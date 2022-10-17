@@ -8,11 +8,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.CreationTimestamp;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 public class Event {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name="native", strategy="native")
     @Column(name = "id")
     private int id;
 
@@ -28,7 +33,7 @@ public class Event {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "long")
+    @Column(name = "longitude")
     private double longitude;
 
     @Column(name = "lat")
@@ -40,13 +45,17 @@ public class Event {
     @Column(name = "media")
     private String media;
 
+    @CreationTimestamp
     @Column(name = "creation_timestamp")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss.SS Z")
     private Timestamp creationTimestamp;
 
     @Column(name = "start_timestamp")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss.SS Z")
     private Timestamp startTimestamp;
 
     @Column(name = "end_timestamp")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss.SS Z")
     private Timestamp endTimestamp;
 
     public int getId() {
