@@ -10,12 +10,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.TWCC.data.Event;
 import com.TWCC.data.EventRepository;
+import com.TWCC.exception.InvalidRequestException;
 
 @RestController
 public class EventController {
 
     @Autowired
     EventRepository eventRepository;
+
+    @GetMapping("/hello")
+    public String Hello() {
+        return "Hi there!";
+    }
 
     @GetMapping("/events")
     public List<Event> getEvents() {
@@ -25,7 +31,14 @@ public class EventController {
 
     @GetMapping("/events/{id}")
     public Optional<Event> getEventsById(@PathVariable Integer id) {
-        return eventRepository.findById(id);
+        
+        Optional<Event> result = eventRepository.findById(id);
+        
+        if (result == null) {
+            throw new InvalidRequestException("Event ID: " + id + " does not exist");
+        }
+
+        return result;
     }
 
     @GetMapping("/events/byaddress/{address}")

@@ -145,6 +145,25 @@ public class Event {
         this.endTimestamp = endTimestamp;
     }
 
+    
+
+    public Event(int id, String address, int ageLimit, String name, String description, double longitude,
+            double latitude, float cost, String media, Timestamp creationTimestamp, Timestamp startTimestamp,
+            Timestamp endTimestamp) {
+        this.id = id;
+        this.address = address;
+        this.ageLimit = ageLimit;
+        this.name = name;
+        this.description = description;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.cost = cost;
+        this.media = media;
+        this.creationTimestamp = creationTimestamp;
+        this.startTimestamp = startTimestamp;
+        this.endTimestamp = endTimestamp;
+    }
+
     @Override
     public String toString() {
         return "Event [id=" + id + ", address=" + address + ", ageLimit=" + ageLimit + ", name=" + name
