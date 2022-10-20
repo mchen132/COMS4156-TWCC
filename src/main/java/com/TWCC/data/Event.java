@@ -24,7 +24,7 @@ public class Event {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "age_limit")
+	@Column(name = "age_limit")
     private int ageLimit;
 
     @Column(name = "name")

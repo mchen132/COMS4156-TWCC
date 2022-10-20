@@ -7,8 +7,6 @@ import java.util.List;
 import java.sql.Timestamp;
 
 import org.hamcrest.Matchers;
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -21,12 +19,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.http.MediaType;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.TWCC.data.Event;
 import com.TWCC.repository.EventRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(EventController.class)
 public class EventControllerTest {
@@ -108,7 +106,7 @@ public class EventControllerTest {
         Mockito.when(eventRepository.findAll()).thenReturn(events);
 
         try {
-            mockMvc.perform(MockMvcRequestBuilders.get("events"))
+            mockMvc.perform(MockMvcRequestBuilders.get("/events"))
                             .andExpect(status().isOk())
                             .andExpect(jsonPath("$", Matchers.hasSize(3)))
                             .andExpect(jsonPath("$[2].address", Matchers.is("Columbia")));
@@ -149,4 +147,39 @@ public class EventControllerTest {
             e.printStackTrace();
         }
     }
+	@Test
+	void createEventSuccessfully() {
+		Event event1 = new Event(
+			1,
+			"Columbia",
+			18, 
+            "Midterm Study session", 
+            "This is a midterm study session",
+            12.5,
+            122.34,
+            5.0f,
+            "www.columbia.edu",
+            new Timestamp(new Date().getTime() - 10),
+            new Timestamp(new Date().getTime() + 5),
+            new Timestamp(new Date().getTime() + 10)
+        );
+		
+		Mockito.when(eventRepository.save(event1)).thenReturn(event1);
+		
+		
+		try {
+			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/events")
+					.contentType(MediaType.APPLICATION_JSON)
+					.accept(MediaType.APPLICATION_JSON)
+					.content(this.objectMapper.writeValueAsString(event1));
+			
+			mockMvc.perform(mockRequest)
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", Matchers.notNullValue()))
+	            .andExpect(jsonPath("$.name", Matchers.is("Columbia")));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
