@@ -7,6 +7,8 @@ import java.util.List;
 import java.sql.Timestamp;
 
 import org.hamcrest.Matchers;
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -21,7 +23,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.TWCC.data.Event;
-import com.TWCC.data.EventRepository;
+import com.TWCC.repository.EventRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
