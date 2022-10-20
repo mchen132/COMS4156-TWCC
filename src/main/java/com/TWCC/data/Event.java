@@ -24,7 +24,7 @@ public class Event {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "age_limit")
+	@Column(name = "age_limit")
     private int ageLimit;
 
     @Column(name = "name")
@@ -57,6 +57,23 @@ public class Event {
     @Column(name = "end_timestamp")
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss.SS Z")
     private Timestamp endTimestamp;
+    
+    public Event(int id, String address, int ageLimit, String name, String description, double longitude, double latitude,
+			float cost, String media, Timestamp creationTimestamp, Timestamp startTimestamp, Timestamp endTimestamp) {
+		super();
+		this.id = id;
+		this.address = address;
+		this.ageLimit = ageLimit;
+		this.name = name;
+		this.description = description;
+		this.longitude = longitude;
+		this.latitude = latitude;
+		this.cost = cost;
+		this.media = media;
+		this.creationTimestamp = creationTimestamp;
+		this.startTimestamp = startTimestamp;
+		this.endTimestamp = endTimestamp;
+	}
 
     public int getId() {
         return id;
