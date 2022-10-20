@@ -60,4 +60,10 @@ public class EventController {
         System.out.println("new event: " + newEvent.toString());
         return eventRepository.save(newEvent);
     }
+    
+    @GetMapping("/events/beforedate/{date}")
+    public List<Event> getEventsBeforeDate(@PathVariable String date) {
+        // TODO: return events before a certain date
+        return null;
+    }
 }
