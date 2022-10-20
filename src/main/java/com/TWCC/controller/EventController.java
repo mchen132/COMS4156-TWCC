@@ -45,4 +45,10 @@ public class EventController {
     public List<Event> getEventsByAddress(@PathVariable String address) {
         return eventRepository.findByAddress(address);
     }
+
+    @GetMapping("/events/beforedate/{date}")
+    public List<Event> getEventsBeforeDate(@PathVariable String date) {
+        // TODO: return events before a certain date
+        return null;
+    }
 }
