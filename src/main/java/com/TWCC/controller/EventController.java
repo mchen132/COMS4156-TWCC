@@ -25,8 +25,7 @@ public class EventController {
 
     @PostMapping("/events")
     public Event createEvent(@RequestBody Event newEvent) {
-        System.out.println("print new event");
-        System.out.println("new event: " + newEvent.toString());
+        System.out.println("Create new event: " + newEvent.toString());
         return eventRepository.save(newEvent);
     }
 }

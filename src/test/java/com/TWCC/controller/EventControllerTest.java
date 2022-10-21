@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -70,15 +71,13 @@ class EventControllerTest {
             new Timestamp(new Date().getTime() + 10)
         );
 		
-		Mockito.when(eventRepository.save(any())).thenReturn(event1);
-		
+		Mockito.when(eventRepository.save(any())).thenReturn(event1);		
 		
 		try {
 			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/events")
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON)
 					.content(this.objectMapper.writeValueAsString(event1));
-			System.out.println(this.objectMapper.writeValueAsString(event1));
 			
 			mockMvc.perform(mockRequest)
 				.andExpect(status().isOk())
@@ -97,4 +96,30 @@ class EventControllerTest {
 		}
 	}
 	
+
+	@Test
+	void createEventWithInvalidFields() {
+		try {
+			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/events")
+					.content(this.objectMapper.writeValueAsString(new HashMap<String, Object>(){{					
+						put("address", "Columbia");
+						put("ageLimit", 18);
+						put("name", "Midterm Study Session");
+						put("description", "This is a midterm study session");
+						put("latitude", 12.5);
+						put("longitude", 125.2);
+						put("cost", "5"); // cost should be a float
+						put("media", "www.columbia.edu");						
+						put("startTimestamp", new Timestamp(new Date().getTime() + 5));
+						put("endTimestamp", new Timestamp(new Date().getTime() + 10));
+					}}))
+					.contentType(MediaType.APPLICATION_JSON)
+					.accept(MediaType.APPLICATION_JSON);
+			
+			mockMvc.perform(mockRequest);
+			assertTrue(false); // Should not execute
+		} catch (Exception e) {
+			assertTrue(true); // Should execute due to failure from parsing Event entity
+		}
+	}
 }
