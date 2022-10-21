@@ -1,6 +1,9 @@
 package com.TWCC.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.hamcrest.Matchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -18,8 +21,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.hamcrest.Matchers;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.TWCC.data.Event;
 import com.TWCC.repository.EventRepository;
@@ -58,7 +59,7 @@ class EventControllerTest {
 			1,
 			"Columbia",
 			18, 
-            "Midterm Study session", 
+            "Midterm Study Session", 
             "This is a midterm study session",
             12.5,
             122.34,
@@ -69,7 +70,7 @@ class EventControllerTest {
             new Timestamp(new Date().getTime() + 10)
         );
 		
-		Mockito.when(eventRepository.save(event1)).thenReturn(event1);
+		Mockito.when(eventRepository.save(any())).thenReturn(event1);
 		
 		
 		try {
@@ -77,11 +78,20 @@ class EventControllerTest {
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON)
 					.content(this.objectMapper.writeValueAsString(event1));
+			System.out.println(this.objectMapper.writeValueAsString(event1));
 			
 			mockMvc.perform(mockRequest)
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$", Matchers.notNullValue()))
-	            .andExpect(jsonPath("$.name", Matchers.is("Columbia")));
+				.andExpect(jsonPath("$", notNullValue()))
+	            .andExpect(jsonPath("$.id", is(1)))
+				.andExpect(jsonPath("$.address", is("Columbia")))
+				.andExpect(jsonPath("$.ageLimit", is(18)))
+				.andExpect(jsonPath("$.name", is("Midterm Study Session")))
+				.andExpect(jsonPath("$.description", is("This is a midterm study session")))
+				.andExpect(jsonPath("$.longitude", is(12.5)))
+				.andExpect(jsonPath("$.latitude", is(122.34)))
+				.andExpect(jsonPath("$.cost", is(5.0)))
+				.andExpect(jsonPath("$.media", is("www.columbia.edu")));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

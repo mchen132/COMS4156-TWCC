@@ -36,7 +36,7 @@ public class Event {
     @Column(name = "longitude")
     private double longitude;
 
-    @Column(name = "lat")
+    @Column(name = "latitude")
     private double latitude;
 
     @Column(name = "cost")
@@ -47,15 +47,15 @@ public class Event {
 
     @CreationTimestamp
     @Column(name = "creation_timestamp")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss.SS Z")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSZ")
     private Timestamp creationTimestamp;
 
     @Column(name = "start_timestamp")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss.SS Z")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSZ")
     private Timestamp startTimestamp;
 
     @Column(name = "end_timestamp")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss.SS Z")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSZ")
     private Timestamp endTimestamp;
     
     public Event(int id, String address, int ageLimit, String name, String description, double longitude, double latitude,
