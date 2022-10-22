@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.TWCC.data.Event;
-import com.TWCC.data.EventRepository;
+import com.TWCC.repository.EventRepository;
 
 @RestController
 public class EventController {
@@ -19,5 +21,11 @@ public class EventController {
     public List<Event> getEvents() {
         System.out.println("getEvents() is calls");
         return eventRepository.findAll();
+    }
+
+    @PostMapping("/events")
+    public Event createEvent(@RequestBody Event newEvent) {
+        System.out.println("Create new event: " + newEvent.toString());
+        return eventRepository.save(newEvent);
     }
 }
