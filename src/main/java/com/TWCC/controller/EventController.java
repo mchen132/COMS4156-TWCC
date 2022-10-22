@@ -25,7 +25,7 @@ public class EventController {
 
     @GetMapping("/events")
     public List<Event> getEvents() {
-        System.out.println("getEvents() is calls");
+        System.out.println("getEvents() is called");
         return eventRepository.findAll();
     }
 

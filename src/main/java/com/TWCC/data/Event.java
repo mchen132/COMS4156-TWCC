@@ -28,10 +28,10 @@ public class Event {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "long")
+    @Column(name = "longitude")
     private double longitude;
 
-    @Column(name = "lat")
+    @Column(name = "latitude")
     private double latitude;
 
     @Column(name = "cost")
@@ -49,9 +49,7 @@ public class Event {
     @Column(name = "end_timestamp")
     private Timestamp endTimestamp;
 
-    public Event(){
-        
-    }
+    public Event() {}
 
     public Event(int id, String address, int ageLimit, String name, String description, double longitude,
             double latitude, float cost, String media, Timestamp creationTimestamp, Timestamp startTimestamp,
