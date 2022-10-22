@@ -57,6 +57,8 @@ public class Event {
     @Column(name = "end_timestamp")
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSZ")
     private Timestamp endTimestamp;
+
+    public Event() {}
     
     public Event(int id, String address, int ageLimit, String name, String description, double longitude, double latitude,
 			float cost, String media, Timestamp creationTimestamp, Timestamp startTimestamp, Timestamp endTimestamp) {
