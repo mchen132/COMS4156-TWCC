@@ -15,9 +15,16 @@ public class EventController {
     @Autowired
     EventRepository eventRepository;
 
-    @GetMapping("/events")
+    @GetMapping("/hello")
+    public String hello() {
+        return "Hi there";
+    }
+
+    @GetMapping("/event")
     public List<Event> getEvents() {
         System.out.println("getEvents() is calls");
         return eventRepository.findAll();
     }
+
+
 }
