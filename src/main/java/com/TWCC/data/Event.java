@@ -59,23 +59,23 @@ public class Event {
     private Timestamp endTimestamp;
 
     public Event() {}
-    
-    public Event(int id, String address, int ageLimit, String name, String description, double longitude, double latitude,
-			float cost, String media, Timestamp creationTimestamp, Timestamp startTimestamp, Timestamp endTimestamp) {
-		super();
-		this.id = id;
-		this.address = address;
-		this.ageLimit = ageLimit;
-		this.name = name;
-		this.description = description;
-		this.longitude = longitude;
-		this.latitude = latitude;
-		this.cost = cost;
-		this.media = media;
-		this.creationTimestamp = creationTimestamp;
-		this.startTimestamp = startTimestamp;
-		this.endTimestamp = endTimestamp;
-	}
+
+    public Event(int id, String address, int ageLimit, String name, String description, double longitude,
+            double latitude, float cost, String media, Timestamp creationTimestamp, Timestamp startTimestamp,
+            Timestamp endTimestamp) {
+        this.id = id;
+        this.address = address;
+        this.ageLimit = ageLimit;
+        this.name = name;
+        this.description = description;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.cost = cost;
+        this.media = media;
+        this.creationTimestamp = creationTimestamp;
+        this.startTimestamp = startTimestamp;
+        this.endTimestamp = endTimestamp;
+    }
 
     public int getId() {
         return id;
