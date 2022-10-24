@@ -16,15 +16,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class Event {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
-    @GenericGenerator(name="native", strategy="native")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
     @Column(name = "id")
     private int id;
 
     @Column(name = "address")
     private String address;
 
-	@Column(name = "age_limit")
+    @Column(name = "age_limit")
     private int ageLimit;
 
     @Column(name = "name")
@@ -47,18 +47,19 @@ public class Event {
 
     @CreationTimestamp
     @Column(name = "creation_timestamp")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSZ")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSZ")
     private Timestamp creationTimestamp;
 
     @Column(name = "start_timestamp")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSZ")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSZ")
     private Timestamp startTimestamp;
 
     @Column(name = "end_timestamp")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSZ")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSZ")
     private Timestamp endTimestamp;
 
-    public Event() {}
+    public Event() {
+    }
 
     public Event(int id, String address, int ageLimit, String name, String description, double longitude,
             double latitude, float cost, String media, Timestamp creationTimestamp, Timestamp startTimestamp,
@@ -181,5 +182,4 @@ public class Event {
                 + startTimestamp + ", endTimestamp=" + endTimestamp + "]";
     }
 
-    
 }

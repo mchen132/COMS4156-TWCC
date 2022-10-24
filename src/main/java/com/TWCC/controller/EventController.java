@@ -28,9 +28,9 @@ public class EventController {
 
     @GetMapping("/events/{id}")
     public Optional<Event> getEventsById(@PathVariable Integer id) {
-        
+
         Optional<Event> result = eventRepository.findById(id);
-        
+
         if (result == null) {
             throw new InvalidRequestException("Event ID: " + id + " does not exist");
         }
@@ -48,7 +48,7 @@ public class EventController {
         // TODO: return events before a certain date
         return null;
     }
-    
+
     @PostMapping("/events")
     public Event createEvent(@RequestBody Event newEvent) {
         System.out.println("print new event");
