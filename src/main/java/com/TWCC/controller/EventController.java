@@ -20,11 +20,6 @@ public class EventController {
     @Autowired
     EventRepository eventRepository;
 
-    @GetMapping("/hello")
-    public String Hello() {
-        return "Hi there!";
-    }
-
     @GetMapping("/events")
     public List<Event> getEvents() {
         System.out.println("getEvents() is called");
@@ -58,18 +53,6 @@ public class EventController {
     public Event createEvent(@RequestBody Event newEvent) {
         System.out.println("print new event");
         System.out.println("new event: " + newEvent.toString());
-        return eventRepository.save(newEvent);
-    }
-    
-    @GetMapping("/events/beforedate/{date}")
-    public List<Event> getEventsBeforeDate(@PathVariable String date) {
-        // TODO: return events before a certain date
-        return null;
-    }
-    
-    @PostMapping("/events")
-    public Event createEvent(@RequestBody Event newEvent) {
-        System.out.println("Create new event: " + newEvent.toString());
         return eventRepository.save(newEvent);
     }
 }

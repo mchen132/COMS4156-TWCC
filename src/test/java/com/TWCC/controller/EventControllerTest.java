@@ -92,17 +92,6 @@ public class EventControllerTest {
     static void afterClass() {
         // TODO: cleanup after all tests
     }
-
-    @Test 
-    void testHello() {
-        try {
-            mockMvc.perform(MockMvcRequestBuilders
-                            .get("/hello"))
-                            .andExpect(status().isOk());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
     
 
     @Test
