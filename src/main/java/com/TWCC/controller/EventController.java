@@ -66,4 +66,10 @@ public class EventController {
         // TODO: return events before a certain date
         return null;
     }
+    
+    @PostMapping("/events")
+    public Event createEvent(@RequestBody Event newEvent) {
+        System.out.println("Create new event: " + newEvent.toString());
+        return eventRepository.save(newEvent);
+    }
 }
