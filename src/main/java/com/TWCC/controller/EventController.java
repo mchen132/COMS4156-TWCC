@@ -18,7 +18,7 @@ import com.TWCC.repository.EventRepository;
 public class EventController {
 
     @Autowired
-    EventRepository eventRepository;
+    private EventRepository eventRepository;
 
     @GetMapping("/events")
     public List<Event> getEvents() {
@@ -27,30 +27,30 @@ public class EventController {
     }
 
     @GetMapping("/events/{id}")
-    public Optional<Event> getEventsById(@PathVariable Integer id) {
-        
+    public Optional<Event> getEventsById(@PathVariable final Integer id) {
+
         Optional<Event> result = eventRepository.findById(id);
-        
+
         if (result == null) {
-            throw new InvalidRequestException("Event ID: " + id + " does not exist");
+            throw new InvalidRequestException("Event ID: "
+                    + id + " does not exist");
         }
 
         return result;
     }
 
     @GetMapping("/events/byaddress/{address}")
-    public List<Event> getEventsByAddress(@PathVariable String address) {
+    public List<Event> getEventsByAddress(@PathVariable final String address) {
         return eventRepository.findByAddress(address);
     }
 
     @GetMapping("/events/beforedate/{date}")
-    public List<Event> getEventsBeforeDate(@PathVariable String date) {
-        // TODO: return events before a certain date
+    public List<Event> getEventsBeforeDate(@PathVariable final String date) {
         return null;
     }
-    
+
     @PostMapping("/events")
-    public Event createEvent(@RequestBody Event newEvent) {
+    public Event createEvent(@RequestBody final Event newEvent) {
         System.out.println("print new event");
         System.out.println("new event: " + newEvent.toString());
         return eventRepository.save(newEvent);
