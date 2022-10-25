@@ -17,13 +17,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.data.repository.CrudRepository;
 
 import com.TWCC.data.Event;
+import com.TWCC.exception.InvalidRequestException;
 import com.TWCC.repository.EventRepository;
 
 @RestController
 public class EventController {
 
     @Autowired
-    EventRepository eventRepository;
+    private EventRepository eventRepository;
 
     @GetMapping("/hello")
     public String hello() {
@@ -32,31 +33,9 @@ public class EventController {
 
     @GetMapping("/event")
     public List<Event> getEvents() {
-        System.out.println("getEvents() is calls");
+        System.out.println("getEvents() is called");
         return eventRepository.findAll();
     }
-
-    @GetMapping("/event/{eventId}")
-    public Event getEventById(@PathVariable int eventId) {
-        System.out.println("getEventById is called");
-        return eventRepository.findById(eventId).get();
-    }
-
-    // @PutMapping("/eventUpdate")
-    // public Event updateEventName(@RequestBody Integer eventId, String newEventName) throws NotFoundException {
-    //     if (eventId == null || newEventName == null) {
-    //         throw new RuntimeException("eventId and newEventName cannot be null.");
-    //     }
-    //     Optional<Event> optionalEvent = eventRepository.findById(eventId);
-    //     if (optionalEvent.isEmpty()) {
-    //         throw new NotFoundException();
-    //     }
-    //     System.out.println("updateEventName is called...");
-
-    //     Event existingEvent = optionalEvent.get();
-    //     existingEvent.setName(newEventName);
-    //     return existingEvent;
-    // }
 
     @PutMapping("eventUpdate")
     public Event updateEvent(@RequestBody Event eventRecord) throws NotFoundException {
@@ -81,9 +60,33 @@ public class EventController {
         return eventRepository.save(existingEvent);
     }
 
+    @GetMapping("/events/{id}")
+    public Optional<Event> getEventsById(@PathVariable final Integer id) {
+
+        Optional<Event> result = eventRepository.findById(id);
+
+        if (result == null) {
+            throw new InvalidRequestException("Event ID: "
+                    + id + " does not exist");
+        }
+
+        return result;
+    }
+
+    @GetMapping("/events/byaddress/{address}")
+    public List<Event> getEventsByAddress(@PathVariable final String address) {
+        return eventRepository.findByAddress(address);
+    }
+
+    @GetMapping("/events/beforedate/{date}")
+    public List<Event> getEventsBeforeDate(@PathVariable final String date) {
+        return null;
+    }
+
     @PostMapping("/events")
-    public Event createEvent(@RequestBody Event newEvent) {
-        System.out.println("Create new event: " + newEvent.toString());
+    public Event createEvent(@RequestBody final Event newEvent) {
+        System.out.println("print new event");
+        System.out.println("new event: " + newEvent.toString());
         return eventRepository.save(newEvent);
     }
 }
