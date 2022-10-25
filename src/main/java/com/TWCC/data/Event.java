@@ -16,8 +16,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class Event {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
-    @GenericGenerator(name="native", strategy="native")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
     @Column(name = "id")
     private int id;
 
@@ -33,10 +33,10 @@ public class Event {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "long")
+    @Column(name = "longitude")
     private double longitude;
 
-    @Column(name = "lat")
+    @Column(name = "latitude")
     private double latitude;
 
     @Column(name = "cost")
@@ -47,41 +47,49 @@ public class Event {
 
     @CreationTimestamp
     @Column(name = "creation_timestamp")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSZ")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,
+            pattern = "yyyy-MM-dd'T'HH:mm:ss.SSZ")
     private Timestamp creationTimestamp;
 
     @Column(name = "start_timestamp")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSZ")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,
+            pattern = "yyyy-MM-dd'T'HH:mm:ss.SSZ")
     private Timestamp startTimestamp;
 
     @Column(name = "end_timestamp")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSZ")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,
+            pattern = "yyyy-MM-dd'T'HH:mm:ss.SSZ")
     private Timestamp endTimestamp;
 
-    public Event() {}
-    
-    public Event(int id, String address, int ageLimit, String name, String description, double longitude, double latitude,
-			float cost, String media, Timestamp creationTimestamp, Timestamp startTimestamp, Timestamp endTimestamp) {
-		super();
-		this.id = id;
-		this.address = address;
-		this.ageLimit = ageLimit;
-		this.name = name;
-		this.description = description;
-		this.longitude = longitude;
-		this.latitude = latitude;
-		this.cost = cost;
-		this.media = media;
-		this.creationTimestamp = creationTimestamp;
-		this.startTimestamp = startTimestamp;
-		this.endTimestamp = endTimestamp;
-	}
+    public Event() {
+    }
+
+    public Event(final int id, final String address, final int ageLimit,
+                 final String name, final String description,
+                 final double longitude, final double latitude,
+                 final float cost, final String media,
+                 final Timestamp creationTimestamp,
+                 final Timestamp startTimestamp,
+                 final Timestamp endTimestamp) {
+        this.id = id;
+        this.address = address;
+        this.ageLimit = ageLimit;
+        this.name = name;
+        this.description = description;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.cost = cost;
+        this.media = media;
+        this.creationTimestamp = creationTimestamp;
+        this.startTimestamp = startTimestamp;
+        this.endTimestamp = endTimestamp;
+    }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -89,7 +97,7 @@ public class Event {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(final String address) {
         this.address = address;
     }
 
@@ -97,7 +105,7 @@ public class Event {
         return ageLimit;
     }
 
-    public void setAgeLimit(int ageLimit) {
+    public void setAgeLimit(final int ageLimit) {
         this.ageLimit = ageLimit;
     }
 
@@ -105,7 +113,7 @@ public class Event {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -113,7 +121,7 @@ public class Event {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -121,7 +129,7 @@ public class Event {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(final double longitude) {
         this.longitude = longitude;
     }
 
@@ -129,7 +137,7 @@ public class Event {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(final double latitude) {
         this.latitude = latitude;
     }
 
@@ -137,7 +145,7 @@ public class Event {
         return cost;
     }
 
-    public void setCost(float cost) {
+    public void setCost(final float cost) {
         this.cost = cost;
     }
 
@@ -145,7 +153,7 @@ public class Event {
         return media;
     }
 
-    public void setMedia(String media) {
+    public void setMedia(final String media) {
         this.media = media;
     }
 
@@ -153,7 +161,7 @@ public class Event {
         return creationTimestamp;
     }
 
-    public void setCreationTimestamp(Timestamp creationTimestamp) {
+    public void setCreationTimestamp(final Timestamp creationTimestamp) {
         this.creationTimestamp = creationTimestamp;
     }
 
@@ -161,7 +169,7 @@ public class Event {
         return startTimestamp;
     }
 
-    public void setStartTimestamp(Timestamp startTimestamp) {
+    public void setStartTimestamp(final Timestamp startTimestamp) {
         this.startTimestamp = startTimestamp;
     }
 
@@ -169,17 +177,24 @@ public class Event {
         return endTimestamp;
     }
 
-    public void setEndTimestamp(Timestamp endTimestamp) {
+    public void setEndTimestamp(final Timestamp endTimestamp) {
         this.endTimestamp = endTimestamp;
     }
 
     @Override
     public String toString() {
-        return "Event [id=" + id + ", address=" + address + ", ageLimit=" + ageLimit + ", name=" + name
-                + ", description=" + description + ", longitude=" + longitude + ", latitude=" + latitude + ", cost="
-                + cost + ", media=" + media + ", creationTimestamp=" + creationTimestamp + ", startTimestamp="
-                + startTimestamp + ", endTimestamp=" + endTimestamp + "]";
+        return "Event [id=" + id
+                + ", address=" + address
+                + ", ageLimit=" + ageLimit
+                + ", name=" + name
+                + ", description=" + description
+                + ", longitude=" + longitude
+                + ", latitude=" + latitude
+                + ", cost=" + cost
+                + ", media=" + media
+                + ", creationTimestamp=" + creationTimestamp
+                + ", startTimestamp=" + startTimestamp
+                + ", endTimestamp=" + endTimestamp + "]";
     }
 
-    
 }
