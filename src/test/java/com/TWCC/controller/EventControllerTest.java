@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.List;
 
 import org.hamcrest.Matchers;
@@ -18,13 +19,16 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.util.NestedServletException;
 import org.springframework.http.MediaType;
 
 import com.TWCC.data.Event;
@@ -210,5 +214,82 @@ public class EventControllerTest {
 			assertTrue(true); // Should execute due to failure from parsing Event entity
 		}
 	}
-	
+
+	@Test
+	void updateEventSuccessfully() {
+		Event updatedEvent = new Event(
+			1,
+			"Manhattan",
+			18, 
+            "Finals Study Session", 
+            "This is a finals study session",
+            12.55,
+            125.34,
+            10.0f,
+            "www.columbia.edu",
+            new Timestamp(new Date().getTime() - 10),
+            new Timestamp(new Date().getTime() + 5),
+            new Timestamp(new Date().getTime() + 10)
+        );
+
+		Mockito.when(eventRepository.findById(event1.getId())).thenReturn(Optional.of(event1));
+		Mockito.when(eventRepository.save(any())).thenReturn(updatedEvent);
+		try {
+			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/eventUpdate")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.content(this.objectMapper.writeValueAsString(updatedEvent));
+
+		
+			mockMvc.perform(mockRequest)
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.id", is(1)))
+				.andExpect(jsonPath("$.address", is("Manhattan")))
+				.andExpect(jsonPath("$.ageLimit", is(18)))
+				.andExpect(jsonPath("$.name", is("Finals Study Session")))
+				.andExpect(jsonPath("$.description", is("This is a finals study session")))
+				.andExpect(jsonPath("$.longitude", is(12.55)))
+				.andExpect(jsonPath("$.latitude", is(125.34)))
+				.andExpect(jsonPath("$.cost", is(10.0)))
+				.andExpect(jsonPath("$.media", is("www.columbia.edu")));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	void updateEvent_recordNotFound() {
+		Event updatedEvent = new Event(
+			1000,
+			"Manhattan",
+			18, 
+            "Finals Study Session", 
+            "This is a finals study session",
+            12.55,
+            125.34,
+            10.0f,
+            "www.columbia.edu",
+            new Timestamp(new Date().getTime() - 10),
+            new Timestamp(new Date().getTime() + 5),
+            new Timestamp(new Date().getTime() + 10)
+        );
+
+		Mockito.when(eventRepository.findById(updatedEvent.getId())).thenReturn(null);
+
+		try {
+			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/eventUpdate")
+					.contentType(MediaType.APPLICATION_JSON)
+					.accept(MediaType.APPLICATION_JSON)
+					.content(this.objectMapper.writeValueAsString(updatedEvent));
+
+			mockMvc.perform(mockRequest);
+			
+		} catch (Exception e) {
+			if (e instanceof NestedServletException) {
+				assertTrue(e.getMessage().contains("NotFoundException"));
+			}
+		}
+
+	}
+
 }
