@@ -51,6 +51,7 @@ public class EventController {
         return null;
     }
 
+
     @DeleteMapping("/delete/{eventId}")
     public void deleteEventById(@PathVariable(value = "eventId") Integer eventId) throws NotFoundException{
         if (eventRepository.findById(eventId).isEmpty()){
@@ -59,10 +60,15 @@ public class EventController {
         eventRepository.deleteById(eventId);
     }
 
+
     @PostMapping("/events")
     public Event createEvent(@RequestBody final Event newEvent) {
         System.out.println("print new event");
         System.out.println("new event: " + newEvent.toString());
         return eventRepository.save(newEvent);
     }
+
 }
+
+
+
