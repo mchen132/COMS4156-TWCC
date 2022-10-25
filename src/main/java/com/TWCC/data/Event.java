@@ -13,6 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
+@Builder
 public class Event {
 
     @Id
