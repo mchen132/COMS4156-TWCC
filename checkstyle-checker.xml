@@ -111,7 +111,7 @@
         <!-- See http://checkstyle.sf.net/config_sizes.html -->
         <module name="LineLength"/>
         <module name="MethodLength"/>
-        <module name="ParameterNumber"/>
+        <!-- <module name="ParameterNumber"> -->
 
         <!-- Checks for whitespace                               -->
         <!-- See http://checkstyle.sf.net/config_whitespace.html -->
@@ -163,10 +163,13 @@
         <!-- Miscellaneous other checks.                   -->
         <!-- See http://checkstyle.sf.net/config_misc.html -->
         <module name="ArrayTypeStyle"/>
-        <module name="FinalParameters"/>
+        <!-- <module name="FinalParameters"/> -->
         <module name="TodoComment"/>
         <module name="UpperEll"/>
 
+        <module name="SuppressWarnings">
+          <property name="id" value="checkstyle:suppresswarnings"/>
+        </module>
     </module>
 
 </module>
