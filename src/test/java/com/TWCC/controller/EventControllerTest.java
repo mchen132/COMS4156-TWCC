@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.List;
 
 import org.hamcrest.Matchers;
@@ -26,6 +27,7 @@ import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.util.NestedServletException;
 import org.springframework.http.MediaType;
 
 import com.TWCC.data.Event;
@@ -239,15 +241,15 @@ public class EventControllerTest {
 	@Test
 	void deleteEventById_notFound() throws Exception{
 		try{
-			Mockito.when(eventRepository.findById(5)).thenReturn(null);
+			Mockito.when(eventRepository.findById(5)).thenReturn(Optional.empty());
 			mockMvc.perform(MockMvcRequestBuilders
 			   .delete("/delete/2")
 			   .contentType(MediaType.APPLICATION_JSON));
 		}
 		catch (Exception ex){
-			assertTrue(ex instanceof NotFoundException);
-			System.out.println(ex);
-
+			if (ex instanceof NestedServletException) {
+                assertTrue(ex.getMessage().contains("NotFoundException"));
+            }
 		}
 
 		
