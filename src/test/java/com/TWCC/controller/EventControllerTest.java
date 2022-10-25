@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Optional;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -18,10 +19,13 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.TWCC.data.Event;
 import com.TWCC.repository.EventRepository;
@@ -37,6 +41,8 @@ class EventControllerTest {
 
     @MockBean
     EventRepository eventRepository;
+
+	
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -122,4 +128,47 @@ class EventControllerTest {
 			assertTrue(true); // Should execute due to failure from parsing Event entity
 		}
 	}
+
+	@Test
+	void deleteEventById_success() throws Exception{
+		Event Record_1 = new Event(2,
+	"Columbia",
+	18, 
+	"Midterm Study Session", 
+	"This is a midterm study session",
+	12.5,
+	122.34,
+	5.0f,
+	"www.columbia.edu",
+	new Timestamp(new Date().getTime() - 10),
+	new Timestamp(new Date().getTime() + 5),
+	new Timestamp(new Date().getTime() + 10)
+	);
+		Mockito.when(eventRepository.findById(Record_1.getId())).thenReturn(Optional.of(Record_1));
+
+		mockMvc.perform(MockMvcRequestBuilders
+			   .delete("/delete/2")
+			   .contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isOk());
+	}
+
+	@Test
+	void deleteEventById_notFound() throws Exception{
+		try{
+			Mockito.when(eventRepository.findById(5)).thenReturn(null);
+			mockMvc.perform(MockMvcRequestBuilders
+			   .delete("/delete/2")
+			   .contentType(MediaType.APPLICATION_JSON));
+		}
+		catch (Exception ex){
+			assertTrue(ex instanceof NotFoundException);
+			System.out.println(ex);
+
+		}
+
+		
+		
+	}
+
+
 }
