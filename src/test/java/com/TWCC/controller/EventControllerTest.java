@@ -216,6 +216,44 @@ public class EventControllerTest {
 	}
 
 	@Test
+	void deleteEventById_success() throws Exception{
+		Event Record_1 = new Event(2,
+	"Columbia",
+	18, 
+	"Midterm Study Session", 
+	"This is a midterm study session",
+	12.5,
+	122.34,
+	5.0f,
+	"www.columbia.edu",
+	new Timestamp(new Date().getTime() - 10),
+	new Timestamp(new Date().getTime() + 5),
+	new Timestamp(new Date().getTime() + 10)
+	);
+		Mockito.when(eventRepository.findById(Record_1.getId())).thenReturn(Optional.of(Record_1));
+
+		mockMvc.perform(MockMvcRequestBuilders
+			   .delete("/delete/2")
+			   .contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isOk());
+	}
+
+	@Test
+	void deleteEventById_notFound() throws Exception{
+		try{
+			Mockito.when(eventRepository.findById(5)).thenReturn(Optional.empty());
+			mockMvc.perform(MockMvcRequestBuilders
+			   .delete("/delete/2")
+			   .contentType(MediaType.APPLICATION_JSON));
+		}
+		catch (Exception ex){
+			if (ex instanceof NestedServletException) {
+                assertTrue(ex.getMessage().contains("NotFoundException"));
+            }
+		}
+	}
+
+	@Test
 	void updateEventSuccessfully() {
 		Event updatedEvent = new Event(
 			1,
@@ -289,7 +327,5 @@ public class EventControllerTest {
 				assertTrue(e.getMessage().contains("NotFoundException"));
 			}
 		}
-
 	}
-
 }
