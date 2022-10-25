@@ -15,3 +15,33 @@
     - `src/main/resources/application.properties` database properties are required to run the app successfully connecting to the database. Make sure to replace placeholder values.
 
 ## 2. Documentation
+### **Events**
+- `GET /events`: Gets a list of events
+    - Specify request parameters to filter returned events
+        - `id` (integer)
+        - `address` (string)
+    - Sample Request:
+        - localhost:8080/events
+        - localhost:8080/events/1
+        - localhost:8080/events/byaddress/Columbia
+- `POST /events`: Creates an event with the specified event fields
+    - Must specify request body
+    - Sample Request Body: 
+    ```
+        {
+            "address": "test address",
+            "ageLimit": 21,
+            "name": "test event",
+            "description": "this is just a test event",
+            "longitude": 10.0,
+            "latitude": 20.0,
+            "cost": 0.0,
+            "media": "www.example.com",
+            "startTimestamp": "2022-10-24T20:12:00.00+0000",
+            "endTimestamp": "2022-10-25T20:12:00.00+0000"    
+        }
+     ```
+- `UPDATE /events`: Updates an existing event given the event ID
+    - Sample Request: localhost:8080/events/1
+- `DELETE /events`: Deletes an event
+    - Sample Request: localhost:8080/events/1
