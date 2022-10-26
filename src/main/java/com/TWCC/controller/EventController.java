@@ -32,13 +32,13 @@ public class EventController {
         return "Hi there";
     }
 
-    @GetMapping("/event")
+    @GetMapping("/events")
     public List<Event> getEvents() {
         System.out.println("getEvents() is called");
         return eventRepository.findAll();
     }
 
-    @PutMapping("eventUpdate")
+    @PutMapping("/eventUpdate")
     public Event updateEvent(@RequestBody Event eventRecord) throws NotFoundException {
         Optional<Event> optionalEvent = eventRepository.findById(eventRecord.getId());
         // if (optionalEvent.isEmpty()) {
