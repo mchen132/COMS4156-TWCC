@@ -10,6 +10,5 @@ import com.TWCC.data.Event;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Integer> {
-    
-    public List<Event> findByAddress(String addr);
+    List<Event> findByAddress(String addr);
 }

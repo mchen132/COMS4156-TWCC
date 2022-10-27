@@ -63,3 +63,11 @@
      ```
 - `DELETE /events`: Deletes an event given an existing event ID
     - Sample Request: localhost:8080/events/1
+
+## 3. Reports
+### Checkstyle
+- Directions:
+    1. In app root directory: `mvn site`
+    2. Locate Checkstyle report in `target/site/index.html`
+- Most recent Checkstyle run: `0 warnings, 0 errors`
+    ![Checkstyle report](./reports/t3-checkstyle-report.png)
