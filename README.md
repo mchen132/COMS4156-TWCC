@@ -42,7 +42,7 @@
             "endTimestamp": "2022-10-25T20:12:00.00+0000"    
         }
      ```
-- `UPDATE /events`: Updates an existing event given the event request body
+- `PUT /events`: Updates an existing event given the event request body
     - Sample Request: localhost:8080/events
     - Must specify request body and a existing event ID in the body
     - Sample Request Body:
