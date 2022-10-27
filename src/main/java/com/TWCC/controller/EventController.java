@@ -67,10 +67,7 @@ public class EventController {
     @PutMapping("/events")
     public Event updateEvent(@RequestBody Event eventRecord) throws NotFoundException {
         Optional<Event> optionalEvent = eventRepository.findById(eventRecord.getId());
-        // if (optionalEvent.isEmpty()) {
-        //     throw new NotFoundException();
-        // }
-        if (optionalEvent == null) {
+        if (optionalEvent.isEmpty()) {
             throw new NotFoundException();
         }
 
