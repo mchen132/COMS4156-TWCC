@@ -13,6 +13,7 @@
 - Run: To run the app run `mvn spring-boot:run`
 - Test (locally - requires MySQL configured with database set up): After running the app, we can access our app through the endpoints at localhost:{exposed-port} (localhost:8080) and appending any route specified in documentation (i.e. localhost:8080/events).
     - `src/main/resources/application.properties` database properties are required to run the app successfully connecting to the database. Make sure to replace placeholder values.
+- Run Tests: After building the app, run `mvn test` to execute all tests in the package
 
 ## 2. Documentation
 ### **Events**
@@ -41,9 +42,26 @@
             "endTimestamp": "2022-10-25T20:12:00.00+0000"    
         }
      ```
-- `UPDATE /events`: Updates an existing event given the event ID
-    - Sample Request: localhost:8080/events/1
-- `DELETE /events`: Deletes an event
+- `PUT /events`: Updates an existing event given the event request body
+    - Sample Request: localhost:8080/events
+    - Must specify request body and a existing event ID in the body
+    - Sample Request Body:
+    ```
+        {
+            "id": 1,
+            "address": "test address update",
+            "ageLimit": 21,
+            "name": "test event update",
+            "description": "this is just a test event update",
+            "longitude": 10.0,
+            "latitude": 20.0,
+            "cost": 0.0,
+            "media": "www.example.com",
+            "startTimestamp": "2022-10-24T20:12:00.00+0000",
+            "endTimestamp": "2022-10-25T20:12:00.00+0000"    
+        }
+     ```
+- `DELETE /events`: Deletes an event given an existing event ID
     - Sample Request: localhost:8080/events/1
 
 ## 3. Reports

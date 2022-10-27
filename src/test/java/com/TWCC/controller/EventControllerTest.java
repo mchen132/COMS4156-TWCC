@@ -19,12 +19,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -147,7 +145,7 @@ public class EventControllerTest {
     }
 	@Test
 	void createEventSuccessfully() {
-		Event event1 = new Event(
+		Event eventToCreate = new Event(
 			1,
 			"Columbia",
 			18, 
@@ -162,15 +160,14 @@ public class EventControllerTest {
             new Timestamp(new Date().getTime() + 10)
         );
 		
-		Mockito.when(eventRepository.save(any())).thenReturn(event1);
+		Mockito.when(eventRepository.save(any())).thenReturn(eventToCreate);
 		
 		
 		try {
 			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/events")
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON)
-					.content(this.objectMapper.writeValueAsString(event1));
-			System.out.println(this.objectMapper.writeValueAsString(event1));
+					.content(this.objectMapper.writeValueAsString(eventToCreate));
 			
 			mockMvc.perform(mockRequest)
 				.andExpect(status().isOk())
@@ -193,14 +190,14 @@ public class EventControllerTest {
 	void createEventWithInvalidFields() {
 		try {
 			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/events")
-					.content(this.objectMapper.writeValueAsString(new HashMap<String, Object>(){{					
+					.content(this.objectMapper.writeValueAsString(new HashMap<String, Object>() {{					
 						put("address", "Columbia");
 						put("ageLimit", 18);
 						put("name", "Midterm Study Session");
 						put("description", "This is a midterm study session");
 						put("latitude", 12.5);
 						put("longitude", 125.2);
-						put("cost", "5"); // cost should be a float
+						put("cost", "five"); // cost should be a float
 						put("media", "www.columbia.edu");						
 						put("startTimestamp", new Timestamp(new Date().getTime() + 5));
 						put("endTimestamp", new Timestamp(new Date().getTime() + 10));
@@ -208,47 +205,47 @@ public class EventControllerTest {
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON);
 			
-			mockMvc.perform(mockRequest);
-			// assertTrue(false); // Should not execute
+			mockMvc.perform(mockRequest)
+					.andExpect(status().isBadRequest());			
 		} catch (Exception e) {
-			assertTrue(true); // Should execute due to failure from parsing Event entity
+			e.getStackTrace();
 		}
 	}
 
 	@Test
-	void deleteEventById_success() throws Exception{
-		Event Record_1 = new Event(2,
-	"Columbia",
-	18, 
-	"Midterm Study Session", 
-	"This is a midterm study session",
-	12.5,
-	122.34,
-	5.0f,
-	"www.columbia.edu",
-	new Timestamp(new Date().getTime() - 10),
-	new Timestamp(new Date().getTime() + 5),
-	new Timestamp(new Date().getTime() + 10)
-	);
-		Mockito.when(eventRepository.findById(Record_1.getId())).thenReturn(Optional.of(Record_1));
+	void deleteEventByIdSuccessfully() throws Exception {
+		Event eventToDelete = new Event(
+			2,
+			"Columbia",
+			18,
+			"Midterm Study Session",
+			"This is a midterm study session",
+			12.5,
+			122.34,
+			5.0f,
+			"www.columbia.edu",
+			new Timestamp(new Date().getTime() - 10),
+			new Timestamp(new Date().getTime() + 5),
+			new Timestamp(new Date().getTime() + 10)
+		);
+		Mockito.when(eventRepository.findById(eventToDelete.getId())).thenReturn(Optional.of(eventToDelete));
 
 		mockMvc.perform(MockMvcRequestBuilders
-			   .delete("/delete/2")
+			   .delete("/events/2")
 			   .contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isOk());
 	}
 
 	@Test
-	void deleteEventById_notFound() throws Exception{
+	void deleteEventByIdNotFound() {
 		try{
 			Mockito.when(eventRepository.findById(5)).thenReturn(Optional.empty());
 			mockMvc.perform(MockMvcRequestBuilders
-			   .delete("/delete/2")
+			   .delete("/events/2")
 			   .contentType(MediaType.APPLICATION_JSON));
-		}
-		catch (Exception ex){
-			if (ex instanceof NestedServletException) {
-                assertTrue(ex.getMessage().contains("NotFoundException"));
+		} catch (Exception e) {
+			if (e instanceof NestedServletException) {
+                assertTrue(e.getMessage().contains("NotFoundException"));
             }
 		}
 	}
@@ -273,7 +270,7 @@ public class EventControllerTest {
 		Mockito.when(eventRepository.findById(event1.getId())).thenReturn(Optional.of(event1));
 		Mockito.when(eventRepository.save(any())).thenReturn(updatedEvent);
 		try {
-			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/eventUpdate")
+			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/events")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.content(this.objectMapper.writeValueAsString(updatedEvent));
@@ -296,7 +293,7 @@ public class EventControllerTest {
 	}
 
 	@Test
-	void updateEvent_recordNotFound() {
+	void updateEventRecordNotFound() {
 		Event updatedEvent = new Event(
 			1000,
 			"Manhattan",
@@ -312,10 +309,10 @@ public class EventControllerTest {
             new Timestamp(new Date().getTime() + 10)
         );
 
-		Mockito.when(eventRepository.findById(updatedEvent.getId())).thenReturn(null);
+		Mockito.when(eventRepository.findById(updatedEvent.getId())).thenReturn(Optional.empty());
 
 		try {
-			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/eventUpdate")
+			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/events")
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON)
 					.content(this.objectMapper.writeValueAsString(updatedEvent));
