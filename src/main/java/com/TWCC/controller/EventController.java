@@ -34,7 +34,37 @@ public class EventController {
         return eventRepository.findAll();
     }
 
-    @PutMapping("/eventUpdate")
+    @GetMapping("/events/{id}")
+    public Optional<Event> getEventsById(@PathVariable final Integer id) {
+
+        Optional<Event> result = eventRepository.findById(id);
+
+        if (result == null) {
+            throw new InvalidRequestException("Event ID: "
+                    + id + " does not exist");
+        }
+
+        return result;
+    }
+
+    @GetMapping("/events/byaddress/{address}")
+    public List<Event> getEventsByAddress(@PathVariable final String address) {
+        return eventRepository.findByAddress(address);
+    }
+
+    @GetMapping("/events/beforedate/{date}")
+    public List<Event> getEventsBeforeDate(@PathVariable final String date) {
+        return null;
+    }
+
+    @PostMapping("/events")
+    public Event createEvent(@RequestBody final Event newEvent) {
+        System.out.println("print new event");
+        System.out.println("new event: " + newEvent.toString());
+        return eventRepository.save(newEvent);
+    }
+
+    @PutMapping("/events")
     public Event updateEvent(@RequestBody Event eventRecord) throws NotFoundException {
         Optional<Event> optionalEvent = eventRepository.findById(eventRecord.getId());
         // if (optionalEvent.isEmpty()) {
@@ -60,46 +90,13 @@ public class EventController {
         return eventRepository.save(existingEvent);
     }
 
-    @GetMapping("/events/{id}")
-    public Optional<Event> getEventsById(@PathVariable final Integer id) {
-
-        Optional<Event> result = eventRepository.findById(id);
-
-        if (result == null) {
-            throw new InvalidRequestException("Event ID: "
-                    + id + " does not exist");
-        }
-
-        return result;
-    }
-
-    @GetMapping("/events/byaddress/{address}")
-    public List<Event> getEventsByAddress(@PathVariable final String address) {
-        return eventRepository.findByAddress(address);
-    }
-
-    @GetMapping("/events/beforedate/{date}")
-    public List<Event> getEventsBeforeDate(@PathVariable final String date) {
-        return null;
-    }
-
-
-    @DeleteMapping("/delete/{eventId}")
+    @DeleteMapping("/events/{eventId}")
     public void deleteEventById(@PathVariable(value = "eventId") Integer eventId) throws NotFoundException{
         if (eventRepository.findById(eventId).isEmpty()){
             throw new NotFoundException();
         }
         eventRepository.deleteById(eventId);
     }
-
-
-    @PostMapping("/events")
-    public Event createEvent(@RequestBody final Event newEvent) {
-        System.out.println("print new event");
-        System.out.println("new event: " + newEvent.toString());
-        return eventRepository.save(newEvent);
-    }
-
 }
 
 

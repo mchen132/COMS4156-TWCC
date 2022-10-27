@@ -214,7 +214,7 @@ public class EventControllerTest {
 	}
 
 	@Test
-	void deleteEventById_success() throws Exception{
+	void deleteEventByIdSuccessfully() throws Exception{
 		Event Record_1 = new Event(2,
 	"Columbia",
 	18, 
@@ -231,17 +231,17 @@ public class EventControllerTest {
 		Mockito.when(eventRepository.findById(Record_1.getId())).thenReturn(Optional.of(Record_1));
 
 		mockMvc.perform(MockMvcRequestBuilders
-			   .delete("/delete/2")
+			   .delete("/events/2")
 			   .contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isOk());
 	}
 
 	@Test
-	void deleteEventById_notFound() throws Exception{
+	void deleteEventByIdNotFound() throws Exception{
 		try{
 			Mockito.when(eventRepository.findById(5)).thenReturn(Optional.empty());
 			mockMvc.perform(MockMvcRequestBuilders
-			   .delete("/delete/2")
+			   .delete("/events/2")
 			   .contentType(MediaType.APPLICATION_JSON));
 		}
 		catch (Exception ex){
@@ -271,7 +271,7 @@ public class EventControllerTest {
 		Mockito.when(eventRepository.findById(event1.getId())).thenReturn(Optional.of(event1));
 		Mockito.when(eventRepository.save(any())).thenReturn(updatedEvent);
 		try {
-			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/eventUpdate")
+			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/events")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.content(this.objectMapper.writeValueAsString(updatedEvent));
@@ -294,7 +294,7 @@ public class EventControllerTest {
 	}
 
 	@Test
-	void updateEvent_recordNotFound() {
+	void updateEventRecordNotFound() {
 		Event updatedEvent = new Event(
 			1000,
 			"Manhattan",
@@ -313,7 +313,7 @@ public class EventControllerTest {
 		Mockito.when(eventRepository.findById(updatedEvent.getId())).thenReturn(null);
 
 		try {
-			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/eventUpdate")
+			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/events")
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON)
 					.content(this.objectMapper.writeValueAsString(updatedEvent));
