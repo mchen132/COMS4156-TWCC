@@ -65,6 +65,7 @@ public class Event {
     public Event() {
     }
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public Event(final int id, final String address, final int ageLimit,
                  final String name, final String description,
                  final double longitude, final double latitude,

@@ -34,32 +34,6 @@ public class EventController {
         return eventRepository.findAll();
     }
 
-    @PutMapping("/eventUpdate")
-    public Event updateEvent(@RequestBody Event eventRecord) throws NotFoundException {
-        Optional<Event> optionalEvent = eventRepository.findById(eventRecord.getId());
-        // if (optionalEvent.isEmpty()) {
-        //     throw new NotFoundException();
-        // }
-        if (optionalEvent == null) {
-            throw new NotFoundException();
-        }
-
-        Event existingEvent = optionalEvent.get();
-
-        existingEvent.setAddress(eventRecord.getAddress());
-        existingEvent.setAgeLimit(eventRecord.getAgeLimit());
-        existingEvent.setCost(eventRecord.getCost());
-        existingEvent.setDescription(eventRecord.getDescription());
-        existingEvent.setEndTimestamp(eventRecord.getEndTimestamp());
-        existingEvent.setLatitude(eventRecord.getLatitude());
-        existingEvent.setLongitude(eventRecord.getLongitude());
-        existingEvent.setMedia(eventRecord.getMedia());
-        existingEvent.setName(eventRecord.getName());
-        existingEvent.setStartTimestamp(eventRecord.getStartTimestamp());
-
-        return eventRepository.save(existingEvent);
-    }
-
     @GetMapping("/events/{id}")
     public Optional<Event> getEventsById(@PathVariable final Integer id) {
 
@@ -83,16 +57,6 @@ public class EventController {
         return null;
     }
 
-
-    @DeleteMapping("/delete/{eventId}")
-    public void deleteEventById(@PathVariable(value = "eventId") Integer eventId) throws NotFoundException{
-        if (eventRepository.findById(eventId).isEmpty()){
-            throw new NotFoundException();
-        }
-        eventRepository.deleteById(eventId);
-    }
-
-
     @PostMapping("/events")
     public Event createEvent(@RequestBody final Event newEvent) {
         System.out.println("print new event");
@@ -100,6 +64,36 @@ public class EventController {
         return eventRepository.save(newEvent);
     }
 
+    @PutMapping("/events")
+    public Event updateEvent(@RequestBody Event eventRecord) throws NotFoundException {
+        Optional<Event> optionalEvent = eventRepository.findById(eventRecord.getId());
+        if (optionalEvent.isEmpty()) {
+            throw new NotFoundException();
+        }
+
+        Event existingEvent = optionalEvent.get();
+
+        existingEvent.setAddress(eventRecord.getAddress());
+        existingEvent.setAgeLimit(eventRecord.getAgeLimit());
+        existingEvent.setCost(eventRecord.getCost());
+        existingEvent.setDescription(eventRecord.getDescription());
+        existingEvent.setEndTimestamp(eventRecord.getEndTimestamp());
+        existingEvent.setLatitude(eventRecord.getLatitude());
+        existingEvent.setLongitude(eventRecord.getLongitude());
+        existingEvent.setMedia(eventRecord.getMedia());
+        existingEvent.setName(eventRecord.getName());
+        existingEvent.setStartTimestamp(eventRecord.getStartTimestamp());
+
+        return eventRepository.save(existingEvent);
+    }
+
+    @DeleteMapping("/events/{eventId}")
+    public void deleteEventById(@PathVariable(value = "eventId") Integer eventId) throws NotFoundException{
+        if (eventRepository.findById(eventId).isEmpty()){
+            throw new NotFoundException();
+        }
+        eventRepository.deleteById(eventId);
+    }
 }
 
 
