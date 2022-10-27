@@ -3,8 +3,6 @@ package com.TWCC.controller;
 import java.util.List;
 import java.util.Optional;
 
-import javax.naming.NameNotFoundException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,9 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpClientErrorException.NotFound;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.data.repository.CrudRepository;
 
 import com.TWCC.data.Event;
 import com.TWCC.exception.InvalidRequestException;
