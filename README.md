@@ -71,3 +71,10 @@
     2. Locate Checkstyle report in `target/site/index.html`
 - Most recent Checkstyle run: `0 warnings, 0 errors`
     ![Checkstyle report](./reports/t3-checkstyle-report.png)
+
+### Test Coverage
+- Directions:
+    1. In app root directory: `mvn clean test`
+    2. Locate Checkstyle report in `target/site/jacoco/index.html`
+- Most recent Jacoco coverage run: `Instruction Coverage: 93%, Branch Coverage: 83%`
+    ![Coverage report](./reports/t4-test-coverage-report.png)
