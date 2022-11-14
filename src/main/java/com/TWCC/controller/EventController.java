@@ -86,6 +86,83 @@ public class EventController {
 
         return eventRepository.save(existingEvent);
     }
+    
+    
+    @PutMapping("/eventsPartial")
+    public Event updatedEventPartial(@RequestBody Event eventRecord) throws NotFoundException {
+        Optional<Event> optionalEvent = eventRepository.findById(eventRecord.getId());
+        if (optionalEvent.isEmpty()) {
+            throw new NotFoundException();
+        }
+
+        Event existingEvent = optionalEvent.get();
+
+        if (eventRecord.getAddress() != null) {
+            existingEvent.setAddress(eventRecord.getAddress());
+        } else {
+            existingEvent.setAddress(existingEvent.getAddress());
+        }
+        
+        // numeric
+        if (eventRecord.getAgeLimit() != 0) { 
+            existingEvent.setAgeLimit(eventRecord.getAgeLimit());
+        } else {
+            existingEvent.setAgeLimit(existingEvent.getAgeLimit());
+        }
+
+        // numeric
+        if (eventRecord.getCost() != 0.0) {
+            existingEvent.setCost(eventRecord.getCost());
+        } else {
+            existingEvent.setCost(existingEvent.getCost());
+        }
+
+        if (eventRecord.getDescription() != null) {
+            existingEvent.setDescription(eventRecord.getDescription());
+        } else {
+            existingEvent.setDescription(existingEvent.getDescription());
+        }
+
+        if (eventRecord.getEndTimestamp() != null) {
+            existingEvent.setEndTimestamp(eventRecord.getEndTimestamp());
+        } else {
+            existingEvent.setEndTimestamp(existingEvent.getEndTimestamp());
+        }
+
+        // numeric
+        if (eventRecord.getLatitude() != 0.0) {
+            existingEvent.setLatitude(eventRecord.getLatitude());
+        } else {
+            existingEvent.setLatitude(existingEvent.getLatitude());
+        }
+
+        // numeric
+        if (eventRecord.getLongitude() != 0.0) {
+            existingEvent.setLongitude(eventRecord.getLongitude());
+        } else {
+            existingEvent.setLongitude(existingEvent.getLongitude());
+        }
+
+        if (eventRecord.getMedia() != null) {
+            existingEvent.setMedia(eventRecord.getMedia());
+        } else {
+            existingEvent.setMedia(existingEvent.getMedia());
+        }
+
+        if (eventRecord.getName() != null) {
+            existingEvent.setName(eventRecord.getName());
+        } else {
+            existingEvent.setName(existingEvent.getName());
+        }
+
+        if (eventRecord.getStartTimestamp() != null) {
+            existingEvent.setStartTimestamp(eventRecord.getStartTimestamp());
+        } else {
+            existingEvent.setStartTimestamp(existingEvent.getStartTimestamp());
+        }
+
+        return eventRepository.save(existingEvent);
+    }
 
     @DeleteMapping("/events/{eventId}")
     public void deleteEventById(@PathVariable(value = "eventId") Integer eventId) throws NotFoundException{
