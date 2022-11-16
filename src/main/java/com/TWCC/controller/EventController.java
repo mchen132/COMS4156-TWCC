@@ -1,6 +1,7 @@
 package com.TWCC.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.TWCC.api.ApiHandler;
 import com.TWCC.data.Event;
 import com.TWCC.exception.InvalidRequestException;
 import com.TWCC.repository.EventRepository;
@@ -23,9 +25,13 @@ public class EventController {
     @Autowired
     private EventRepository eventRepository;
 
-    @GetMapping("/hello")
-    public String hello() {
-        return "Hi there";
+    @Autowired
+    private ApiHandler apiHandler;
+
+    @GetMapping("/apiTest")
+    public Map<String, Object> unparsedJSON() {
+
+        return apiHandler.getResponse();
     }
 
     @GetMapping("/events")
