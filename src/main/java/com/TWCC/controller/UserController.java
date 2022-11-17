@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.TWCC.data.User;
 import com.TWCC.payload.JwtResponse;
 import com.TWCC.payload.LoginRequest;
+import com.TWCC.payload.MessageResponse;
 import com.TWCC.repository.UserRepository;
 import com.TWCC.security.JwtUtils;
 import com.TWCC.security.UserDetailsExt;
@@ -44,13 +45,13 @@ public class UserController {
     public ResponseEntity<?> registerUser(@RequestBody User newUser) {
         if (userRepository.existsByUsername(newUser.getUsername())) {
             return ResponseEntity.badRequest().body(
-                "Username is already being used."
+                new MessageResponse("Username is already being used.")
             );
         }
 
         if (userRepository.existsByEmail(newUser.getEmail())) {
             return ResponseEntity.badRequest().body(
-                "Email is already being used."
+                new MessageResponse("Email is already being used.")
             );
         }
 
@@ -72,7 +73,7 @@ public class UserController {
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
         if (loginRequest.getUsername() == null || loginRequest.getPassword() == null) {        
             return ResponseEntity.badRequest().body(
-                "Username or password is empty"
+                new MessageResponse("Username or password is empty")
             );
         }
 
