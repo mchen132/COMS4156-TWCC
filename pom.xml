@@ -86,7 +86,6 @@
             <scope>test</scope>
         </dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -103,7 +102,9 @@
         		<version>2.22.0</version>
         		<configuration>
             		<includes>
+						<include>NycTodoServiceApplicationTests.java</include>
                 		<include>EventControllerTest.java</include>
+						<include>UserControllerTest.java</include>
             		</includes>
        	 		</configuration>
     		</plugin>

@@ -23,23 +23,20 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.util.NestedServletException;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.server.csrf.CsrfToken;
 
 import com.TWCC.data.Event;
-import com.TWCC.data.User;
 import com.TWCC.repository.EventRepository;
-import com.TWCC.repository.UserRepository;
+import com.TWCC.security.JwtUtils;
+import com.TWCC.security.UserDetailsServiceExt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(EventController.class)
@@ -52,6 +49,12 @@ public class EventControllerTest {
 
     @MockBean
     EventRepository eventRepository;
+
+	@MockBean
+	JwtUtils jwtUtils;
+
+	@MockBean
+	UserDetailsServiceExt userDetailsService;
 
     private List<Event> events = new ArrayList<>();
     private Event event1, event2, event3;
@@ -70,7 +73,7 @@ public class EventControllerTest {
         event1 = new Event(1, "Columbia", 18, 
                                 "Midterm Study session", 
                                 "This is a midterm study session", 
-                                12.5, 122.34, 0, "www.columbia.edu", 
+                                12.5, 122.34, 0, "www.columbia.edu", 1,
                                 new Timestamp(new Date().getTime() - 10), 
                                 new Timestamp(new Date().getTime() + 5),
                                 new Timestamp(new Date().getTime() + 10));
@@ -78,7 +81,7 @@ public class EventControllerTest {
         event2 = new Event(2, "UW", 18, 
                                 "Midterm Study session at UW", 
                                 "This is a midterm study session at UW", 
-                                12.5, 122.34, 0, "www.uw.edu", 
+                                12.5, 122.34, 0, "www.uw.edu", 2,
                                 new Timestamp(new Date().getTime() - 10), 
                                 new Timestamp(new Date().getTime() + 5), 
                                 new Timestamp(new Date().getTime() + 10));
@@ -86,7 +89,7 @@ public class EventControllerTest {
         event3 = new Event(3, "Columbia", 18, 
                                 "Midterm Study session at UMD", 
                                 "This is a midterm study session at UMD", 
-                                12.5, 122.34, 0, "www.umd.edu", 
+                                12.5, 122.34, 0, "www.umd.edu", 3,
                                 new Timestamp(new Date().getTime() - 10), 
                                 new Timestamp(new Date().getTime() + 5), 
                                 new Timestamp(new Date().getTime() + 10));
@@ -171,6 +174,7 @@ public class EventControllerTest {
             122.34,
             5.0f,
             "www.columbia.edu",
+			3,
             new Timestamp(new Date().getTime() - 10),
             new Timestamp(new Date().getTime() + 5),
             new Timestamp(new Date().getTime() + 10)
@@ -199,7 +203,8 @@ public class EventControllerTest {
 				.andExpect(jsonPath("$.longitude", is(12.5)))
 				.andExpect(jsonPath("$.latitude", is(122.34)))
 				.andExpect(jsonPath("$.cost", is(5.0)))
-				.andExpect(jsonPath("$.media", is("www.columbia.edu")));
+				.andExpect(jsonPath("$.media", is("www.columbia.edu")))
+				.andExpect(jsonPath("$.host", is(3)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -221,7 +226,8 @@ public class EventControllerTest {
 						put("latitude", 12.5);
 						put("longitude", 125.2);
 						put("cost", "five"); // cost should be a float
-						put("media", "www.columbia.edu");						
+						put("media", "www.columbia.edu");
+						put("host", 3);
 						put("startTimestamp", new Timestamp(new Date().getTime() + 5));
 						put("endTimestamp", new Timestamp(new Date().getTime() + 10));
 					}}))
@@ -248,6 +254,7 @@ public class EventControllerTest {
 			122.34,
 			5.0f,
 			"www.columbia.edu",
+			3,
 			new Timestamp(new Date().getTime() - 10),
 			new Timestamp(new Date().getTime() + 5),
 			new Timestamp(new Date().getTime() + 10)
@@ -296,6 +303,7 @@ public class EventControllerTest {
             125.34,
             10.0f,
             "www.columbia.edu",
+			3,
             new Timestamp(new Date().getTime() - 10),
             new Timestamp(new Date().getTime() + 5),
             new Timestamp(new Date().getTime() + 10)
@@ -340,6 +348,7 @@ public class EventControllerTest {
             125.34,
             10.0f,
             "www.columbia.edu",
+			3,
             new Timestamp(new Date().getTime() - 10),
             new Timestamp(new Date().getTime() + 5),
             new Timestamp(new Date().getTime() + 10)
