@@ -22,4 +22,4 @@ jobs:
         run: mvn site
 
       - name: Static Analysis Bug Finder Tool
-        run: echo "TODO: Update static analysis bug finder tool script"
+        run: echo "TODO - Update static analysis bug finder tool script"
