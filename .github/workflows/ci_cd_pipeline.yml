@@ -26,11 +26,13 @@ jobs:
   checkstyle:
     needs: build
     runs-on: ubuntu-latest
+    steps:
       - name: Checkstyle
         run: mvn site
   
   static-analysis-tool:
     needs: build
     runs-on: ubuntu-latest
+    steps:
       - name: Static Analysis Bug Finder Tool
         run: echo "TODO - Update static analysis bug finder tool script"
