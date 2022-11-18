@@ -1,0 +1,25 @@
+# CI/CD Pipeline for TWCC's project
+
+name: TWCC CI/CD Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Run tests
+        run: mvn clean test
+
+      - name: Checkstyle
+        run: mvn site
+        
+      - name: Static Analysis Bug Finder Tool
+        run: echo TODO: Update static analysis bug finder tool script
