@@ -23,23 +23,27 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.util.NestedServletException;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.server.csrf.CsrfToken;
 
 import com.TWCC.data.Event;
+import com.TWCC.data.User;
 import com.TWCC.repository.EventRepository;
+import com.TWCC.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(EventController.class)
 public class EventControllerTest {
-
     @Autowired
     MockMvc mockMvc;
 
@@ -357,6 +361,19 @@ public class EventControllerTest {
 			if (e instanceof NestedServletException) {
 				assertTrue(e.getMessage().contains("NotFoundException"));
 			}
+		}
+	}
+
+
+	@Test
+	void testGetEventsWithUnauthorizedUser() {
+		try {
+			// Without using "WithMockUser" annotation, the user shouldn't
+			// be mocked and the request should be unauthorized
+			mockMvc.perform(MockMvcRequestBuilders.get("/events"))
+				.andExpect(status().isUnauthorized());
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }
