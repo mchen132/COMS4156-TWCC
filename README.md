@@ -17,6 +17,7 @@
 
 ## 2. Documentation
 ### **Events**
+- All calls need to include a valid JWT (Bearer Token), which can be obtained from `/user/login` route, in the authorization headers
 - `GET /events`: Gets a list of events
     - Specify request parameters to filter returned events
         - `id` (integer)
@@ -63,6 +64,32 @@
      ```
 - `DELETE /events`: Deletes an event given an existing event ID
     - Sample Request: localhost:8080/events/1
+
+### **User**
+- `POST /user/register`: Registers a new user
+    - Sample Request: localhost:8080/user/register
+    - Must specify request body
+    - Sample Request Body:
+    ```
+        {
+            "firstName": "foo",
+            "lastName": "bar",
+            "age": 50,
+            "username": "foobar",
+            "password": "12345",
+            "email": "foobar@baz.com"
+        }
+    ```
+- `POST /user/login`: login as the specified user
+    - Returns JWT upon successful login which is then to be used as an authorization mechanism in any other non `/user/**` subsequent API calls (in order to be a valid request)
+    - Sample Request: localhost:8080/user/login
+    - Sample Request Body:
+    ```
+        {
+            "username": "foobar",
+            "password": "12345"
+        }
+    ```
 
 ## 3. Reports
 ### Checkstyle
