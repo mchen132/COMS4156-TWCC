@@ -1,6 +1,6 @@
-# CI/CD Pipeline for TWCC's project
+# CI/CD Workflow for TWCC's project
 
-name: TWCC CI/CD Pipeline
+name: TWCC CI/CD Workflow
 
 on: [push, pull_request]
 
