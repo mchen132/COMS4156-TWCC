@@ -46,6 +46,9 @@ public class Event {
     @Column(name = "media")
     private String media;
 
+    @Column(name = "host")
+    private int host;
+
     @CreationTimestamp
     @Column(name = "creation_timestamp")
     @JsonFormat(shape = JsonFormat.Shape.STRING,
@@ -69,7 +72,7 @@ public class Event {
     public Event(final int id, final String address, final int ageLimit,
                  final String name, final String description,
                  final double longitude, final double latitude,
-                 final float cost, final String media,
+                 final float cost, final String media, int host,
                  final Timestamp creationTimestamp,
                  final Timestamp startTimestamp,
                  final Timestamp endTimestamp) {
@@ -82,6 +85,7 @@ public class Event {
         this.latitude = latitude;
         this.cost = cost;
         this.media = media;
+        this.host = host;
         this.creationTimestamp = creationTimestamp;
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
@@ -157,6 +161,14 @@ public class Event {
 
     public void setMedia(final String media) {
         this.media = media;
+    }
+
+    public int getHost() {
+        return host;
+    }
+
+    public void setHost(final int host) {
+        this.host = host;
     }
 
     public Timestamp getCreationTimestamp() {

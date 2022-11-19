@@ -17,6 +17,7 @@
 
 ## 2. Documentation
 ### **Events**
+- All calls need to include a valid JWT (Bearer Token), which can be obtained from `/user/login` route, in the authorization headers
 - `GET /events`: Gets a list of events
     - Specify request parameters to filter returned events
         - `id` (integer)
@@ -64,6 +65,32 @@
 - `DELETE /events`: Deletes an event given an existing event ID
     - Sample Request: localhost:8080/events/1
 
+### **User**
+- `POST /user/register`: Registers a new user
+    - Sample Request: localhost:8080/user/register
+    - Must specify request body
+    - Sample Request Body:
+    ```
+        {
+            "firstName": "foo",
+            "lastName": "bar",
+            "age": 50,
+            "username": "foobar",
+            "password": "12345",
+            "email": "foobar@baz.com"
+        }
+    ```
+- `POST /user/login`: login as the specified user
+    - Returns JWT upon successful login which is then to be used as an authorization mechanism in any other non `/user/**` subsequent API calls (in order to be a valid request)
+    - Sample Request: localhost:8080/user/login
+    - Sample Request Body:
+    ```
+        {
+            "username": "foobar",
+            "password": "12345"
+        }
+    ```
+
 ## 3. Reports
 ### Checkstyle
 - Directions:
@@ -78,3 +105,6 @@
     2. Locate Checkstyle report in `target/site/jacoco/index.html`
 - Most recent Jacoco coverage run: `Instruction Coverage: 93%, Branch Coverage: 83%`
     ![Coverage report](./reports/t4-test-coverage-report.png)
+
+### CI/CD Workflow Reports
+- Any push and pull request triggers a Github Actions workflow run where each log can be located [here](https://github.com/mchen132/COMS4156-TWCC/actions/workflows/ci_cd_workflow.yml)
