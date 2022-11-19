@@ -333,8 +333,10 @@ public class EventControllerTest {
 	// }
 
 	@Test
+	@WithMockUser
 	void updateEventSuccessfully() {
 		try {
+			CsrfToken csrfToken = (CsrfToken) csrfTokenRepo.generateToken(new MockHttpServletRequest());
 			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/events")
 					.content(this.objectMapper.writeValueAsString(new HashMap<String, String>() {{		
 						put("id", "1");			
@@ -350,7 +352,21 @@ public class EventControllerTest {
 						put("endTimestamp", new Timestamp(new Date().getTime() + 10).toString());
 					}}))
 					.contentType(MediaType.APPLICATION_JSON)
-					.accept(MediaType.APPLICATION_JSON);
+					.accept(MediaType.APPLICATION_JSON)
+					.sessionAttr(CSRF_TOKEN_NAME, csrfToken);
+
+			mockMvc.perform(mockRequest)
+						.andExpect(status().isOk())
+						.andExpect(jsonPath("$.id", is(1)))
+						.andExpect(jsonPath("$.address", is("Columbia")))
+						.andExpect(jsonPath("$.ageLimit", is(18)))
+						.andExpect(jsonPath("$.name", is("Midterm Study Session")))
+						.andExpect(jsonPath("$.description", is("This is a midterm study session")))
+						.andExpect(jsonPath("$.longitude", is(125.2)))
+						.andExpect(jsonPath("$.latitude", is(12.5)))
+						.andExpect(jsonPath("$.cost", is(5.0)))
+						.andExpect(jsonPath("$.media", is("www.columbia.edu")));
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
