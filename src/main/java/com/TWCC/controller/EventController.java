@@ -1,8 +1,8 @@
 package com.TWCC.controller;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +67,7 @@ public class EventController {
     }
     
     @PutMapping("/events")
-    public Event updateEvent(@RequestBody Map<String, String> jsonObject) throws NotFoundException {
+    public Event updateEvent(@RequestBody HashMap<String, String> jsonObject) throws NotFoundException {
         Optional<Event> optionalEvent = eventRepository.findById(Integer.parseInt(jsonObject.get("id")));
         if (optionalEvent.isEmpty()) {
             throw new NotFoundException();
