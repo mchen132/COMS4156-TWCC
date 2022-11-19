@@ -1,6 +1,8 @@
 package com.TWCC.controller;
 
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,102 +65,54 @@ public class EventController {
         System.out.println("new event: " + newEvent.toString());
         return eventRepository.save(newEvent);
     }
-
+    
     @PutMapping("/events")
-    public Event updateEvent(@RequestBody Event eventRecord) throws NotFoundException {
-        Optional<Event> optionalEvent = eventRepository.findById(eventRecord.getId());
+    public Event updateEvent(@RequestBody Map<String, String> jsonObject) throws NotFoundException {
+        Optional<Event> optionalEvent = eventRepository.findById(Integer.parseInt(jsonObject.get("id")));
         if (optionalEvent.isEmpty()) {
             throw new NotFoundException();
         }
 
         Event existingEvent = optionalEvent.get();
 
-        existingEvent.setAddress(eventRecord.getAddress());
-        existingEvent.setAgeLimit(eventRecord.getAgeLimit());
-        existingEvent.setCost(eventRecord.getCost());
-        existingEvent.setDescription(eventRecord.getDescription());
-        existingEvent.setEndTimestamp(eventRecord.getEndTimestamp());
-        existingEvent.setLatitude(eventRecord.getLatitude());
-        existingEvent.setLongitude(eventRecord.getLongitude());
-        existingEvent.setMedia(eventRecord.getMedia());
-        existingEvent.setName(eventRecord.getName());
-        existingEvent.setStartTimestamp(eventRecord.getStartTimestamp());
-
-        return eventRepository.save(existingEvent);
-    }
-    
-    
-    @PutMapping("/eventsPartial")
-    public Event updatedEventPartial(@RequestBody Event eventRecord) throws NotFoundException {
-        Optional<Event> optionalEvent = eventRepository.findById(eventRecord.getId());
-        if (optionalEvent.isEmpty()) {
-            throw new NotFoundException();
-        }
-
-        Event existingEvent = optionalEvent.get();
-
-        if (eventRecord.getAddress() != null) {
-            existingEvent.setAddress(eventRecord.getAddress());
-        } else {
-            existingEvent.setAddress(existingEvent.getAddress());
+        if (jsonObject.containsKey("address")) {
+            existingEvent.setAddress(jsonObject.get("address"));
         }
         
-        // numeric
-        if (eventRecord.getAgeLimit() != 0) { 
-            existingEvent.setAgeLimit(eventRecord.getAgeLimit());
-        } else {
-            existingEvent.setAgeLimit(existingEvent.getAgeLimit());
+        if (jsonObject.containsKey("ageLimit")) {
+            existingEvent.setAgeLimit(Integer.parseInt(jsonObject.get("ageLimit")));
         }
 
-        // numeric
-        if (eventRecord.getCost() != 0.0) {
-            existingEvent.setCost(eventRecord.getCost());
-        } else {
-            existingEvent.setCost(existingEvent.getCost());
+        if (jsonObject.containsKey("name")) {
+            existingEvent.setName(jsonObject.get("name"));
         }
 
-        if (eventRecord.getDescription() != null) {
-            existingEvent.setDescription(eventRecord.getDescription());
-        } else {
-            existingEvent.setDescription(existingEvent.getDescription());
+        if (jsonObject.containsKey("description")) {
+            existingEvent.setDescription(jsonObject.get("description"));
         }
 
-        if (eventRecord.getEndTimestamp() != null) {
-            existingEvent.setEndTimestamp(eventRecord.getEndTimestamp());
-        } else {
-            existingEvent.setEndTimestamp(existingEvent.getEndTimestamp());
+        if (jsonObject.containsKey("longitude")) {
+            existingEvent.setLongitude(Double.parseDouble(jsonObject.get("longitude")));
         }
 
-        // numeric
-        if (eventRecord.getLatitude() != 0.0) {
-            existingEvent.setLatitude(eventRecord.getLatitude());
-        } else {
-            existingEvent.setLatitude(existingEvent.getLatitude());
+        if (jsonObject.containsKey("latitude")) {
+            existingEvent.setLatitude(Double.parseDouble(jsonObject.get("latitude")));
         }
 
-        // numeric
-        if (eventRecord.getLongitude() != 0.0) {
-            existingEvent.setLongitude(eventRecord.getLongitude());
-        } else {
-            existingEvent.setLongitude(existingEvent.getLongitude());
+        if (jsonObject.containsKey("cost")) {
+            existingEvent.setCost(Float.parseFloat(jsonObject.get("cost")));
         }
 
-        if (eventRecord.getMedia() != null) {
-            existingEvent.setMedia(eventRecord.getMedia());
-        } else {
-            existingEvent.setMedia(existingEvent.getMedia());
+        if (jsonObject.containsKey("media")) {
+            existingEvent.setMedia(jsonObject.get("media"));
         }
 
-        if (eventRecord.getName() != null) {
-            existingEvent.setName(eventRecord.getName());
-        } else {
-            existingEvent.setName(existingEvent.getName());
+        if (jsonObject.containsKey("startTimestamp")) {
+            existingEvent.setStartTimestamp(Timestamp.valueOf(jsonObject.get("startTimestamp")));
         }
 
-        if (eventRecord.getStartTimestamp() != null) {
-            existingEvent.setStartTimestamp(eventRecord.getStartTimestamp());
-        } else {
-            existingEvent.setStartTimestamp(existingEvent.getStartTimestamp());
+        if (jsonObject.containsKey("endTimestamp")) {
+            existingEvent.setEndTimestamp(Timestamp.valueOf(jsonObject.get("endTimestamp")));
         }
 
         return eventRepository.save(existingEvent);
