@@ -1,12 +1,11 @@
 package com.TWCC.api;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+
+import com.TWCC.data.Event;
 
 @Component
 public class ApiHandler {
@@ -18,24 +17,11 @@ public class ApiHandler {
     private ResponseProcessor processor;
 
 
-    public Map<String, Object> getResponse() {
+    public List<Event> getAllEvents() {
 
-        String responseString = requester.getPlainJSON();
+        String responseString = requester.getAllEvents();
+        return processor.processResponse(responseString);
 
-        try {
-            return processor.processResponse(responseString);
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        return new HashMap<String, Object>();
-
-    }
-
-    public String getStringResponse() {
-        return requester.getPlainJSON();
     }
 
 }

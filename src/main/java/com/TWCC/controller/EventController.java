@@ -1,7 +1,6 @@
 package com.TWCC.controller;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +27,9 @@ public class EventController {
     @Autowired
     private ApiHandler apiHandler;
 
-    @GetMapping("/apiTest")
-    public Map<String, Object> unparsedJSON() {
-
-        return apiHandler.getResponse();
+    @GetMapping("/populateEvents")
+    public List<Event> populateEvents() {
+        return apiHandler.getAllEvents();
     }
 
     @GetMapping("/events")
