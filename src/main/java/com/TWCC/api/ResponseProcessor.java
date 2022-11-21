@@ -82,7 +82,7 @@ public class ResponseProcessor {
         Timestamp creationTimestamp = startTimestamp;
         Timestamp endTimestamp = startTimestamp;
 
-        return new Event(id, address, id, name, description, longitude, latitude, cost, media, creationTimestamp, startTimestamp, endTimestamp);
+        return new Event(id, address, ageLimit, name, description, longitude, latitude, cost, media, creationTimestamp, startTimestamp, endTimestamp);
     }
 
     // All location related info are embedded in events[_embedded][venues]
