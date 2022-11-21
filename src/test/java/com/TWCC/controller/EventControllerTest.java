@@ -28,6 +28,9 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.util.NestedServletException;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
+// import org.springframework.security.test.context.support.WithMockUser;
+// import org.springframework.security.web.csrf
 
 import com.TWCC.data.Event;
 import com.TWCC.repository.EventRepository;
@@ -106,33 +109,63 @@ public class EventControllerTest {
                             .andExpect(status().isOk())
                             .andExpect(jsonPath("$", Matchers.hasSize(3)))
                             .andExpect(jsonPath("$[2].address", Matchers.is("Columbia")));
+							
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @Test
-    void testGetEventsByAddress() {
-        Mockito.when(eventRepository.findByAddress("Columbia")).thenReturn(new ArrayList<>(Arrays.asList(event1, event3)));
+    // @Test
+    // void testGetEventsByAddress() {
+    //     Mockito.when(eventRepository.findByAddress("Columbia")).thenReturn(new ArrayList<>(Arrays.asList(event1, event3)));
 
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/events/byaddress/Columbia");
+    //     MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/events/byaddress/Columbia");
         
-        try {
-            mockMvc.perform(request)
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$", Matchers.hasSize(2)))
-                    .andExpect(jsonPath("$[0].id", Matchers.is(1)))
-                    .andExpect(jsonPath("$[1].id", Matchers.is(3)));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    //     try {
+    //         mockMvc.perform(request)
+    //                 .andExpect(status().isOk())
+    //                 .andExpect(jsonPath("$", Matchers.hasSize(2)))
+    //                 .andExpect(jsonPath("$[0].id", Matchers.is(1)))
+    //                 .andExpect(jsonPath("$[1].id", Matchers.is(3)));
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //     }
+    // }
+	
+	@Test
+	void testFilterEvent() {
+
+		Mockito.when(eventRepository.findAll()).thenReturn(new ArrayList<>(Arrays.asList(event3)));
+
+		try {
+		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/filterEvents")
+				.content(this.objectMapper.writeValueAsString(new HashMap<String, String>() {{					
+					put("address", "Columbia");
+					put("description", "UMD");
+					// put("age_limit", "10");					
+					// put("start_timestamp", new Timestamp(new Date().getTime()).toString());
+				}}))
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON);			
+
+				mockMvc.perform(mockRequest)
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].address", is("Columbia")))
+				.andExpect(jsonPath("$[0].description", is("This is a midterm study session at UMD")))
+				// .andExpect(jsonPath("$[0].ageLimit", is(18)))
+				// .andExpect(jsonPath("$[0].start_timestamp", is( new Timestamp(new Date().getTime() + 5))))
+				.andReturn();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+	}
 
     @Test
     void testGetEventsById() {
         Mockito.when(eventRepository.findById(event1.getId())).thenReturn(java.util.Optional.of(event1));
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/events/1");
+		
         
         try {
             mockMvc.perform(request)
