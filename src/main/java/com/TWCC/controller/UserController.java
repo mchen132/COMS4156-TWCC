@@ -7,7 +7,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +41,6 @@ public class UserController {
      * @param newUser
      * @return ResponseEntity containing register user information
      */
-    @CrossOrigin
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User newUser) {
         if (userRepository.existsByUsername(newUser.getUsername())) {
@@ -71,7 +69,6 @@ public class UserController {
      * @param loginRequest
      * @return ResponseEntity containing login user response information
      */
-    @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
         if (loginRequest.getUsername() == null || loginRequest.getPassword() == null) {        

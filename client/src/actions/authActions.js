@@ -15,3 +15,17 @@ export const registerUser = async (registerBody, navigate) => {
         console.error(err);
     }
 };
+
+export const loginUser = async (loginBody, navigate) => {
+    try {
+        const res = await axios.post('http://localhost:8080/user/login',
+            loginBody
+        );
+
+        if (res.status == 200) {
+            navigate('/events');
+        }
+    } catch (err) {
+        console.error(err);
+    }
+};
