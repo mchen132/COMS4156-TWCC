@@ -5,6 +5,11 @@ import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import EventsContainer from './components/events/EventsContainer';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { setAuthToken } from './utils/authUtil';
+
+if (localStorage.token) {
+	setAuthToken(localStorage.token);
+}
 
 const App = () => {
 	return (

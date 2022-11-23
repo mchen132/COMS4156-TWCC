@@ -18,8 +18,7 @@ public class NycTodoServiceApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/user/**").allowedOrigins("http://localhost:3002");
-                registry.addMapping("/events/**").allowedOrigins("http://localhost:3002");
+				registry.addMapping("/**").allowedOrigins("http://localhost:3002");
 			}
 		};
 	}

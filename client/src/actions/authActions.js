@@ -8,7 +8,7 @@ export const registerUser = async (registerBody, navigate) => {
             { headers: { 'Content-Type': 'application/json' }}
         );
 
-        if (res.status == 200) {
+        if (res.status === 200) {
             navigate('/login');
             return res.data;
         }
@@ -21,13 +21,13 @@ export const loginUser = async (loginBody, navigate) => {
     try {
         const res = await axios.post('http://localhost:8080/user/login', loginBody);
 
-        if (res.status == 200) {
+        if (res.status === 200) {
             const { email, id, token, username } = res.data;
             
             localStorage.setItem('userEmail', email);
             localStorage.setItem('userId', id);
             localStorage.setItem('username', username);
-            localStorage.setItem('jwtInfo', token);
+            localStorage.setItem('token', token);
 
             setAuthToken(token);
             
