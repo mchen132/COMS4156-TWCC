@@ -1,21 +1,25 @@
 package com.TWCC.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.TWCC.data.Event;
+import com.TWCC.data.EventStatistics;
 import com.TWCC.exception.InvalidRequestException;
 import com.TWCC.repository.EventRepository;
 import com.TWCC.security.JwtUtils;
@@ -107,6 +111,35 @@ public class EventController {
             throw new NotFoundException();
         }
         eventRepository.deleteById(eventId);
+    }
+
+    @GetMapping("/events/statistics")
+    public ResponseEntity<?> getEventStatistics() {
+        EventStatistics eventStats = new EventStatistics();
+        List<Event> events = eventRepository.findAll();
+        
+        // Parse by category
+        Map<String, Integer> eventsByCategory = new HashMap<String, Integer>();
+        for (Event event: events) {
+            if (event.getCategories() != null) {
+                String[] categories = event.getCategories().split(",");
+    
+                for (int i = 0; i < categories.length; i++) {
+                    String category = categories[i];
+    
+                    if (eventsByCategory.containsKey(category)) {
+                        eventsByCategory.put(category, eventsByCategory.get(category) + 1);
+                    } else {
+                        eventsByCategory.put(category, 1);
+                    }
+                }
+            }
+        }
+
+        eventStats = eventStats.setEventsByCategory(eventsByCategory);
+
+        // return eventStats.setEventsByCategory(eventsByCategory);
+        return ResponseEntity.ok().body(eventStats);
     }
 }
 
