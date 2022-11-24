@@ -16,6 +16,9 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Change to service directory
+        run: cd service/
+
       - name: Run tests
         run: mvn clean test
 
