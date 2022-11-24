@@ -14,6 +14,7 @@ if (localStorage.token) {
 const App = () => {
 	return (
 		<div className="App">
+			<h1>TWCC Events</h1>
 			<Router>
 				<>
 					<Routes>
