@@ -6,7 +6,6 @@ const Landing = () => {
   return (
     <section className="landing">
         <div className="landing-inner">
-            <h1>TWCC Events</h1>
             <p className="lead">
                 Learn about events
             </p>
