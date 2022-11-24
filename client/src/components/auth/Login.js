@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { loginUser } from '../../actions/authActions';
+import { Link } from 'react-router-dom';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -46,6 +47,9 @@ const Register = () => {
                     />
                 </div>
                 <Button type="submit" variant="primary">Login</Button>
+                <p className="my-1">
+                    Don't have an account yet? <Link to="/register">Sign Up</Link>
+                </p>
             </form>
         </>
     );

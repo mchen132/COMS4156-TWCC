@@ -5,6 +5,7 @@ export const setAuthToken = token => {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } else {
         delete axios.defaults.headers.common['Authorization'];
+        clearAuthLocalStorageInfo();
     }
 };
 
@@ -15,3 +16,11 @@ export const getAuthInformation = key => {
         console.error(`getAuthInformation(): Key does not exist (${key})`);
     }
 }
+
+// Clear local storage variables
+export const clearAuthLocalStorageInfo = () => {
+    localStorage.removeItem('username');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('token');
+};

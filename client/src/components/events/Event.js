@@ -19,9 +19,10 @@ const Event = ({ event }) => {
     } = event;
 
     return (
-        <Card style={{ width: '18rem' }}>
+        <Card className='event-card' style={{ width: '18rem' }}>
             <Card.Body>
                 <Card.Title>{name}</Card.Title>
+                <Card.Subtitle className="mb-2 text-muted">Host: {host}</Card.Subtitle>
                 <Card.Subtitle className="mb-2 text-muted">Address: {address}</Card.Subtitle>
                 <Card.Subtitle className="mb-2 text-muted">Age Restriction: {ageLimit}+</Card.Subtitle>
                 <Card.Subtitle className="mb-2 text-muted">Cost: ${cost}</Card.Subtitle>

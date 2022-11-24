@@ -21,7 +21,7 @@ const Events = () => {
 
     return (
         <>
-            { events.map(event => <Event key={event.id} event={event}/>) }
+            { events && events.length > 0 && events.map(event => <Event key={event.id} event={event}/>) }
         </>
     );
 };

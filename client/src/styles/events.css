@@ -1,0 +1,14 @@
+.events-container-header {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+
+.events-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.events-container .event-card {
+    margin: 0.2rem;
+}
