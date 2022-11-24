@@ -74,6 +74,7 @@ public class EventControllerTest {
                                 "Midterm Study session", 
                                 "This is a midterm study session", 
                                 12.5, 122.34, 0, "www.columbia.edu", 1,
+								"category1, category2, category3",
                                 new Timestamp(new Date().getTime() - 10), 
                                 new Timestamp(new Date().getTime() + 5),
                                 new Timestamp(new Date().getTime() + 10));
@@ -82,6 +83,7 @@ public class EventControllerTest {
                                 "Midterm Study session at UW", 
                                 "This is a midterm study session at UW", 
                                 12.5, 122.34, 0, "www.uw.edu", 2,
+								"category1, category2, category3",
                                 new Timestamp(new Date().getTime() - 10), 
                                 new Timestamp(new Date().getTime() + 5), 
                                 new Timestamp(new Date().getTime() + 10));
@@ -90,6 +92,7 @@ public class EventControllerTest {
                                 "Midterm Study session at UMD", 
                                 "This is a midterm study session at UMD", 
                                 12.5, 122.34, 0, "www.umd.edu", 3,
+								"category1, category2, category3",
                                 new Timestamp(new Date().getTime() - 10), 
                                 new Timestamp(new Date().getTime() + 5), 
                                 new Timestamp(new Date().getTime() + 10));
@@ -175,6 +178,7 @@ public class EventControllerTest {
             5.0f,
             "www.columbia.edu",
 			3,
+			"category1, category2, category3",
             new Timestamp(new Date().getTime() - 10),
             new Timestamp(new Date().getTime() + 5),
             new Timestamp(new Date().getTime() + 10)
@@ -255,6 +259,7 @@ public class EventControllerTest {
 			5.0f,
 			"www.columbia.edu",
 			3,
+			"category1, category2, category3",
 			new Timestamp(new Date().getTime() - 10),
 			new Timestamp(new Date().getTime() + 5),
 			new Timestamp(new Date().getTime() + 10)
@@ -304,6 +309,7 @@ public class EventControllerTest {
             10.0f,
             "www.columbia.edu",
 			3,
+			"category1, category2, category3",
             new Timestamp(new Date().getTime() - 10),
             new Timestamp(new Date().getTime() + 5),
             new Timestamp(new Date().getTime() + 10)
@@ -349,6 +355,7 @@ public class EventControllerTest {
             10.0f,
             "www.columbia.edu",
 			3,
+			"category1, category2, category3",
             new Timestamp(new Date().getTime() - 10),
             new Timestamp(new Date().getTime() + 5),
             new Timestamp(new Date().getTime() + 10)

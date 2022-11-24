@@ -49,6 +49,9 @@ public class Event {
     @Column(name = "host")
     private int host;
 
+    @Column(name = "categories")
+    private String categories;
+
     @CreationTimestamp
     @Column(name = "creation_timestamp")
     @JsonFormat(shape = JsonFormat.Shape.STRING,
@@ -73,6 +76,7 @@ public class Event {
                  final String name, final String description,
                  final double longitude, final double latitude,
                  final float cost, final String media, int host,
+                 final String categories,
                  final Timestamp creationTimestamp,
                  final Timestamp startTimestamp,
                  final Timestamp endTimestamp) {
@@ -86,6 +90,7 @@ public class Event {
         this.cost = cost;
         this.media = media;
         this.host = host;
+        this.categories = categories;
         this.creationTimestamp = creationTimestamp;
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
@@ -171,6 +176,14 @@ public class Event {
         this.host = host;
     }
 
+    public String getCategories() {
+        return categories;
+    }
+
+    public void setCategories(String categories) {
+        this.categories = categories;
+    }
+
     public Timestamp getCreationTimestamp() {
         return creationTimestamp;
     }
@@ -206,6 +219,8 @@ public class Event {
                 + ", latitude=" + latitude
                 + ", cost=" + cost
                 + ", media=" + media
+                + ", host=" + host
+                + ", categories=" + categories
                 + ", creationTimestamp=" + creationTimestamp
                 + ", startTimestamp=" + startTimestamp
                 + ", endTimestamp=" + endTimestamp + "]";
