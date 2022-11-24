@@ -7,6 +7,9 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./service
     steps:
       - uses: actions/checkout@v3 # action that checks out repository onto the runner
       - name: Set up JDK 17
@@ -15,9 +18,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
-
-      - name: Change to service directory
-        run: cd service/
 
       - name: Run tests
         run: mvn clean test
