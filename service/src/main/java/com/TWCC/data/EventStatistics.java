@@ -3,14 +3,14 @@ package com.TWCC.data;
 import java.util.Map;
 
 public class EventStatistics {
-    private Map<String, Integer> eventsByCategory;
+    private Map<String, Integer> numberOfEventsByCategory;
 
-    public Map<String, Integer> getEventsByCategory() {
-        return eventsByCategory;
+    public Map<String, Integer> getNumberOfEventsByCategory() {
+        return numberOfEventsByCategory;
     }
 
-    public EventStatistics setEventsByCategory(Map<String, Integer> eventsByCategory) {
-        this.eventsByCategory = eventsByCategory;
+    public EventStatistics setEventsByCategory(Map<String, Integer> numberOfEventsByCategory) {
+        this.numberOfEventsByCategory = numberOfEventsByCategory;
         return this;
     }
 }

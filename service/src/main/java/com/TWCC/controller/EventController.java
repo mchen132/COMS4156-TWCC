@@ -25,6 +25,7 @@ import com.TWCC.repository.EventRepository;
 import com.TWCC.security.JwtUtils;
 import com.TWCC.security.UserDetailsExt;
 import com.TWCC.security.UserDetailsServiceExt;
+import com.TWCC.service.EventStatisticService;
 
 @RestController
 public class EventController {
@@ -37,6 +38,9 @@ public class EventController {
 
     @Autowired
     private UserDetailsServiceExt userDetailsService;
+
+    @Autowired
+    private EventStatisticService eventStatisticService;
 
     @GetMapping("/hello")
     public String hello() {
@@ -119,26 +123,10 @@ public class EventController {
         List<Event> events = eventRepository.findAll();
         
         // Parse by category
-        Map<String, Integer> eventsByCategory = new HashMap<String, Integer>();
-        for (Event event: events) {
-            if (event.getCategories() != null) {
-                String[] categories = event.getCategories().split(",");
-    
-                for (int i = 0; i < categories.length; i++) {
-                    String category = categories[i];
-    
-                    if (eventsByCategory.containsKey(category)) {
-                        eventsByCategory.put(category, eventsByCategory.get(category) + 1);
-                    } else {
-                        eventsByCategory.put(category, 1);
-                    }
-                }
-            }
-        }
+        Map<String, Integer> numberOfEventsByCategory = eventStatisticService.getNumberOfEventsByCategory(events);
 
-        eventStats = eventStats.setEventsByCategory(eventsByCategory);
+        eventStats = eventStats.setEventsByCategory(numberOfEventsByCategory);
 
-        // return eventStats.setEventsByCategory(eventsByCategory);
         return ResponseEntity.ok().body(eventStats);
     }
 }
