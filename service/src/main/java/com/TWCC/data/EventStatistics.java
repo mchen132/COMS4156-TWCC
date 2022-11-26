@@ -8,6 +8,7 @@ public class EventStatistics {
     private float averageCostForEvents;
     private Map<String, Float> averageCostOfEventsByCategory;
     private Map<String, Integer> averageAgeLimitOfEventsByCategory;
+    private Map<String, Map<String, Integer>> numberOfEventsByCategoryTimeRanges;
 
     public Map<String, Integer> getNumberOfEventsByCategory() {
         return numberOfEventsByCategory;
@@ -51,6 +52,15 @@ public class EventStatistics {
 
     public EventStatistics setAverageAgeLimitOfEventsByCategory(Map<String, Integer> averageAgeLimitOfEventsByCategory) {
         this.averageAgeLimitOfEventsByCategory = averageAgeLimitOfEventsByCategory;
+        return this;
+    }
+
+    public Map<String, Map<String, Integer>> getNumberOfEventsByCategoryTimeRanges() {
+        return numberOfEventsByCategoryTimeRanges;
+    }
+
+    public EventStatistics setNumberOfEventsByCategoryTimeRanges(Map<String, Map<String, Integer>> numberOfEventsByCategoryTimeRanges) {
+        this.numberOfEventsByCategoryTimeRanges = numberOfEventsByCategoryTimeRanges;
         return this;
     }
 }
