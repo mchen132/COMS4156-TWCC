@@ -117,15 +117,37 @@ public class EventController {
         eventRepository.deleteById(eventId);
     }
 
+    /**
+     * Gets various statistics about TWCC events including:
+     * total number of events, number of events by category,
+     * average age limit for events, average age limit of events
+     * by category, average cost for events, average cost of
+     * events by category, and number of events by category in
+     * multiple time ranges
+     * 
+     * @return ResponseEntity containing various TWCC event statistics
+     */
     @GetMapping("/events/statistics")
     public ResponseEntity<?> getEventStatistics() {
         EventStatistics eventStats = new EventStatistics();
         List<Event> events = eventRepository.findAll();
         
-        // Parse by category
-        Map<String, Integer> numberOfEventsByCategory = eventStatisticService.getNumberOfEventsByCategory(events);
-
-        eventStats = eventStats.setEventsByCategory(numberOfEventsByCategory);
+        eventStats = eventStats
+            .setTotalNumberOfEvents(
+                events.size()
+            ).setNumberOfEventsByCategory(
+                eventStatisticService.getNumberOfEventsByCategory(events)
+            ).setAverageAgeLimitForEvents(
+                eventStatisticService.getAverageAgeLimitForEvents(events)
+            ).setAverageAgeLimitOfEventsByCategory(
+                eventStatisticService.getAverageAgeLimitOfEventsByCategory(events)
+            ).setAverageCostForEvents(
+                eventStatisticService.getAverageCostForEvents(events)
+            ).setAverageCostOfEventsByCategory(
+                eventStatisticService.getAverageCostOfEventsByCategory(events)
+            ).setNumberOfEventsByCategoryTimeRanges(
+                eventStatisticService.getNumberOfEventsByCategoryTimeRanges(events)
+            );
 
         return ResponseEntity.ok().body(eventStats);
     }

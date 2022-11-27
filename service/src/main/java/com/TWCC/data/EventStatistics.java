@@ -3,6 +3,7 @@ package com.TWCC.data;
 import java.util.Map;
 
 public class EventStatistics {
+    private int totalNumberOfEvents;
     private Map<String, Integer> numberOfEventsByCategory;
     private int averageAgeLimitForEvents;
     private float averageCostForEvents;
@@ -10,11 +11,20 @@ public class EventStatistics {
     private Map<String, Integer> averageAgeLimitOfEventsByCategory;
     private Map<String, Map<String, Integer>> numberOfEventsByCategoryTimeRanges;
 
+    public int getTotalNumberOfEvents() {
+        return totalNumberOfEvents;
+    }
+
+    public EventStatistics setTotalNumberOfEvents(int totalNumberOfEvents) {
+        this.totalNumberOfEvents = totalNumberOfEvents;
+        return this;
+    }
+
     public Map<String, Integer> getNumberOfEventsByCategory() {
         return numberOfEventsByCategory;
     }
 
-    public EventStatistics setEventsByCategory(Map<String, Integer> numberOfEventsByCategory) {
+    public EventStatistics setNumberOfEventsByCategory(Map<String, Integer> numberOfEventsByCategory) {
         this.numberOfEventsByCategory = numberOfEventsByCategory;
         return this;
     }

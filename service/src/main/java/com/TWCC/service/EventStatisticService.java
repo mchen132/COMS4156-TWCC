@@ -59,6 +59,43 @@ public class EventStatisticService {
     }
 
     /**
+     * Gets the average age limit of events per event category
+     * 
+     * @param events list of events
+     * @return the average age limit of events per event category
+     */
+    public Map<String, Integer> getAverageAgeLimitOfEventsByCategory(List<Event> events) {
+        Map<String, Integer> averageAgeLimitOfEventsByCategory = new HashMap<String, Integer>();
+        Map<String, Integer> numberOfEventsByCategory = new HashMap<String, Integer>();
+
+        for (Event event: events) {
+            if (event.getCategories() != null) {
+                String[] categories = event.getCategories().split(",");
+    
+                for (int i = 0; i < categories.length; i++) {
+                    String category = categories[i];
+    
+                    if (averageAgeLimitOfEventsByCategory.containsKey(category)) {
+                        averageAgeLimitOfEventsByCategory.put(category, averageAgeLimitOfEventsByCategory.get(category) + event.getAgeLimit());
+                        numberOfEventsByCategory.put(category, numberOfEventsByCategory.get(category) + 1);
+                    } else {
+                        averageAgeLimitOfEventsByCategory.put(category, event.getAgeLimit());
+                        numberOfEventsByCategory.put(category, 1);
+                    }
+                }
+            }
+        }
+
+        // Calculate average
+        for (String category: averageAgeLimitOfEventsByCategory.keySet()) {
+            int averageAgeLimit = averageAgeLimitOfEventsByCategory.get(category) / numberOfEventsByCategory.get(category);
+            averageAgeLimitOfEventsByCategory.put(category, averageAgeLimit);
+        }
+
+        return averageAgeLimitOfEventsByCategory;
+    }
+
+    /**
      * Gets the average cost for all of the existing events
      * 
      * @param events list of events
@@ -112,43 +149,6 @@ public class EventStatisticService {
     }
 
     /**
-     * Gets the average age limit of events per event category
-     * 
-     * @param events list of events
-     * @return the average age limit of events per event category
-     */
-    public Map<String, Integer> getAverageAgeLimitOfEventsByCategory(List<Event> events) {
-        Map<String, Integer> averageAgeLimitOfEventsByCategory = new HashMap<String, Integer>();
-        Map<String, Integer> numberOfEventsByCategory = new HashMap<String, Integer>();
-
-        for (Event event: events) {
-            if (event.getCategories() != null) {
-                String[] categories = event.getCategories().split(",");
-    
-                for (int i = 0; i < categories.length; i++) {
-                    String category = categories[i];
-    
-                    if (averageAgeLimitOfEventsByCategory.containsKey(category)) {
-                        averageAgeLimitOfEventsByCategory.put(category, averageAgeLimitOfEventsByCategory.get(category) + event.getAgeLimit());
-                        numberOfEventsByCategory.put(category, numberOfEventsByCategory.get(category) + 1);
-                    } else {
-                        averageAgeLimitOfEventsByCategory.put(category, event.getAgeLimit());
-                        numberOfEventsByCategory.put(category, 1);
-                    }
-                }
-            }
-        }
-
-        // Calculate average
-        for (String category: averageAgeLimitOfEventsByCategory.keySet()) {
-            int averageAgeLimit = averageAgeLimitOfEventsByCategory.get(category) / numberOfEventsByCategory.get(category);
-            averageAgeLimitOfEventsByCategory.put(category, averageAgeLimit);
-        }
-
-        return averageAgeLimitOfEventsByCategory;
-    }
-
-    /**
      * Gets the number of events for a category in a given time range (month-year-weekInMonth)
      * for all existing events 
      * 
@@ -162,7 +162,6 @@ public class EventStatisticService {
             if (event.getStartTimestamp() != null && event.getCategories() != null) {
                 Timestamp startTimestamp = event.getStartTimestamp();
                 String[] categories = event.getCategories().split(",");
-                // long currDateTime = new Date().getTime();
     
                 cal.setTimeInMillis(startTimestamp.getTime());
                 int eventMonth = cal.get(Calendar.MONTH);
