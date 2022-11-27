@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.TWCC.data.Event;
@@ -24,8 +23,10 @@ import com.fasterxml.jackson.databind.node.TextNode;
 @Component
 public class ResponseProcessor {
     
-    @Autowired
-    private ObjectMapper mapper;
+    // @Autowired
+    // private ObjectMapper mapper;
+
+    private ObjectMapper mapper = new ObjectMapper();
 
     public List<Event> processResponse(String jsonString) {
 

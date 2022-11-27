@@ -183,6 +183,64 @@ public class Event {
         this.endTimestamp = endTimestamp;
     }
 
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Event other = (Event) obj;
+        if (id != other.id)
+            return false;
+        if (address == null) {
+            if (other.address != null)
+                return false;
+        } else if (!address.equals(other.address))
+            return false;
+        if (ageLimit != other.ageLimit)
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (description == null) {
+            if (other.description != null)
+                return false;
+        } else if (!description.equals(other.description))
+            return false;
+        if (Double.doubleToLongBits(longitude) != Double.doubleToLongBits(other.longitude))
+            return false;
+        if (Double.doubleToLongBits(latitude) != Double.doubleToLongBits(other.latitude))
+            return false;
+        if (Float.floatToIntBits(cost) != Float.floatToIntBits(other.cost))
+            return false;
+        if (media == null) {
+            if (other.media != null)
+                return false;
+        } else if (!media.equals(other.media))
+            return false;
+        if (creationTimestamp == null) {
+            if (other.creationTimestamp != null)
+                return false;
+        } else if (!creationTimestamp.equals(other.creationTimestamp))
+            return false;
+        if (startTimestamp == null) {
+            if (other.startTimestamp != null)
+                return false;
+        } else if (!startTimestamp.equals(other.startTimestamp))
+            return false;
+        if (endTimestamp == null) {
+            if (other.endTimestamp != null)
+                return false;
+        } else if (!endTimestamp.equals(other.endTimestamp))
+            return false;
+        return true;
+    }
+
     @Override
     public String toString() {
         return "Event [id=" + id

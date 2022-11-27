@@ -11,7 +11,7 @@ import com.TWCC.data.Event;
 public class ApiHandler {
     
     @Autowired
-    private Requester requester;
+    private RequestService requester;
     
     @Autowired
     private ResponseProcessor processor;

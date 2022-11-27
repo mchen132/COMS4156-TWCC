@@ -90,6 +90,8 @@
         		<configuration>
             		<includes>
                 		<include>EventControllerTest.java</include>
+                		<include>RequestServiceTest.java</include>
+                		<include>ResponseProcessorTest.java</include>
             		</includes>
        	 		</configuration>
     		</plugin>
@@ -111,6 +113,11 @@
                         </goals>
                     </execution>
                 </executions>
+				<configuration>
+					<excludes>
+						<exclude>**/com/TWCC/data/Event.class</exclude>
+					</excludes>
+				</configuration>
             </plugin>
 		</plugins>
 	</build>
