@@ -132,24 +132,28 @@ public class EventController {
         EventStatistics eventStats = new EventStatistics();
         List<Event> events = eventRepository.findAll();
         
-        eventStats = eventStats
-            .setTotalNumberOfEvents(
-                events.size()
-            ).setNumberOfEventsByCategory(
-                eventStatisticService.getNumberOfEventsByCategory(events)
-            ).setAverageAgeLimitForEvents(
-                eventStatisticService.getAverageAgeLimitForEvents(events)
-            ).setAverageAgeLimitOfEventsByCategory(
-                eventStatisticService.getAverageAgeLimitOfEventsByCategory(events)
-            ).setAverageCostForEvents(
-                eventStatisticService.getAverageCostForEvents(events)
-            ).setAverageCostOfEventsByCategory(
-                eventStatisticService.getAverageCostOfEventsByCategory(events)
-            ).setNumberOfEventsByCategoryTimeRanges(
-                eventStatisticService.getNumberOfEventsByCategoryTimeRanges(events)
-            );
-
-        return ResponseEntity.ok().body(eventStats);
+        try {
+            eventStats = eventStats
+                .setTotalNumberOfEvents(
+                    events.size()
+                ).setNumberOfEventsByCategory(
+                    eventStatisticService.getNumberOfEventsByCategory(events)
+                ).setAverageAgeLimitForEvents(
+                    eventStatisticService.getAverageAgeLimitForEvents(events)
+                ).setAverageAgeLimitOfEventsByCategory(
+                    eventStatisticService.getAverageAgeLimitOfEventsByCategory(events)
+                ).setAverageCostForEvents(
+                    eventStatisticService.getAverageCostForEvents(events)
+                ).setAverageCostOfEventsByCategory(
+                    eventStatisticService.getAverageCostOfEventsByCategory(events)
+                ).setNumberOfEventsByCategoryTimeRanges(
+                    eventStatisticService.getNumberOfEventsByCategoryTimeRanges(events)
+                );
+    
+            return ResponseEntity.ok().body(eventStats);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e);
+        }
     }
 }
 
