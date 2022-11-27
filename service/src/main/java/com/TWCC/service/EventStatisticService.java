@@ -112,16 +112,18 @@ public class EventStatisticService {
      * @return the average cost for events
      */
     public float getAverageCostForEvents(List<Event> events) {
-        int totalNumberOfEvents = events.size();
-        float costTotal = 0;
-
         if (events != null) {
+            int totalNumberOfEvents = events.size();
+            float costTotal = 0;
+
             for (Event event: events) {
                 costTotal += event.getCost();
             }
-        }
 
-        return costTotal / totalNumberOfEvents;
+            return costTotal / totalNumberOfEvents;
+        } else {
+            return 0;
+        }
     }
 
     /**
