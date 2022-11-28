@@ -6,6 +6,8 @@ import Login from './components/auth/Login';
 import EventsContainer from './components/events/EventsContainer';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { setAuthToken } from './utils/authUtil';
+import CustomNavbar from './components/layout/CustomNavbar';
+import EventStatistics from './components/statistics/EventStatistics';
 
 if (localStorage.token) {
 	setAuthToken(localStorage.token);
@@ -14,6 +16,7 @@ if (localStorage.token) {
 const App = () => {
 	return (
 		<div className="App">
+			<CustomNavbar title="TWCC Events" links={[{ href: 'events', name: 'Events' }, { href: 'events/statistics', name: 'Event Statistics' }]} />
 			<h1>TWCC Events</h1>
 			<Router>
 				<>
@@ -22,6 +25,7 @@ const App = () => {
 						<Route path='/register' element={<Register />} />
 						<Route path='/login' element={<Login />} />
 						<Route path='/events' element={<EventsContainer />} />
+						<Route path='/events/statistics' element={<EventStatistics />} />
 					</Routes>
 				</>
 			</Router>
