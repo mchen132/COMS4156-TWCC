@@ -209,4 +209,75 @@ public class ResponseProcessorTest {
 
         assertEquals(testEventList, expectedEventList);
     }
+
+    @Test
+    void testGetAllEventsNoStartDateTime() {
+        String jsonStringNoStartDateTime = """
+            {
+                \"_embedded\": {
+                    \"events\": [
+                        {
+                            \"name\": \"Phoenix Suns vs. Utah Jazz\", 
+                            \"url\": \"https://www.ticketmaster.com/phoenix-suns-vs-utah-jazz-phoenix-arizona-11-26-2022/event/19005D0B8FA91548\",
+                            \"_embedded\": {
+                                \"venues\": [
+                                    {
+                                        \"name\": \"Footprint Center\",
+                                        \"city\": {
+                                            \"name\": \"Phoenix\"
+                                        }, 
+                                        \"state\": {
+                                            \"name\": \"Arizona\", 
+                                            \"stateCode\": \"AZ\"
+                                        },
+                                        \"country\": {
+                                            \"name\": \"United States of America\", 
+                                            \"countryCode\": \"US\"
+                                        }, 
+                                        \"address\": {
+                                            \"line1\": \"201 East Jefferson Street\"
+                                        }, 
+                                        \"location\": {
+                                            \"longitude\": \"-112.071313\", 
+                                            \"latitude\": \"33.445899\"
+                                        }
+                                    }
+                                ]
+                            }, 
+                            \"priceRanges\": [
+                                {
+                                    \"type\": \"standard\", 
+                                    \"currency\": \"USD\", 
+                                    \"min\": 46.0, 
+                                    \"max\": 574.0
+                                }
+                            ], 
+                            \"ageRestrictions\": {
+                                \"legalAgeEnforced\": false
+                            },
+                            \"dates\": {
+                                \"start\": {
+                                    \"localDate\": \"2022-11-26\",
+                                    \"localTime\": \"19:00:00\"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+                """;
+        
+        Event event = this.createEvent();
+
+        List<Event> testEventList = processor.processResponse(jsonStringNoStartDateTime);
+        List<Event> expectedEventList = new ArrayList<>();
+
+        event.setCreationTimestamp(Timestamp.valueOf("2022-11-26 00:00:00"));
+        event.setStartTimestamp(Timestamp.valueOf("2022-11-26 00:00:00"));
+        event.setEndTimestamp(Timestamp.valueOf("2022-11-26 00:00:00"));
+
+        expectedEventList.add(event);
+
+        assertEquals(testEventList, expectedEventList);
+    }
 }
