@@ -18,14 +18,11 @@ import com.TWCC.data.Event;
 
 @SpringBootTest
 public class EventStatisticServiceTest {
-    private static EventStatisticService eventStatisticService;
+    @Autowired
+    EventStatisticService eventStatisticService;
+    
     private List<Event> events;
     private List<Event> eventsWithNoCategories;
-    
-    @BeforeAll
-    static void beforeClass() {
-        eventStatisticService = new EventStatisticService();
-    }
 
     @BeforeEach
     void setup() {
