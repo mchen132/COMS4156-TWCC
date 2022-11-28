@@ -68,8 +68,8 @@ public class EventController {
 
 
 
-    @PostMapping("/filterEvents")
-    public List<Event> filterEvent(@RequestBody HashMap<String,String> allParams){
+    @GetMapping("/filterEvents")
+    public List<Event> filterEvent(@RequestParam HashMap<String,String> allParams){
         Map<String, String> test = allParams;
 
         List<Event> remainingEvents = eventRepository.findAll();
@@ -77,8 +77,11 @@ public class EventController {
         for (Map.Entry<String, String> pair : test.entrySet()) {
             String key = pair.getKey();
             String value = pair.getValue();
+            System.out.println(key);
+            System.out.println(value);
 
-            if (key == "age_limit") {
+            if (key.equals("age_limit")) {
+                System.out.println("hiiii");
                 int age_limit = Integer.parseInt(value);
                 for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
                     Event event = curEvent.next();
@@ -89,7 +92,7 @@ public class EventController {
                 }
                 }
             
-            if (key == "address") {
+            if (key.equals("address")) {
                 for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
                     Event event = curEvent.next();
                     boolean findSub = event.getAddress().contains(value.toLowerCase());
@@ -99,7 +102,7 @@ public class EventController {
                 }
             }
 
-            if (key == "name") {              
+            if (key.equals("name")) {              
                 for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
                     Event event = curEvent.next();
                     boolean findSub = event.getName().contains(value.toLowerCase());
@@ -110,7 +113,7 @@ public class EventController {
                 }
             }
 
-            if (key == "description") {
+            if (key.equals("description")) {
                 for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
                     Event event = curEvent.next();
                     boolean findSub = event.getDescription().contains(value.toLowerCase());
@@ -120,7 +123,7 @@ public class EventController {
                 }
             }
 
-            if (key == "cost") {
+            if (key.equals("cost")) {
                 int cost = Integer.parseInt(value);
                 for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
                     Event event = curEvent.next();
@@ -130,7 +133,7 @@ public class EventController {
                 }
                 }
 
-            if (key == "media") {
+            if (key.equals("media")) {
                 for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
                     Event event = curEvent.next();
                     Boolean findSub = event.getMedia().contains(value.toLowerCase());
@@ -140,7 +143,7 @@ public class EventController {
                 }
             }
 
-            if (key == "start_timestamp") {   
+            if (key.equals("start_timestamp")) {   
                 Timestamp start_timestamp = Timestamp.valueOf(value);
                 for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
                     Event event = curEvent.next();
@@ -151,7 +154,7 @@ public class EventController {
                 }
             }
 
-            if (key == "end_timestamp") {   
+            if (key.equals("end_timestamp")) {   
                 Timestamp end_timestamp = Timestamp.valueOf(value);
                 for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
                     Event event = curEvent.next();
