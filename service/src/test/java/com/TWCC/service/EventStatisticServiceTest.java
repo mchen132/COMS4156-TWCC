@@ -13,10 +13,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.TWCC.data.Event;
 
 @SpringBootTest
+@ActiveProfiles("test")
 public class EventStatisticServiceTest {
     private static EventStatisticService eventStatisticService;
     private List<Event> events;
