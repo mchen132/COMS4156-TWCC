@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./service
+        working-directory: ./twcc-service
     steps:
       - uses: actions/checkout@v3 # action that checks out repository onto the runner
       - name: Set up JDK 17
