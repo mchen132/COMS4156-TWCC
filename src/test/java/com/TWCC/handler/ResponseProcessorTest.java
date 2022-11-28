@@ -280,4 +280,401 @@ public class ResponseProcessorTest {
 
         assertEquals(testEventList, expectedEventList);
     }
+
+    @Test
+    void testGetAllEventsNoPriceRangeList() {
+        String jsonStringNoPriceRange = """
+            {
+                \"_embedded\": {
+                    \"events\": [
+                        {
+                            \"name\": \"Phoenix Suns vs. Utah Jazz\", 
+                            \"url\": \"https://www.ticketmaster.com/phoenix-suns-vs-utah-jazz-phoenix-arizona-11-26-2022/event/19005D0B8FA91548\",
+                            \"_embedded\": {
+                                \"venues\": [
+                                    {
+                                        \"name\": \"Footprint Center\",
+                                        \"city\": {
+                                            \"name\": \"Phoenix\"
+                                        }, 
+                                        \"state\": {
+                                            \"name\": \"Arizona\", 
+                                            \"stateCode\": \"AZ\"
+                                        },
+                                        \"country\": {
+                                            \"name\": \"United States of America\", 
+                                            \"countryCode\": \"US\"
+                                        }, 
+                                        \"address\": {
+                                            \"line1\": \"201 East Jefferson Street\"
+                                        }, 
+                                        \"location\": {
+                                            \"longitude\": \"-112.071313\", 
+                                            \"latitude\": \"33.445899\"
+                                        }
+                                    }
+                                ]
+                            }, 
+                            \"ageRestrictions\": {
+                                \"legalAgeEnforced\": false
+                            },
+                            \"dates\": {
+                                \"start\": {
+                                    \"localDate\": \"2022-11-26\",
+                                    \"localTime\": \"19:00:00\",
+                                    \"dateTime\": \"2022-11-27T02:00:00Z\"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+                """;
+                
+                
+        Event event = this.createEvent();
+
+        List<Event> testEventList = processor.processResponse(jsonStringNoPriceRange);
+        List<Event> expectedEventList = new ArrayList<>();
+        
+        event.setCost(0f);
+        expectedEventList.add(event);
+
+        assertEquals(testEventList, expectedEventList);
+
+    }
+
+    @Test
+    void testGetAllEventsNoPriceRangeListContent() {
+        String jsonStringNoPriceRangeListContent = """
+            {
+                \"_embedded\": {
+                    \"events\": [
+                        {
+                            \"name\": \"Phoenix Suns vs. Utah Jazz\", 
+                            \"url\": \"https://www.ticketmaster.com/phoenix-suns-vs-utah-jazz-phoenix-arizona-11-26-2022/event/19005D0B8FA91548\",
+                            \"_embedded\": {
+                                \"venues\": [
+                                    {
+                                        \"name\": \"Footprint Center\",
+                                        \"city\": {
+                                            \"name\": \"Phoenix\"
+                                        }, 
+                                        \"state\": {
+                                            \"name\": \"Arizona\", 
+                                            \"stateCode\": \"AZ\"
+                                        },
+                                        \"country\": {
+                                            \"name\": \"United States of America\", 
+                                            \"countryCode\": \"US\"
+                                        }, 
+                                        \"address\": {
+                                            \"line1\": \"201 East Jefferson Street\"
+                                        }, 
+                                        \"location\": {
+                                            \"longitude\": \"-112.071313\", 
+                                            \"latitude\": \"33.445899\"
+                                        }
+                                    }
+                                ]
+                            }, 
+                            \"priceRanges\": [
+                            ], 
+                            \"ageRestrictions\": {
+                                \"legalAgeEnforced\": false
+                            },
+                            \"dates\": {
+                                \"start\": {
+                                    \"localDate\": \"2022-11-26\",
+                                    \"localTime\": \"19:00:00\",
+                                    \"dateTime\": \"2022-11-27T02:00:00Z\"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+                """;
+        
+        Event event = this.createEvent();
+
+        List<Event> testEventList = processor.processResponse(jsonStringNoPriceRangeListContent);
+        List<Event> expectedEventList = new ArrayList<>();
+        
+        event.setCost(0f);
+        expectedEventList.add(event);
+
+        assertEquals(testEventList, expectedEventList);
+    }
+
+    @Test
+    void testGetAllEventsNoMinCost() {
+        String jsonStringNoMinCost = """
+            {
+                \"_embedded\": {
+                    \"events\": [
+                        {
+                            \"name\": \"Phoenix Suns vs. Utah Jazz\", 
+                            \"url\": \"https://www.ticketmaster.com/phoenix-suns-vs-utah-jazz-phoenix-arizona-11-26-2022/event/19005D0B8FA91548\",
+                            \"_embedded\": {
+                                \"venues\": [
+                                    {
+                                        \"name\": \"Footprint Center\",
+                                        \"city\": {
+                                            \"name\": \"Phoenix\"
+                                        }, 
+                                        \"state\": {
+                                            \"name\": \"Arizona\", 
+                                            \"stateCode\": \"AZ\"
+                                        },
+                                        \"country\": {
+                                            \"name\": \"United States of America\", 
+                                            \"countryCode\": \"US\"
+                                        }, 
+                                        \"address\": {
+                                            \"line1\": \"201 East Jefferson Street\"
+                                        }, 
+                                        \"location\": {
+                                            \"longitude\": \"-112.071313\", 
+                                            \"latitude\": \"33.445899\"
+                                        }
+                                    }
+                                ]
+                            }, 
+                            \"priceRanges\": [
+                                {
+                                    \"type\": \"standard\", 
+                                    \"currency\": \"USD\",
+                                    \"max\": 574.0
+                                }
+                            ], 
+                            \"ageRestrictions\": {
+                                \"legalAgeEnforced\": false
+                            },
+                            \"dates\": {
+                                \"start\": {
+                                    \"localDate\": \"2022-11-26\",
+                                    \"localTime\": \"19:00:00\",
+                                    \"dateTime\": \"2022-11-27T02:00:00Z\"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+                """;
+        
+        Event event = this.createEvent();
+
+        List<Event> testEventList = processor.processResponse(jsonStringNoMinCost);
+        List<Event> expectedEventList = new ArrayList<>();
+        
+        event.setCost(0f);
+        expectedEventList.add(event);
+
+        assertEquals(testEventList, expectedEventList);
+    }
+
+    @Test
+    void testGetAllEventsNoAgeRestriction() {
+        String jsonStringNoAgeRestriction = """
+            {
+                \"_embedded\": {
+                    \"events\": [
+                        {
+                            \"name\": \"Phoenix Suns vs. Utah Jazz\", 
+                            \"url\": \"https://www.ticketmaster.com/phoenix-suns-vs-utah-jazz-phoenix-arizona-11-26-2022/event/19005D0B8FA91548\",
+                            \"_embedded\": {
+                                \"venues\": [
+                                    {
+                                        \"name\": \"Footprint Center\",
+                                        \"city\": {
+                                            \"name\": \"Phoenix\"
+                                        }, 
+                                        \"state\": {
+                                            \"name\": \"Arizona\", 
+                                            \"stateCode\": \"AZ\"
+                                        },
+                                        \"country\": {
+                                            \"name\": \"United States of America\", 
+                                            \"countryCode\": \"US\"
+                                        }, 
+                                        \"address\": {
+                                            \"line1\": \"201 East Jefferson Street\"
+                                        }, 
+                                        \"location\": {
+                                            \"longitude\": \"-112.071313\", 
+                                            \"latitude\": \"33.445899\"
+                                        }
+                                    }
+                                ]
+                            }, 
+                            \"priceRanges\": [
+                                {
+                                    \"type\": \"standard\", 
+                                    \"currency\": \"USD\", 
+                                    \"min\": 46.0, 
+                                    \"max\": 574.0
+                                }
+                            ],
+                            \"dates\": {
+                                \"start\": {
+                                    \"localDate\": \"2022-11-26\",
+                                    \"localTime\": \"19:00:00\",
+                                    \"dateTime\": \"2022-11-27T02:00:00Z\"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+                """;
+        
+        Event event = this.createEvent();
+
+        List<Event> testEventList = processor.processResponse(jsonStringNoAgeRestriction);
+        List<Event> expectedEventList = new ArrayList<>();
+        
+        event.setAgeLimit(0);
+        expectedEventList.add(event);
+
+        assertEquals(testEventList, expectedEventList);
+    }
+
+    @Test
+    void testGetAllEventsNoLegalAgeEnforced() {
+        String jsonStringNoLegalAgeEnforced = """
+            {
+                \"_embedded\": {
+                    \"events\": [
+                        {
+                            \"name\": \"Phoenix Suns vs. Utah Jazz\", 
+                            \"url\": \"https://www.ticketmaster.com/phoenix-suns-vs-utah-jazz-phoenix-arizona-11-26-2022/event/19005D0B8FA91548\",
+                            \"_embedded\": {
+                                \"venues\": [
+                                    {
+                                        \"name\": \"Footprint Center\",
+                                        \"city\": {
+                                            \"name\": \"Phoenix\"
+                                        }, 
+                                        \"state\": {
+                                            \"name\": \"Arizona\", 
+                                            \"stateCode\": \"AZ\"
+                                        },
+                                        \"country\": {
+                                            \"name\": \"United States of America\", 
+                                            \"countryCode\": \"US\"
+                                        }, 
+                                        \"address\": {
+                                            \"line1\": \"201 East Jefferson Street\"
+                                        }, 
+                                        \"location\": {
+                                            \"longitude\": \"-112.071313\", 
+                                            \"latitude\": \"33.445899\"
+                                        }
+                                    }
+                                ]
+                            }, 
+                            \"priceRanges\": [
+                                {
+                                    \"type\": \"standard\", 
+                                    \"currency\": \"USD\", 
+                                    \"min\": 46.0, 
+                                    \"max\": 574.0
+                                }
+                            ], 
+                            \"ageRestrictions\": {
+                            },
+                            \"dates\": {
+                                \"start\": {
+                                    \"localDate\": \"2022-11-26\",
+                                    \"localTime\": \"19:00:00\",
+                                    \"dateTime\": \"2022-11-27T02:00:00Z\"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+                """;
+        
+        Event event = this.createEvent();
+
+        List<Event> testEventList = processor.processResponse(jsonStringNoLegalAgeEnforced);
+        List<Event> expectedEventList = new ArrayList<>();
+        
+        event.setAgeLimit(0);
+        expectedEventList.add(event);
+
+        assertEquals(testEventList, expectedEventList);
+    }
+
+    @Test
+    void testGetAllEventsLegalAgeRequired() {
+        String jsonStringLegalAgeRequired = """
+            {
+                \"_embedded\": {
+                    \"events\": [
+                        {
+                            \"name\": \"Phoenix Suns vs. Utah Jazz\", 
+                            \"url\": \"https://www.ticketmaster.com/phoenix-suns-vs-utah-jazz-phoenix-arizona-11-26-2022/event/19005D0B8FA91548\",
+                            \"_embedded\": {
+                                \"venues\": [
+                                    {
+                                        \"name\": \"Footprint Center\",
+                                        \"city\": {
+                                            \"name\": \"Phoenix\"
+                                        }, 
+                                        \"state\": {
+                                            \"name\": \"Arizona\", 
+                                            \"stateCode\": \"AZ\"
+                                        },
+                                        \"country\": {
+                                            \"name\": \"United States of America\", 
+                                            \"countryCode\": \"US\"
+                                        }, 
+                                        \"address\": {
+                                            \"line1\": \"201 East Jefferson Street\"
+                                        }, 
+                                        \"location\": {
+                                            \"longitude\": \"-112.071313\", 
+                                            \"latitude\": \"33.445899\"
+                                        }
+                                    }
+                                ]
+                            }, 
+                            \"priceRanges\": [
+                                {
+                                    \"type\": \"standard\", 
+                                    \"currency\": \"USD\", 
+                                    \"min\": 46.0, 
+                                    \"max\": 574.0
+                                }
+                            ], 
+                            \"ageRestrictions\": {
+                                \"legalAgeEnforced\": true
+                            },
+                            \"dates\": {
+                                \"start\": {
+                                    \"localDate\": \"2022-11-26\",
+                                    \"localTime\": \"19:00:00\",
+                                    \"dateTime\": \"2022-11-27T02:00:00Z\"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+                """;
+        
+        Event event = this.createEvent();
+
+        List<Event> testEventList = processor.processResponse(jsonStringLegalAgeRequired);
+        List<Event> expectedEventList = new ArrayList<>();
+        
+        event.setAgeLimit(18);
+        expectedEventList.add(event);
+
+        assertEquals(testEventList, expectedEventList);
+    }
 }
