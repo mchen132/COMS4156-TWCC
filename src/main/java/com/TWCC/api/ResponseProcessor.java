@@ -110,19 +110,26 @@ public class ResponseProcessor {
         @SuppressWarnings("unchecked")
         Map<String, Object> locationMap = (HashMap<String, Object>)venueMap.get("location");
 
+        if (locationMap != null) {
+            String longitudeString = ((TextNode)locationMap.get("longitude")).toString();
 
-        String longitudeString = ((TextNode)locationMap.get("longitude")).toString();
+            // remove surrounding quotes
+            longitudeString = longitudeString.substring(1, longitudeString.length() - 1);
 
-        // remove surrounding quotes
-        longitudeString = longitudeString.substring(1, longitudeString.length() - 1);
+            String latitudeString = ((TextNode)locationMap.get("latitude")).toString();
 
-        String latitudeString = ((TextNode)locationMap.get("latitude")).toString();
+            // remove surrounding quotes
+            latitudeString = latitudeString.substring(1, latitudeString.length() - 1);
 
-        // remove surrounding quotes
-        latitudeString = latitudeString.substring(1, latitudeString.length() - 1);
+            res.add(Double.valueOf(longitudeString));
+            res.add(Double.valueOf(latitudeString));
+        } else {
+            // set coordinates to 0 if the event doesn't have a venue
 
-        res.add(Double.valueOf(longitudeString));
-        res.add(Double.valueOf(latitudeString));
+            res.add(Double.valueOf("0.000000"));
+            res.add(Double.valueOf("0.000000"));
+        }
+        
 
         return res;
         
