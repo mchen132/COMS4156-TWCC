@@ -64,6 +64,8 @@
      ```
 - `DELETE /events`: Deletes an event given an existing event ID
     - Sample Request: localhost:8080/events/1
+- `GET /events/statistics`: Gets event statistics data
+    - Sample Request: localhost:8080/events/statistics
 
 ### **User**
 - `POST /user/register`: Registers a new user

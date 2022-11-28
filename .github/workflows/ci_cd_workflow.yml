@@ -7,6 +7,9 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./service
     steps:
       - uses: actions/checkout@v3 # action that checks out repository onto the runner
       - name: Set up JDK 17

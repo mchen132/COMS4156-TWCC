@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Event.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">nyc-todo-service</a> &gt; <a href="index.source.html" class="el_package">com.TWCC.data</a> &gt; <span class="el_source">Event.java</span></div><h1>Event.java</h1><pre class="source lang-java linenums">package com.TWCC.data;
+
+import java.sql.Timestamp;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.CreationTimestamp;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@Entity
+@Builder
+public class Event {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = &quot;native&quot;)
+    @GenericGenerator(name = &quot;native&quot;, strategy = &quot;native&quot;)
+    @Column(name = &quot;id&quot;)
+    private int id;
+
+    @Column(name = &quot;address&quot;)
+    private String address;
+
+    @Column(name = &quot;age_limit&quot;)
+    private int ageLimit;
+
+    @Column(name = &quot;name&quot;)
+    private String name;
+
+    @Column(name = &quot;description&quot;)
+    private String description;
+
+    @Column(name = &quot;longitude&quot;)
+    private double longitude;
+
+    @Column(name = &quot;latitude&quot;)
+    private double latitude;
+
+    @Column(name = &quot;cost&quot;)
+    private float cost;
+
+    @Column(name = &quot;media&quot;)
+    private String media;
+
+    @Column(name = &quot;host&quot;)
+    private int host;
+
+    @CreationTimestamp
+    @Column(name = &quot;creation_timestamp&quot;)
+    @JsonFormat(shape = JsonFormat.Shape.STRING,
+            pattern = &quot;yyyy-MM-dd'T'HH:mm:ss.SSZ&quot;)
+    private Timestamp creationTimestamp;
+
+    @Column(name = &quot;start_timestamp&quot;)
+    @JsonFormat(shape = JsonFormat.Shape.STRING,
+            pattern = &quot;yyyy-MM-dd'T'HH:mm:ss.SSZ&quot;)
+    private Timestamp startTimestamp;
+
+    @Column(name = &quot;end_timestamp&quot;)
+    @JsonFormat(shape = JsonFormat.Shape.STRING,
+            pattern = &quot;yyyy-MM-dd'T'HH:mm:ss.SSZ&quot;)
+    private Timestamp endTimestamp;
+
+<span class="nc" id="L68">    public Event() {</span>
+<span class="nc" id="L69">    }</span>
+
+    @SuppressWarnings(&quot;checkstyle:ParameterNumber&quot;)
+    public Event(final int id, final String address, final int ageLimit,
+                 final String name, final String description,
+                 final double longitude, final double latitude,
+                 final float cost, final String media, int host,
+                 final Timestamp creationTimestamp,
+                 final Timestamp startTimestamp,
+<span class="fc" id="L78">                 final Timestamp endTimestamp) {</span>
+<span class="fc" id="L79">        this.id = id;</span>
+<span class="fc" id="L80">        this.address = address;</span>
+<span class="fc" id="L81">        this.ageLimit = ageLimit;</span>
+<span class="fc" id="L82">        this.name = name;</span>
+<span class="fc" id="L83">        this.description = description;</span>
+<span class="fc" id="L84">        this.longitude = longitude;</span>
+<span class="fc" id="L85">        this.latitude = latitude;</span>
+<span class="fc" id="L86">        this.cost = cost;</span>
+<span class="fc" id="L87">        this.media = media;</span>
+<span class="fc" id="L88">        this.host = host;</span>
+<span class="fc" id="L89">        this.creationTimestamp = creationTimestamp;</span>
+<span class="fc" id="L90">        this.startTimestamp = startTimestamp;</span>
+<span class="fc" id="L91">        this.endTimestamp = endTimestamp;</span>
+<span class="fc" id="L92">    }</span>
+
+    public int getId() {
+<span class="fc" id="L95">        return id;</span>
+    }
+
+    public void setId(final int id) {
+<span class="nc" id="L99">        this.id = id;</span>
+<span class="nc" id="L100">    }</span>
+
+    public String getAddress() {
+<span class="fc" id="L103">        return address;</span>
+    }
+
+    public void setAddress(final String address) {
+<span class="nc" id="L107">        this.address = address;</span>
+<span class="nc" id="L108">    }</span>
+
+    public int getAgeLimit() {
+<span class="fc" id="L111">        return ageLimit;</span>
+    }
+
+    public void setAgeLimit(final int ageLimit) {
+<span class="nc" id="L115">        this.ageLimit = ageLimit;</span>
+<span class="nc" id="L116">    }</span>
+
+    public String getName() {
+<span class="fc" id="L119">        return name;</span>
+    }
+
+    public void setName(final String name) {
+<span class="nc" id="L123">        this.name = name;</span>
+<span class="nc" id="L124">    }</span>
+
+    public String getDescription() {
+<span class="fc" id="L127">        return description;</span>
+    }
+
+    public void setDescription(final String description) {
+<span class="nc" id="L131">        this.description = description;</span>
+<span class="nc" id="L132">    }</span>
+
+    public double getLongitude() {
+<span class="fc" id="L135">        return longitude;</span>
+    }
+
+    public void setLongitude(final double longitude) {
+<span class="nc" id="L139">        this.longitude = longitude;</span>
+<span class="nc" id="L140">    }</span>
+
+    public double getLatitude() {
+<span class="fc" id="L143">        return latitude;</span>
+    }
+
+    public void setLatitude(final double latitude) {
+<span class="nc" id="L147">        this.latitude = latitude;</span>
+<span class="nc" id="L148">    }</span>
+
+    public float getCost() {
+<span class="fc" id="L151">        return cost;</span>
+    }
+
+    public void setCost(final float cost) {
+<span class="nc" id="L155">        this.cost = cost;</span>
+<span class="nc" id="L156">    }</span>
+
+    public String getMedia() {
+<span class="fc" id="L159">        return media;</span>
+    }
+
+    public void setMedia(final String media) {
+<span class="nc" id="L163">        this.media = media;</span>
+<span class="nc" id="L164">    }</span>
+
+    public int getHost() {
+<span class="fc" id="L167">        return host;</span>
+    }
+
+    public void setHost(final int host) {
+<span class="nc" id="L171">        this.host = host;</span>
+<span class="nc" id="L172">    }</span>
+
+    public Timestamp getCreationTimestamp() {
+<span class="fc" id="L175">        return creationTimestamp;</span>
+    }
+
+    public void setCreationTimestamp(final Timestamp creationTimestamp) {
+<span class="nc" id="L179">        this.creationTimestamp = creationTimestamp;</span>
+<span class="nc" id="L180">    }</span>
+
+    public Timestamp getStartTimestamp() {
+<span class="fc" id="L183">        return startTimestamp;</span>
+    }
+
+    public void setStartTimestamp(final Timestamp startTimestamp) {
+<span class="nc" id="L187">        this.startTimestamp = startTimestamp;</span>
+<span class="nc" id="L188">    }</span>
+
+    public Timestamp getEndTimestamp() {
+<span class="fc" id="L191">        return endTimestamp;</span>
+    }
+
+    public void setEndTimestamp(final Timestamp endTimestamp) {
+<span class="nc" id="L195">        this.endTimestamp = endTimestamp;</span>
+<span class="nc" id="L196">    }</span>
+
+    @Override
+    public String toString() {
+<span class="nc" id="L200">        return &quot;Event [id=&quot; + id</span>
+                + &quot;, address=&quot; + address
+                + &quot;, ageLimit=&quot; + ageLimit
+                + &quot;, name=&quot; + name
+                + &quot;, description=&quot; + description
+                + &quot;, longitude=&quot; + longitude
+                + &quot;, latitude=&quot; + latitude
+                + &quot;, cost=&quot; + cost
+                + &quot;, media=&quot; + media
+                + &quot;, creationTimestamp=&quot; + creationTimestamp
+                + &quot;, startTimestamp=&quot; + startTimestamp
+                + &quot;, endTimestamp=&quot; + endTimestamp + &quot;]&quot;;
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
