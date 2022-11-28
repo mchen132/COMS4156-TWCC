@@ -1,12 +1,14 @@
 package com.TWCC.controller;
 
-import java.util.HashMap;
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -87,24 +89,53 @@ public class EventController {
     }
 
     @PutMapping("/events")
-    public Event updateEvent(@RequestBody Event eventRecord) throws NotFoundException {
-        Optional<Event> optionalEvent = eventRepository.findById(eventRecord.getId());
+    public Event updateEvent(@RequestBody HashMap<String, String> jsonObject) throws NotFoundException {
+        Optional<Event> optionalEvent = eventRepository.findById(Integer.parseInt(jsonObject.get("id")));
         if (optionalEvent.isEmpty()) {
             throw new NotFoundException();
         }
 
         Event existingEvent = optionalEvent.get();
 
-        existingEvent.setAddress(eventRecord.getAddress());
-        existingEvent.setAgeLimit(eventRecord.getAgeLimit());
-        existingEvent.setCost(eventRecord.getCost());
-        existingEvent.setDescription(eventRecord.getDescription());
-        existingEvent.setEndTimestamp(eventRecord.getEndTimestamp());
-        existingEvent.setLatitude(eventRecord.getLatitude());
-        existingEvent.setLongitude(eventRecord.getLongitude());
-        existingEvent.setMedia(eventRecord.getMedia());
-        existingEvent.setName(eventRecord.getName());
-        existingEvent.setStartTimestamp(eventRecord.getStartTimestamp());
+        if (jsonObject.containsKey("address")) {
+            existingEvent.setAddress(jsonObject.get("address"));
+        }
+        
+        if (jsonObject.containsKey("ageLimit")) {
+            existingEvent.setAgeLimit(Integer.parseInt(jsonObject.get("ageLimit")));
+        }
+
+        if (jsonObject.containsKey("name")) {
+            existingEvent.setName(jsonObject.get("name"));
+        }
+
+        if (jsonObject.containsKey("description")) {
+            existingEvent.setDescription(jsonObject.get("description"));
+        }
+
+        if (jsonObject.containsKey("longitude")) {
+            existingEvent.setLongitude(Double.parseDouble(jsonObject.get("longitude")));
+        }
+
+        if (jsonObject.containsKey("latitude")) {
+            existingEvent.setLatitude(Double.parseDouble(jsonObject.get("latitude")));
+        }
+
+        if (jsonObject.containsKey("cost")) {
+            existingEvent.setCost(Float.parseFloat(jsonObject.get("cost")));
+        }
+
+        if (jsonObject.containsKey("media")) {
+            existingEvent.setMedia(jsonObject.get("media"));
+        }
+
+        if (jsonObject.containsKey("startTimestamp")) {
+            existingEvent.setStartTimestamp(Timestamp.valueOf(jsonObject.get("startTimestamp")));
+        }
+
+        if (jsonObject.containsKey("endTimestamp")) {
+            existingEvent.setEndTimestamp(Timestamp.valueOf(jsonObject.get("endTimestamp")));
+        }
 
         return eventRepository.save(existingEvent);
     }
