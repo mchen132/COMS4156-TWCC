@@ -1,26 +1,31 @@
 package com.TWCC.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.TWCC.data.Event;
+import com.TWCC.data.EventStatistics;
 import com.TWCC.exception.InvalidRequestException;
 import com.TWCC.repository.EventRepository;
 import com.TWCC.security.JwtUtils;
 import com.TWCC.security.UserDetailsExt;
 import com.TWCC.security.UserDetailsServiceExt;
+import com.TWCC.service.EventStatisticService;
 
 @RestController
 public class EventController {
@@ -33,6 +38,9 @@ public class EventController {
 
     @Autowired
     private UserDetailsServiceExt userDetailsService;
+
+    @Autowired
+    private EventStatisticService eventStatisticService;
 
     @GetMapping("/hello")
     public String hello() {
@@ -107,6 +115,45 @@ public class EventController {
             throw new NotFoundException();
         }
         eventRepository.deleteById(eventId);
+    }
+
+    /**
+     * Gets various statistics about TWCC events including:
+     * total number of events, number of events by category,
+     * average age limit for events, average age limit of events
+     * by category, average cost for events, average cost of
+     * events by category, and number of events by category in
+     * multiple time ranges
+     * 
+     * @return ResponseEntity containing various TWCC event statistics
+     */
+    @GetMapping("/events/statistics")
+    public ResponseEntity<?> getEventStatistics() {
+        EventStatistics eventStats = new EventStatistics();
+        List<Event> events = eventRepository.findAll();
+        
+        try {
+            eventStats = eventStats
+                .setTotalNumberOfEvents(
+                    events.size()
+                ).setNumberOfEventsByCategory(
+                    eventStatisticService.getNumberOfEventsByCategory(events)
+                ).setAverageAgeLimitForEvents(
+                    eventStatisticService.getAverageAgeLimitForEvents(events)
+                ).setAverageAgeLimitOfEventsByCategory(
+                    eventStatisticService.getAverageAgeLimitOfEventsByCategory(events)
+                ).setAverageCostForEvents(
+                    eventStatisticService.getAverageCostForEvents(events)
+                ).setAverageCostOfEventsByCategory(
+                    eventStatisticService.getAverageCostOfEventsByCategory(events)
+                ).setNumberOfEventsByCategoryTimeRanges(
+                    eventStatisticService.getNumberOfEventsByCategoryTimeRanges(events)
+                );
+    
+            return ResponseEntity.ok().body(eventStats);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e);
+        }
     }
 }
 

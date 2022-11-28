@@ -37,6 +37,7 @@ import com.TWCC.data.Event;
 import com.TWCC.repository.EventRepository;
 import com.TWCC.security.JwtUtils;
 import com.TWCC.security.UserDetailsServiceExt;
+import com.TWCC.service.EventStatisticService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(EventController.class)
@@ -56,6 +57,9 @@ public class EventControllerTest {
 	@MockBean
 	UserDetailsServiceExt userDetailsService;
 
+	@MockBean
+	EventStatisticService eventStatisticService;
+
     private List<Event> events = new ArrayList<>();
     private Event event1, event2, event3;
 	private static String CSRF_TOKEN_NAME;
@@ -74,6 +78,7 @@ public class EventControllerTest {
                                 "Midterm Study session", 
                                 "This is a midterm study session", 
                                 12.5, 122.34, 0, "www.columbia.edu", 1,
+								"social, study",
                                 new Timestamp(new Date().getTime() - 10), 
                                 new Timestamp(new Date().getTime() + 5),
                                 new Timestamp(new Date().getTime() + 10));
@@ -82,6 +87,7 @@ public class EventControllerTest {
                                 "Midterm Study session at UW", 
                                 "This is a midterm study session at UW", 
                                 12.5, 122.34, 0, "www.uw.edu", 2,
+								"social, study",
                                 new Timestamp(new Date().getTime() - 10), 
                                 new Timestamp(new Date().getTime() + 5), 
                                 new Timestamp(new Date().getTime() + 10));
@@ -90,6 +96,7 @@ public class EventControllerTest {
                                 "Midterm Study session at UMD", 
                                 "This is a midterm study session at UMD", 
                                 12.5, 122.34, 0, "www.umd.edu", 3,
+								"social, study",
                                 new Timestamp(new Date().getTime() - 10), 
                                 new Timestamp(new Date().getTime() + 5), 
                                 new Timestamp(new Date().getTime() + 10));
@@ -175,6 +182,7 @@ public class EventControllerTest {
             5.0f,
             "www.columbia.edu",
 			3,
+			"category1, category2, category3",
             new Timestamp(new Date().getTime() - 10),
             new Timestamp(new Date().getTime() + 5),
             new Timestamp(new Date().getTime() + 10)
@@ -255,6 +263,7 @@ public class EventControllerTest {
 			5.0f,
 			"www.columbia.edu",
 			3,
+			"category1, category2, category3",
 			new Timestamp(new Date().getTime() - 10),
 			new Timestamp(new Date().getTime() + 5),
 			new Timestamp(new Date().getTime() + 10)
@@ -304,6 +313,7 @@ public class EventControllerTest {
             10.0f,
             "www.columbia.edu",
 			3,
+			"category1, category2, category3",
             new Timestamp(new Date().getTime() - 10),
             new Timestamp(new Date().getTime() + 5),
             new Timestamp(new Date().getTime() + 10)
@@ -349,6 +359,7 @@ public class EventControllerTest {
             10.0f,
             "www.columbia.edu",
 			3,
+			"category1, category2, category3",
             new Timestamp(new Date().getTime() - 10),
             new Timestamp(new Date().getTime() + 5),
             new Timestamp(new Date().getTime() + 10)
@@ -381,6 +392,21 @@ public class EventControllerTest {
 			// be mocked and the request should be unauthorized
 			mockMvc.perform(MockMvcRequestBuilders.get("/events"))
 				.andExpect(status().isUnauthorized());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	@WithMockUser
+	void testGetEventStatisticsSuccessfully() {
+		Mockito.when(eventRepository.findAll()).thenReturn(events);
+
+		try {
+			mockMvc.perform(MockMvcRequestBuilders.get("/events/statistics"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", notNullValue()))
+				.andExpect(jsonPath("$.totalNumberOfEvents", is(3)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
