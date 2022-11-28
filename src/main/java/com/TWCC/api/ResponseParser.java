@@ -21,13 +21,17 @@ import com.fasterxml.jackson.databind.node.DoubleNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 
 @Component
-public class ResponseProcessor {
+public class ResponseParser {
     
-    // @Autowired
-    // private ObjectMapper mapper;
 
     private ObjectMapper mapper = new ObjectMapper();
 
+    /**
+     * convert a ticketmaster events JSON response to a list of events
+     * 
+     * @param jsonString
+     * @return List<Event> a list of events
+     */
     public List<Event> processResponse(String jsonString) {
 
         Map<String, Object> responseMap = this.jsonStringToMap(jsonString);
@@ -42,12 +46,24 @@ public class ResponseProcessor {
 
     }
 
+    /**
+     * convert a list of Objects to a list of Event objects
+     * 
+     * @param objList
+     * @return List<Event> a list of events
+     */
     private List<Event> objectListToEventList(List<Object> objList) {
         
         return objList.stream().map(this::objectToEvent).collect(Collectors.toList());
 
     }
 
+    /**
+     * convert an hash map that is cast to an Object, to an Event object
+     * 
+     * @param obj
+     * @return an Event object
+     */
     private Event objectToEvent(Object obj) {
 
         @SuppressWarnings("unchecked")
@@ -86,9 +102,16 @@ public class ResponseProcessor {
         return new Event(id, address, ageLimit, name, description, longitude, latitude, cost, media, creationTimestamp, startTimestamp, endTimestamp);
     }
 
-    // All location related info are embedded in events[_embedded][venues]
+    /**
+     * extract the "venues" attribue from JSON response
+     * 
+     * @param eventMap
+     * @return Map<String, Object> of the value of the "venues" attribue 
+     * from JSON response
+     */
     private Map<String, Object> extractVenueMap(Map<String, Object> eventMap) {
-
+        
+        // All location related info are embedded in events[_embedded][venues]
         @SuppressWarnings("unchecked")
         Map<String, Object> venueMap = (HashMap<String, Object>)
                                         ((ArrayList<Object>)
@@ -101,6 +124,12 @@ public class ResponseProcessor {
         return venueMap;
     }
 
+    /**
+     * extract venue location coordinates
+     * 
+     * @param eventMap
+     * @return List<Double> where list[0]=longitude, list[1]=latitude 
+     */
     private List<Double> extractCoordinates(Map<String, Object> eventMap) {
 
         List<Double> res = new ArrayList<>();
@@ -135,6 +164,16 @@ public class ResponseProcessor {
         
     }
 
+    /**
+     * extract address
+     * 
+     * @param eventMap
+     * @return String in the following format:
+     * 
+     * "<venue name>, <street address>, <city>, <state code>, <country code>"
+     * 
+     * if the event doesn't have an venue, "online" be returned
+     */
     private String extractAddress(Map<String, Object> eventMap) {
 
         Map<String, Object> venueMap = this.extractVenueMap(eventMap);
@@ -191,6 +230,15 @@ public class ResponseProcessor {
         return String.format("%s,%s, %s, %s, %s", name, streetAddr, city, state, country);
     }
 
+    /**
+     * extract event start timestamp
+     * 
+     * @param eventMap
+     * @return Timestamp: the timestamp of the start time. 
+     * 
+     * If "dateTime" attribute is missing, "localdate 00:00:00" 
+     * will be used
+     */
     private Timestamp extractStartTimestamp (Map<String, Object> eventMap) {
 
 
@@ -219,6 +267,14 @@ public class ResponseProcessor {
         return Timestamp.from(dateTime);
     }
 
+    /**
+     * extract event cost
+     * 
+     * @param eventMap
+     * @return float: min event cost. 
+     * 
+     * returns 0 if "priceRanges" or "min" attribute is missing
+     */
     private float extractCost (Map<String, Object> eventMap) {
 
         float res = 0;
@@ -244,6 +300,13 @@ public class ResponseProcessor {
         return (float) ((DoubleNode)priceMap.get("min")).asDouble();
     }
 
+    /**
+     * extract age limit
+     * 
+     * @param eventMap
+     * @return int: 0 if "ageRestrictions" or "legalAgeEnforced" attribue is missing, or 
+     * "legalAgeEnforced" attribue is false; 18 if "legalAgeEnforced" is true
+     */
     private int extractAgeLimit (Map<String, Object> eventMap) {
 
         int ageLimit = 0;
@@ -269,7 +332,12 @@ public class ResponseProcessor {
     // NOTE: stringToMap(), toMap(), and toList() are inspired by the following
     // stackoverflow post: https://stackoverflow.com/a/24012023
 
-    // convert a JSON string into a Map
+    /**
+     * Convert a JSON string in to a Map<String, Object>
+     * 
+     * @param jsonString
+     * @return Map<String, Object>: JSON attribute names in string, all values are cast to Object
+     */
     private Map<String, Object> jsonStringToMap(String jsonString) {
         Map<String, Object> retMap = new HashMap<>();
 
@@ -289,9 +357,15 @@ public class ResponseProcessor {
         return retMap;
     }
 
-    // Convert a JsonNode tree to a Json in the form of a Map
-    // where map's value are essentially JsonNode objects;
-    // we can use JsonNode's own methods to check and get values 
+    /**
+     * Convert a JsonNode tree to a Json in the form of a Map
+     * where map's value are essentially JsonNode objects;
+     * we can use JsonNode's own methods to check and get values 
+     * 
+     * @param rootNode
+     * @return Map<String, Object> representing the underlying structure 
+     * of the JsonNode
+     */
     private Map<String, Object> toMap(JsonNode rootNode) {
         
         Map<String, Object> retMap = new HashMap<>();
@@ -317,7 +391,13 @@ public class ResponseProcessor {
 
     }
 
-    // convert an Array JsonNode to a list of JsonNodes
+    /**
+     * convert an Array JsonNode to a list of JsonNodes
+     * 
+     * @param rootNode
+     * @return List<Object> representing the underlying structure 
+     * of an Array JsonNode
+     */
     private List<Object> toList(JsonNode rootNode) {
         List<Object> retList = new ArrayList<>();
 

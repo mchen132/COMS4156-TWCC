@@ -14,13 +14,13 @@ public class ApiHandler {
     private RequestService requester;
     
     @Autowired
-    private ResponseProcessor processor;
+    private ResponseParser parser;
 
 
     public List<Event> getAllEvents() {
 
         String responseString = requester.getAllEvents();
-        return processor.processResponse(responseString);
+        return parser.processResponse(responseString);
 
     }
 

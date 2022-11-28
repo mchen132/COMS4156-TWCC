@@ -9,22 +9,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.TWCC.api.ResponseProcessor;
+import com.TWCC.api.ResponseParser;
 import com.TWCC.data.Event;
 
-// @ExtendWith(MockitoExtension.class)
-// @ExtendWith(SpringExtension.class)
-// @SpringBootTest
-// @ContextConfiguration(classes = { SpringBootConfiguration.class })
-// @JsonTest
-// @ContextConfiguration
-// @AutoConfigureJson
-public class ResponseProcessorTest {
+public class ResponseParserTest {
 
-    // @Autowired
-    // ResponseProcessor processor;
-
-    ResponseProcessor processor = new ResponseProcessor();
+    ResponseParser parser = new ResponseParser();
 
     private String inputJsonString = """
             {
@@ -109,44 +99,10 @@ public class ResponseProcessorTest {
         return new Event(-1, address, ageLimit, eventName, description, longitude, latitude, cost, media, creatioTimestamp, startTimestamp, endTimestamp);
     }
 
-    // private List<Event> createExpectedList () {
-    //     List<Event> eventList = new ArrayList<>();
-
-    //     String eventName = "Phoenix Suns vs. Utah Jazz";
-    //     String description = eventName;
-
-    //     float cost = (float) 46.0;
-
-
-    //     String media = "https://www.ticketmaster.com/phoenix-suns-vs-utah-jazz-phoenix-arizona-11-26-2022/event/19005D0B8FA91548";
-
-    //     int ageLimit = 0;
-
-    //     String startTimestampString = "2022-11-27T02:00:00Z";
-
-    //     Instant dateTime = Instant.parse(startTimestampString);
-
-    //     Timestamp startTimestamp = Timestamp.from(dateTime);
-    //     Timestamp endTimestamp = startTimestamp;
-    //     Timestamp creatioTimestamp = startTimestamp;
-
-    //     String address = "Footprint Center, 201 East Jefferson Street, Phoenix, AZ, US";
-
-    //     double longitude = -112.071313;
-    //     double latitude = 33.445899;
-
-    //     Event event = new Event(-1, address, ageLimit, eventName, description, longitude, latitude, cost, media, creatioTimestamp, startTimestamp, endTimestamp);
-
-    //     eventList.add(event);
-
-    //     return eventList;
-    // }
-
     @Test
     void testGetAllEventsSuccess() {
         
-        List<Event> testEventList = processor.processResponse(inputJsonString);
-        // List<Event> expectedEventList = this.createExpectedList();
+        List<Event> testEventList = parser.processResponse(inputJsonString);
         Event event = this.createEvent();
         List<Event> expectedEventList = new ArrayList<>();
 
@@ -198,7 +154,7 @@ public class ResponseProcessorTest {
         
         Event event = this.createEvent();
 
-        List<Event> testEventList = processor.processResponse(jsonStringNoAddress);
+        List<Event> testEventList = parser.processResponse(jsonStringNoAddress);
         List<Event> expectedEventList = new ArrayList<>();
 
         event.setAddress("online");
@@ -269,7 +225,7 @@ public class ResponseProcessorTest {
         
         Event event = this.createEvent();
 
-        List<Event> testEventList = processor.processResponse(jsonStringNoStartDateTime);
+        List<Event> testEventList = parser.processResponse(jsonStringNoStartDateTime);
         List<Event> expectedEventList = new ArrayList<>();
 
         event.setCreationTimestamp(Timestamp.valueOf("2022-11-26 00:00:00"));
@@ -334,7 +290,7 @@ public class ResponseProcessorTest {
                 
         Event event = this.createEvent();
 
-        List<Event> testEventList = processor.processResponse(jsonStringNoPriceRange);
+        List<Event> testEventList = parser.processResponse(jsonStringNoPriceRange);
         List<Event> expectedEventList = new ArrayList<>();
         
         event.setCost(0f);
@@ -398,7 +354,7 @@ public class ResponseProcessorTest {
         
         Event event = this.createEvent();
 
-        List<Event> testEventList = processor.processResponse(jsonStringNoPriceRangeListContent);
+        List<Event> testEventList = parser.processResponse(jsonStringNoPriceRangeListContent);
         List<Event> expectedEventList = new ArrayList<>();
         
         event.setCost(0f);
@@ -466,7 +422,7 @@ public class ResponseProcessorTest {
         
         Event event = this.createEvent();
 
-        List<Event> testEventList = processor.processResponse(jsonStringNoMinCost);
+        List<Event> testEventList = parser.processResponse(jsonStringNoMinCost);
         List<Event> expectedEventList = new ArrayList<>();
         
         event.setCost(0f);
@@ -532,7 +488,7 @@ public class ResponseProcessorTest {
         
         Event event = this.createEvent();
 
-        List<Event> testEventList = processor.processResponse(jsonStringNoAgeRestriction);
+        List<Event> testEventList = parser.processResponse(jsonStringNoAgeRestriction);
         List<Event> expectedEventList = new ArrayList<>();
         
         event.setAgeLimit(0);
@@ -600,7 +556,7 @@ public class ResponseProcessorTest {
         
         Event event = this.createEvent();
 
-        List<Event> testEventList = processor.processResponse(jsonStringNoLegalAgeEnforced);
+        List<Event> testEventList = parser.processResponse(jsonStringNoLegalAgeEnforced);
         List<Event> expectedEventList = new ArrayList<>();
         
         event.setAgeLimit(0);
@@ -669,7 +625,7 @@ public class ResponseProcessorTest {
         
         Event event = this.createEvent();
 
-        List<Event> testEventList = processor.processResponse(jsonStringLegalAgeRequired);
+        List<Event> testEventList = parser.processResponse(jsonStringLegalAgeRequired);
         List<Event> expectedEventList = new ArrayList<>();
         
         event.setAgeLimit(18);
