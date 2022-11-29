@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.TWCC.data.Event;
 import com.TWCC.data.EventStatistics;
 import com.TWCC.exception.InvalidRequestException;
 import com.TWCC.repository.EventRepository;
+import com.TWCC.service.EventService;
 import com.TWCC.security.JwtUtils;
 import com.TWCC.security.UserDetailsExt;
 import com.TWCC.security.UserDetailsServiceExt;
@@ -36,6 +38,9 @@ public class EventController {
     private EventRepository eventRepository;
 
     @Autowired
+    private EventService eventService;
+
+    @Autowired
     private JwtUtils jwtUtils;
 
     @Autowired
@@ -43,11 +48,6 @@ public class EventController {
 
     @Autowired
     private EventStatisticService eventStatisticService;
-
-    @GetMapping("/hello")
-    public String hello() {
-        return "Hi there";
-    }
 
     @GetMapping("/events")
     public List<Event> getEvents() {

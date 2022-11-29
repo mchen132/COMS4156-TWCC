@@ -35,6 +35,7 @@ import org.springframework.security.web.server.csrf.CsrfToken;
 
 import com.TWCC.data.Event;
 import com.TWCC.repository.EventRepository;
+import com.TWCC.service.EventService;
 import com.TWCC.security.JwtUtils;
 import com.TWCC.security.UserDetailsServiceExt;
 import com.TWCC.service.EventStatisticService;
@@ -172,6 +173,7 @@ public class EventControllerTest {
     }
 
 	@Test
+	@WithMockUser
 	void testFilterEvent() {
 		Mockito.when(eventRepository.findAll()).thenReturn(events);
 		Mockito.when(eventService.filterEvents(any(), any())).thenReturn(new ArrayList<Event>(Arrays.asList(event3)));
