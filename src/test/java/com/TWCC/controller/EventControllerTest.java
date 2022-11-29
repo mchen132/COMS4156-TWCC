@@ -119,23 +119,6 @@ public class EventControllerTest {
             e.printStackTrace();
         }
     }
-
-    // @Test
-    // void testGetEventsByAddress() {
-    //     Mockito.when(eventRepository.findByAddress("Columbia")).thenReturn(new ArrayList<>(Arrays.asList(event1, event3)));
-
-    //     MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/events/byaddress/Columbia");
-        
-    //     try {
-    //         mockMvc.perform(request)
-    //                 .andExpect(status().isOk())
-    //                 .andExpect(jsonPath("$", Matchers.hasSize(2)))
-    //                 .andExpect(jsonPath("$[0].id", Matchers.is(1)))
-    //                 .andExpect(jsonPath("$[1].id", Matchers.is(3)));
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //     }
-    // }
 	
 	@Test
 	void testFilterEvent() {
@@ -170,6 +153,7 @@ public class EventControllerTest {
             e.printStackTrace();
         }
     }
+	
 	@Test
 	void createEventSuccessfully() {
 		Event eventToCreate = new Event(
