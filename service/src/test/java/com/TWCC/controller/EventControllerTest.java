@@ -35,6 +35,7 @@ import org.springframework.security.web.server.csrf.CsrfToken;
 
 import com.TWCC.data.Event;
 import com.TWCC.repository.EventRepository;
+import com.TWCC.service.EventService;
 import com.TWCC.security.JwtUtils;
 import com.TWCC.security.UserDetailsServiceExt;
 import com.TWCC.service.EventStatisticService;
@@ -51,6 +52,9 @@ public class EventControllerTest {
     @MockBean
     EventRepository eventRepository;
 
+	@MockBean
+	EventService eventService;
+	
 	@MockBean
 	JwtUtils jwtUtils;
 
@@ -72,7 +76,7 @@ public class EventControllerTest {
 		csrfTokenRepo = new HttpSessionCsrfTokenRepository();
     }
 
-    @BeforeEach
+	@BeforeEach
     void setUp() {
         event1 = new Event(1, "Columbia", 18, 
                                 "Midterm Study session", 
@@ -167,6 +171,24 @@ public class EventControllerTest {
             e.printStackTrace();
         }
     }
+
+	@Test
+	@WithMockUser
+	void testFilterEvent() {
+		Mockito.when(eventRepository.findAll()).thenReturn(events);
+		Mockito.when(eventService.filterEvents(any(), any())).thenReturn(new ArrayList<Event>(Arrays.asList(event3)));
+
+		try {
+			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/filterEvents?address=Columbia&description=UMD");
+						
+			mockMvc.perform(mockRequest)
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].address", is("Columbia")))
+				.andExpect(jsonPath("$[0].description", is("This is a midterm study session at UMD")));
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+	}
 
 	@Test
 	@WithMockUser
@@ -302,44 +324,38 @@ public class EventControllerTest {
 	@Test
 	@WithMockUser
 	void updateEventSuccessfully() {
-		Event updatedEvent = new Event(
-			1,
-			"Manhattan",
-			18, 
-            "Finals Study Session", 
-            "This is a finals study session",
-            12.55,
-            125.34,
-            10.0f,
-            "www.columbia.edu",
-			3,
-			"category1, category2, category3",
-            new Timestamp(new Date().getTime() - 10),
-            new Timestamp(new Date().getTime() + 5),
-            new Timestamp(new Date().getTime() + 10)
-        );
-
-		Mockito.when(eventRepository.findById(event1.getId())).thenReturn(Optional.of(event1));
-		Mockito.when(eventRepository.save(any())).thenReturn(updatedEvent);
 		try {
 			CsrfToken csrfToken = (CsrfToken) csrfTokenRepo.generateToken(new MockHttpServletRequest());
 			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/events")
-				.sessionAttr(CSRF_TOKEN_NAME, csrfToken) // Need to pass CSRF Token for PUT requests
+				.sessionAttr(CSRF_TOKEN_NAME, csrfToken)
+				.content(this.objectMapper.writeValueAsString(new HashMap<String, String>() {{		
+					put("id", "1");			
+					put("address", "Columbia");
+					put("ageLimit", "18");
+					put("name", "Midterm Study Session");
+					put("description", "This is a midterm study session");
+					put("latitude", "12.5");
+					put("longitude", "125.2");
+					put("cost", "5");
+					put("media", "www.columbia.edu");						
+					put("startTimestamp", new Timestamp(new Date().getTime() + 5).toString());
+					put("endTimestamp", new Timestamp(new Date().getTime() + 10).toString());
+				}}))
 				.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON)
-				.content(this.objectMapper.writeValueAsString(updatedEvent));
+				.accept(MediaType.APPLICATION_JSON);
 
 			mockMvc.perform(mockRequest)
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id", is(1)))
-				.andExpect(jsonPath("$.address", is("Manhattan")))
+				.andExpect(jsonPath("$.address", is("Columbia")))
 				.andExpect(jsonPath("$.ageLimit", is(18)))
-				.andExpect(jsonPath("$.name", is("Finals Study Session")))
-				.andExpect(jsonPath("$.description", is("This is a finals study session")))
-				.andExpect(jsonPath("$.longitude", is(12.55)))
-				.andExpect(jsonPath("$.latitude", is(125.34)))
-				.andExpect(jsonPath("$.cost", is(10.0)))
+				.andExpect(jsonPath("$.name", is("Midterm Study Session")))
+				.andExpect(jsonPath("$.description", is("This is a midterm study session")))
+				.andExpect(jsonPath("$.longitude", is(125.2)))
+				.andExpect(jsonPath("$.latitude", is(12.5)))
+				.andExpect(jsonPath("$.cost", is(5.0)))
 				.andExpect(jsonPath("$.media", is("www.columbia.edu")));
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -348,38 +364,25 @@ public class EventControllerTest {
 	@Test
 	@WithMockUser
 	void updateEventRecordNotFound() {
-		Event updatedEvent = new Event(
-			1000,
-			"Manhattan",
-			18, 
-            "Finals Study Session", 
-            "This is a finals study session",
-            12.55,
-            125.34,
-            10.0f,
-            "www.columbia.edu",
-			3,
-			"category1, category2, category3",
-            new Timestamp(new Date().getTime() - 10),
-            new Timestamp(new Date().getTime() + 5),
-            new Timestamp(new Date().getTime() + 10)
-        );
 
-		Mockito.when(eventRepository.findById(updatedEvent.getId())).thenReturn(Optional.empty());
+		HashMap<String, String> event = new HashMap<String, String>();
+		event.put("id", "1000");
+
+		Mockito.when(eventRepository.findById(Integer.parseInt(event.get("id")))).thenReturn(Optional.empty());
 
 		try {
 			CsrfToken csrfToken = (CsrfToken) csrfTokenRepo.generateToken(new MockHttpServletRequest());
 			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/events")
-					.sessionAttr(CSRF_TOKEN_NAME, csrfToken) // Need to pass CSRF Token for PUT requests
-					.contentType(MediaType.APPLICATION_JSON)
-					.accept(MediaType.APPLICATION_JSON)
-					.content(this.objectMapper.writeValueAsString(updatedEvent));
+				.sessionAttr((CSRF_TOKEN_NAME), csrfToken)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(this.objectMapper.writeValueAsString(event))
+				.accept(MediaType.APPLICATION_JSON);
 
 			mockMvc.perform(mockRequest);
-			
+
 		} catch (Exception e) {
 			if (e instanceof NestedServletException) {
-				assertTrue(e.getMessage().contains("NotFoundException"));
+				assertTrue(e.getMessage().contains("NoutFoundException"));
 			}
 		}
 	}

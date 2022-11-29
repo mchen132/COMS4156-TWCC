@@ -6,9 +6,11 @@
 > 1. Install Docker
 > 2. Clone repo & cd to repo root directory
 > 3. docker pull maven:latest
-> 4. docker run -it v $(pwd):/{root-dir-folder-name} --name {container-name} -p 8080:8080 maven:latest bash
+> 4. `Option 1: (Mac - zsh)` docker run -it -v $(pwd):/{root-dir-folder-name} --name {container-name} -p 8080:8080 maven:latest bash 
 >       - Run maven image while mounting repo on host machine to Docker container and exposing port
-> 5. (Optional) if exited container, start back up: docker start {container-name} -i
+> 5. `Option 2: (Windows - Powershell)` docker run -it -v ${pwd}:/app --name {container-name} -p 8080:8080 maven:latest bash
+>       - Run maven image while mounting repo on host machine to Docker container and exposing port
+> 6. (Optional) if exited container, start back up: docker start {container-name} -i
 - Build: To build the app run `mvn install`
 - Run: To run the app run `mvn spring-boot:run`
 - Test (locally - requires MySQL configured with database set up): After running the app, we can access our app through the endpoints at localhost:{exposed-port} (localhost:8080) and appending any route specified in documentation (i.e. localhost:8080/events).
@@ -64,6 +66,8 @@
      ```
 - `DELETE /events`: Deletes an event given an existing event ID
     - Sample Request: localhost:8080/events/1
+- `GET /filterEvents`: Gets filtered list of events given event fields and values that the user wants to filter on
+    - Sample Request: localhost:8080/filterEvents?address=Columbia&name=Midterm
 - `GET /events/statistics`: Gets event statistics data
     - Sample Request: localhost:8080/events/statistics
 
@@ -110,3 +114,12 @@
 
 ### CI/CD Workflow Reports
 - Any push and pull request triggers a Github Actions workflow run where each log can be located [here](https://github.com/mchen132/COMS4156-TWCC/actions/workflows/ci_cd_workflow.yml)
+
+## 4. Client
+- Directions to run client:
+    1. (Option 1) Start server locally (includes having local MySql Database setup with all tables and application.properties setup)
+    1. (Option 2) Updating API calls in client (residing in `client/src/actions`) to point to production domain URL (EC2 instance)
+    2. In `client/` directory, run `npm install`
+    3. In `client/` directory, run `npm start`
+- Directions to build client:
+    1. In `client/` directory, run `npm build`

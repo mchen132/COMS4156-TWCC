@@ -72,6 +72,11 @@
 			<version>2.13.3</version>
 		</dependency>
 		<dependency>
+			<groupId>com.turkraft</groupId>
+			<artifactId>spring-filter</artifactId>
+			<version>0.9.5</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
@@ -105,6 +110,7 @@
 						<!-- Including NycTodoServiceApplicationTests requires DB configuration in application.properties, so we ignore this file in automated tests to prevent build failure -->
 						<!-- <include>NycTodoServiceApplicationTests.java</include> -->
                 		<include>EventControllerTest.java</include>
+						<include>EventServiceTest.java</include>
 						<include>UserControllerTest.java</include>
 						<include>EventStatisticServiceTest.java</include>
             		</includes>

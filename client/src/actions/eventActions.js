@@ -32,3 +32,35 @@ export const createEvent = async (newEvent) => {
         console.error(err);
     }
 };
+
+export const deleteEvent = async (eventId) => {
+    try {
+        const res = await axios.delete(`http://localhost:8080/events/${eventId}`);
+
+        if (res.status === 200) {
+            return eventId;
+        }
+    } catch (err) {
+        if (err.response && err.response.status === 401) {
+            clearAuthLocalStorageInfo();
+        }
+
+        console.error(err);
+    }
+};
+
+export const getEventStatistics = async () => {
+    try {
+        const res = await axios.get("http://localhost:8080/events/statistics");
+
+        if (res.status === 200) {
+            return res.data;
+        }
+    } catch (err) {
+        if (err.response && err.response.status === 401) {
+            clearAuthLocalStorageInfo();
+        }
+
+        console.error(err);
+    }
+};

@@ -1,12 +1,14 @@
 package com.TWCC.controller;
 
-import java.util.HashMap;
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,11 +19,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.TWCC.data.Event;
 import com.TWCC.data.EventStatistics;
 import com.TWCC.exception.InvalidRequestException;
 import com.TWCC.repository.EventRepository;
+import com.TWCC.service.EventService;
 import com.TWCC.security.JwtUtils;
 import com.TWCC.security.UserDetailsExt;
 import com.TWCC.security.UserDetailsServiceExt;
@@ -34,6 +38,9 @@ public class EventController {
     private EventRepository eventRepository;
 
     @Autowired
+    private EventService eventService;
+
+    @Autowired
     private JwtUtils jwtUtils;
 
     @Autowired
@@ -41,11 +48,6 @@ public class EventController {
 
     @Autowired
     private EventStatisticService eventStatisticService;
-
-    @GetMapping("/hello")
-    public String hello() {
-        return "Hi there";
-    }
 
     @GetMapping("/events")
     public List<Event> getEvents() {
@@ -76,6 +78,21 @@ public class EventController {
         return null;
     }
 
+    /**
+     * Gets a list of filtered events from the filter query parameters.
+     * 
+     * @param allParams Query parameters based on event fields
+     * @return list of filtered events
+     */
+    @GetMapping("/filterEvents")
+    public List<Event> filterEvent(@RequestParam HashMap<String, String> allParams){
+        List<Event> events = eventRepository.findAll();
+
+        List<Event> remainingEvents = eventService.filterEvents(allParams, events);
+        
+        return remainingEvents;
+    }
+
     @PostMapping("/events")
     public Event createEvent(@RequestBody final Event newEvent, @RequestHeader (name="Authorization") String jwt) {
         // Get user details from JWT and set host Id to new event
@@ -87,24 +104,53 @@ public class EventController {
     }
 
     @PutMapping("/events")
-    public Event updateEvent(@RequestBody Event eventRecord) throws NotFoundException {
-        Optional<Event> optionalEvent = eventRepository.findById(eventRecord.getId());
+    public Event updateEvent(@RequestBody HashMap<String, String> jsonObject) throws NotFoundException {
+        Optional<Event> optionalEvent = eventRepository.findById(Integer.parseInt(jsonObject.get("id")));
         if (optionalEvent.isEmpty()) {
             throw new NotFoundException();
         }
 
         Event existingEvent = optionalEvent.get();
 
-        existingEvent.setAddress(eventRecord.getAddress());
-        existingEvent.setAgeLimit(eventRecord.getAgeLimit());
-        existingEvent.setCost(eventRecord.getCost());
-        existingEvent.setDescription(eventRecord.getDescription());
-        existingEvent.setEndTimestamp(eventRecord.getEndTimestamp());
-        existingEvent.setLatitude(eventRecord.getLatitude());
-        existingEvent.setLongitude(eventRecord.getLongitude());
-        existingEvent.setMedia(eventRecord.getMedia());
-        existingEvent.setName(eventRecord.getName());
-        existingEvent.setStartTimestamp(eventRecord.getStartTimestamp());
+        if (jsonObject.containsKey("address")) {
+            existingEvent.setAddress(jsonObject.get("address"));
+        }
+        
+        if (jsonObject.containsKey("ageLimit")) {
+            existingEvent.setAgeLimit(Integer.parseInt(jsonObject.get("ageLimit")));
+        }
+
+        if (jsonObject.containsKey("name")) {
+            existingEvent.setName(jsonObject.get("name"));
+        }
+
+        if (jsonObject.containsKey("description")) {
+            existingEvent.setDescription(jsonObject.get("description"));
+        }
+
+        if (jsonObject.containsKey("longitude")) {
+            existingEvent.setLongitude(Double.parseDouble(jsonObject.get("longitude")));
+        }
+
+        if (jsonObject.containsKey("latitude")) {
+            existingEvent.setLatitude(Double.parseDouble(jsonObject.get("latitude")));
+        }
+
+        if (jsonObject.containsKey("cost")) {
+            existingEvent.setCost(Float.parseFloat(jsonObject.get("cost")));
+        }
+
+        if (jsonObject.containsKey("media")) {
+            existingEvent.setMedia(jsonObject.get("media"));
+        }
+
+        if (jsonObject.containsKey("startTimestamp")) {
+            existingEvent.setStartTimestamp(Timestamp.valueOf(jsonObject.get("startTimestamp")));
+        }
+
+        if (jsonObject.containsKey("endTimestamp")) {
+            existingEvent.setEndTimestamp(Timestamp.valueOf(jsonObject.get("endTimestamp")));
+        }
 
         return eventRepository.save(existingEvent);
     }
