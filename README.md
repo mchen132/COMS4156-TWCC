@@ -64,6 +64,8 @@
      ```
 - `DELETE /events`: Deletes an event given an existing event ID
     - Sample Request: localhost:8080/events/1
+- `GET /filterEvents`: Gets filtered list of events given event fields and values that the user wants to filter on
+    - Sample Request: localhost:8080/filterEvents?address=Columbia&name=Midterm
 - `GET /events/statistics`: Gets event statistics data
     - Sample Request: localhost:8080/events/statistics
 

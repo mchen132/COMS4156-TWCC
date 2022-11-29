@@ -35,6 +35,7 @@ import org.springframework.security.web.server.csrf.CsrfToken;
 
 import com.TWCC.data.Event;
 import com.TWCC.repository.EventRepository;
+import com.TWCC.service.EventService;
 import com.TWCC.security.JwtUtils;
 import com.TWCC.security.UserDetailsServiceExt;
 import com.TWCC.service.EventStatisticService;
@@ -51,6 +52,9 @@ public class EventControllerTest {
     @MockBean
     EventRepository eventRepository;
 
+	@MockBean
+	EventService eventService;
+	
 	@MockBean
 	JwtUtils jwtUtils;
 
@@ -167,6 +171,24 @@ public class EventControllerTest {
             e.printStackTrace();
         }
     }
+
+	@Test
+	@WithMockUser
+	void testFilterEvent() {
+		Mockito.when(eventRepository.findAll()).thenReturn(events);
+		Mockito.when(eventService.filterEvents(any(), any())).thenReturn(new ArrayList<Event>(Arrays.asList(event3)));
+
+		try {
+			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/filterEvents?address=Columbia&description=UMD");
+						
+			mockMvc.perform(mockRequest)
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].address", is("Columbia")))
+				.andExpect(jsonPath("$[0].description", is("This is a midterm study session at UMD")));
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+	}
 
 	@Test
 	@WithMockUser
