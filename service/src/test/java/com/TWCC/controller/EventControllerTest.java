@@ -37,6 +37,7 @@ import com.TWCC.data.Event;
 import com.TWCC.repository.EventRepository;
 import com.TWCC.security.JwtUtils;
 import com.TWCC.security.UserDetailsServiceExt;
+import com.TWCC.service.EventStatisticService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(EventController.class)
