@@ -5,8 +5,8 @@ import Navbar from 'react-bootstrap/Navbar';
 
 const CustomNavbar = ({ title, links }) => {
     const renderLinks = () => (
-        links.map(link => 
-            <Nav.Link href={`/${link.href}`}>{link.name}</Nav.Link>
+        links.map((link, index) => 
+            <Nav.Link key={`${link.name.replace(/\s+/g, '')}-${index}`} href={`/${link.href}`}>{link.name}</Nav.Link>
         )
     );
 

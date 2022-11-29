@@ -15,6 +15,10 @@ import {
 } from 'chart.js';
 import { Doughnut, Bar, PolarArea, Chart } from 'react-chartjs-2';
 import randomColor from 'randomcolor';
+import { Link } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+import { getAuthInformation } from '../../utils/authUtil';
+import '../../styles/eventStatistics.css';
 
 ChartJS.register(
     ArcElement,
@@ -32,6 +36,7 @@ ChartJS.register(
 const EventStatistics = () => {
     const chartRef = useRef(null);
     const [localEventStatistics, setLocalEventStatistics] = useState({
+        totalNumberOfEvents: null,
         averages: null,
         numberOfEventsByCategory: null,
         averageCostOfEventsByCategory: null,
@@ -39,13 +44,20 @@ const EventStatistics = () => {
         numberOfEventsByCategoryTimeRanges: null
     });
 
-    useEffect(() => {
-        const chart = chartRef.current;
-        
-        // if (!chart) {
-        //     return;
-        // }
+    const setChartOptions = (title) => ({
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top'
+            },
+            title: {
+                display: true,
+                text: title
+            }
+        }
+    });
 
+    useEffect(() => {
         const fetchEventStatistics = async () => {
             try {
                 const eventStatistics = await getEventStatistics();
@@ -79,10 +91,8 @@ const EventStatistics = () => {
                     return dataset;
                 })
 
-                console.log(numberOfEventsByCategoryTimeRangesDatasets);
-                console.log(Object.keys(eventStatistics.numberOfEventsByCategoryTimeRanges));
-
                 setLocalEventStatistics({
+                    totalNumberOfEvents: eventStatistics.totalNumberOfEvents,
                     averages: {
                         labels: ['Cost', 'Age Limit'],
                         datasets: [
@@ -119,11 +129,7 @@ const EventStatistics = () => {
                         }]
                     },
                     numberOfEventsByCategoryTimeRanges: {
-                        labels: Object.keys(eventStatistics.numberOfEventsByCategoryTimeRanges),
-                        // datasets: numberOfEventsByCategoryTimeRangesDatasets.map(dataset => ({
-                        //     ...dataset,
-                        //     borderColor: createGradient(chart?.ctx, chart?.chartArea)
-                        // }))
+                        labels: Object.keys(eventStatistics.numberOfEventsByCategoryTimeRanges),                
                         datasets: numberOfEventsByCategoryTimeRangesDatasets
                     }
                 })
@@ -160,58 +166,86 @@ const EventStatistics = () => {
 
     return (
         <>
-            <h1>Event Statistics</h1>
-            {
-                localEventStatistics && localEventStatistics.averages &&
-                <Bar
-                    options={{
-                        responsive: true,
-                        plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        title: {
-                            display: true,
-                            text: 'Chart.js Bar Chart',
-                        },
-                        }
-                    }}
-                    data={localEventStatistics?.averages}
-                />
-            }
-            <Doughnut data={{
-                    labels: localEventStatistics?.numberOfEventsByCategory?.labels,
-                    datasets: [{
-                        label: 'Number of Events By Category',
-                        data: localEventStatistics?.numberOfEventsByCategory?.data,
-                        backgroundColor: localEventStatistics?.numberOfEventsByCategory?.bgColor,
-                        borderColor: localEventStatistics?.numberOfEventsByCategory?.borderColor,
-                        borderWidth: 1,
-                    }]
-                }}
-            />
-            {
-                localEventStatistics && localEventStatistics.averageCostOfEventsByCategory &&
-                    <PolarArea data={localEventStatistics?.averageCostOfEventsByCategory} />
-            }
-            {
-                localEventStatistics && localEventStatistics.averageAgeLimitOfEventsByCategory &&
-                    <PolarArea data={localEventStatistics?.averageAgeLimitOfEventsByCategory} />
-            }
-            {
-                localEventStatistics && localEventStatistics.numberOfEventsByCategoryTimeRanges &&
+            <div className='events-statistics-header'>
+                {
+                        getAuthInformation('token')
+                            ? <>
+                                <h1>Event Statistics</h1>
+                                <h2>Welcome {getAuthInformation('username')}!</h2>
+                                {
+                                    localEventStatistics && localEventStatistics.totalNumberOfEvents &&
+                                    <h5>{`Total Number of Events: ${localEventStatistics?.totalNumberOfEvents}`}</h5>
+                                }
+                            </>
+                            : <>                        
+                                <h2>Login to view events</h2>
+                                <Link to="/login"><Button variant='primary'>Login</Button></Link>
+                            </>
+                }
+            </div>
+            <div className='event-statistics-container'>
+                <div className='event-statistics-chart'>
+                    {
+                        localEventStatistics && localEventStatistics.averages &&
+                        <Bar
+                            options={setChartOptions('Averages')}
+                            data={localEventStatistics?.averages}
+                        />
+                    }
+                </div>
+                <div className='event-statistics-chart'>
+                    <Doughnut
+                        options={setChartOptions('Number of Events By Category')} 
+                        data={{
+                            labels: localEventStatistics?.numberOfEventsByCategory?.labels,
+                            datasets: [{
+                                label: 'Number of Events By Category',
+                                data: localEventStatistics?.numberOfEventsByCategory?.data,
+                                backgroundColor: localEventStatistics?.numberOfEventsByCategory?.bgColor,
+                                borderColor: localEventStatistics?.numberOfEventsByCategory?.borderColor,
+                                borderWidth: 1,
+                            }]
+                        }}
+                    />
+                </div>
+                <div className='event-statistics-chart'>
+                    {
+                        localEventStatistics && localEventStatistics.averageCostOfEventsByCategory &&
+                            <PolarArea
+                                options={setChartOptions('Average Cost of Events By Category')} 
+                                data={localEventStatistics?.averageCostOfEventsByCategory}
+                            />
+                    }
+                </div>
+                <div className='event-statistics-chart'>
+                    {
+                        localEventStatistics && localEventStatistics.averageAgeLimitOfEventsByCategory &&
+                            <PolarArea
+                                options={setChartOptions('Average Age Limit of Events By Category')} 
+                                data={localEventStatistics?.averageAgeLimitOfEventsByCategory}
+                            />
+                    }            
+                </div>
+                <div className='event-statistics-chart'>
                     <Chart
+                        options={setChartOptions('Number of Events By Category within Time Ranges')} 
                         ref={chartRef}
                         type='line'
-                        data={{
+                        data={localEventStatistics && localEventStatistics.numberOfEventsByCategoryTimeRanges
+                            ? {
                             ...localEventStatistics.numberOfEventsByCategoryTimeRanges,
                             datasets: localEventStatistics.numberOfEventsByCategoryTimeRanges.datasets.map(dataset => ({
                                 ...dataset,
                                 borderColor: createGradient(chartRef?.current?.ctx, chartRef?.current?.chartArea)
-                            }))
-                        }}
+                            }))}
+                            : {
+                                labels: [],
+                                datasets: []
+                            } 
+                        }
                     />
-            }
+                </div>
+            </div>
         </>
     );
 };

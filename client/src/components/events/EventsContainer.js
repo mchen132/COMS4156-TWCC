@@ -194,13 +194,14 @@ const EventsContainer = () => {
                 {
                         getAuthInformation('token')
                             ? <>
+                                <h1>Events</h1>
                                 <h2>Welcome {getAuthInformation('username')}!</h2>
                                 <Button variant="primary" onClick={() => setShowCreateEventModal(true)}>
                                     Create Event
                                 </Button>
                                 {renderCreateEventModal()}
                             </>
-                            : <>
+                            : <>                        
                                 <h2>Login to view events</h2>
                                 <Link to="/login"><Button variant='primary'>Login</Button></Link>
                             </>

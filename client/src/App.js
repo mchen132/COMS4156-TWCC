@@ -17,7 +17,6 @@ const App = () => {
 	return (
 		<div className="App">
 			<CustomNavbar title="TWCC Events" links={[{ href: 'events', name: 'Events' }, { href: 'events/statistics', name: 'Event Statistics' }]} />
-			<h1>TWCC Events</h1>
 			<Router>
 				<>
 					<Routes>
