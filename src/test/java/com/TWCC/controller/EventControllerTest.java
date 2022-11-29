@@ -35,6 +35,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 
 import com.TWCC.data.Event;
 import com.TWCC.repository.EventRepository;
+import com.TWCC.service.EventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(EventController.class)
@@ -48,6 +49,9 @@ public class EventControllerTest {
 
     @MockBean
     EventRepository eventRepository;
+
+	@MockBean
+	EventService eventService;
 
     private List<Event> events = new ArrayList<>();
     private Event event1, event2, event3;
@@ -135,29 +139,16 @@ public class EventControllerTest {
 	
 	@Test
 	void testFilterEvent() {
-
 		Mockito.when(eventRepository.findAll()).thenReturn(events);
+		Mockito.when(eventService.filterEvents(any(), any())).thenReturn(new ArrayList<Event>(Arrays.asList(event3)));
 
 		try {
-		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/filterEvents?address=Columbia&description=UMD");
-				// .content(this.objectMapper.writeValueAsString(new HashMap<String, String>() {{					
-				// 	put("address", "Columbia");
-				// 	put("description", "UMD");
-					// put("age_limit", "10");					
-					// put("start_timestamp", new Timestamp(new Date().getTime()).toString());
-				// }}))
-				// .contentType(MediaType.APPLICATION_JSON)
-				// .accept(MediaType.APPLICATION_JSON);	
-					
-				MvcResult result = mockMvc.perform(mockRequest)
+			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/filterEvents?address=Columbia&description=UMD");
+						
+			mockMvc.perform(mockRequest)
 				.andExpect(status().isOk())
-				// .andExpect(jsonPath("$[0].address", is("Columbia")))
-				// .andExpect(jsonPath("$[0].description", is("This is a midterm study session at UMD")))
-				// .andExpect(jsonPath("$[0].ageLimit", is(18)))
-				// .andExpect(jsonPath("$[0].start_timestamp", is( new Timestamp(new Date().getTime() + 5))))
-				.andReturn();
-				String content = result.getResponse().getContentAsString();
-				System.out.println(content);
+				.andExpect(jsonPath("$[0].address", is("Columbia")))
+				.andExpect(jsonPath("$[0].description", is("This is a midterm study session at UMD")));
 		} catch (Exception e){
 			e.printStackTrace();
 		}
