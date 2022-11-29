@@ -95,6 +95,7 @@
         		<configuration>
             		<includes>
                 		<include>EventControllerTest.java</include>
+						<include>EventServiceTest.java</include>
             		</includes>
        	 		</configuration>
     		</plugin>

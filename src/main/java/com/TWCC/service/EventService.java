@@ -12,6 +12,14 @@ import com.TWCC.data.Event;
 
 @Service
 public class EventService {
+
+    /**
+     * Gets back a list of filtered events based on the filter params and events passed in.
+     * 
+     * @param filterParams Map<String, String> of Event fields as keys and their values to filter on
+     * @param events List of events
+     * @return Filtered list of events
+     */
     public List<Event> filterEvents(Map<String, String> filterParams, List<Event> events) {
         if (filterParams != null && events != null) {
             List<Event> remainingEvents = new ArrayList<>(events);

@@ -63,8 +63,14 @@ public class EventController {
         return result;
     }
 
+    /**
+     * Gets a list of filtered events from the filter query parameters.
+     * 
+     * @param allParams Query parameters based on event fields
+     * @return list of filtered events
+     */
     @GetMapping("/filterEvents")
-    public List<Event> filterEvent(@RequestParam HashMap<String,String> allParams){
+    public List<Event> filterEvent(@RequestParam HashMap<String, String> allParams){
         List<Event> events = eventRepository.findAll();
 
         List<Event> remainingEvents = eventService.filterEvents(allParams, events);
