@@ -110,12 +110,9 @@
 						<!-- Including NycTodoServiceApplicationTests requires DB configuration in application.properties, so we ignore this file in automated tests to prevent build failure -->
 						<!-- <include>NycTodoServiceApplicationTests.java</include> -->
                 		<include>EventControllerTest.java</include>
-<<<<<<< HEAD:pom.xml
 						<include>EventServiceTest.java</include>
-=======
 						<include>UserControllerTest.java</include>
 						<include>EventStatisticServiceTest.java</include>
->>>>>>> 7731e37ad73ffa410aa9c0acdf7fc75921357f8e:service/pom.xml
             		</includes>
        	 		</configuration>
     		</plugin>
