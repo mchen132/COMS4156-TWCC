@@ -2,6 +2,7 @@ import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { deleteEvent } from '../../actions/eventActions';
+import { getAuthInformation } from '../../utils/authUtil';
 
 const Event = ({ event, onDeleteEventCallback }) => {
     const { 
@@ -20,6 +21,8 @@ const Event = ({ event, onDeleteEventCallback }) => {
         host
     } = event;
 
+    const userId = getAuthInformation('userId');
+
     const onDeleteEvent = async () => {
         try {
             const res = await deleteEvent(id);
@@ -31,7 +34,10 @@ const Event = ({ event, onDeleteEventCallback }) => {
 
     return (
         <Card className='event-card' style={{ width: '18rem' }}>
-            <Button variant='danger' onClick={onDeleteEvent}>Delete Event</Button>
+            {
+                host && parseInt(userId) === parseInt(host) && 
+                    <Button variant='danger' onClick={onDeleteEvent}>Delete Event</Button>
+            }
             <Card.Body>
                 <Card.Title>{name}</Card.Title>
                 <Card.Subtitle className="mb-2 text-muted">Host: {host}</Card.Subtitle>
