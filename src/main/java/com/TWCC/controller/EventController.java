@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.TWCC.data.Event;
 import com.TWCC.exception.InvalidRequestException;
 import com.TWCC.repository.EventRepository;
+import com.TWCC.service.EventService;
 import com.turkraft.springfilter.EntityFilter;
 
 @RestController
@@ -34,6 +35,9 @@ public class EventController {
 
     @Autowired
     private EventRepository eventRepository;
+
+    @Autowired
+    private EventService eventService;
 
     @GetMapping("/hello")
     public String hello() {
@@ -59,121 +63,14 @@ public class EventController {
         return result;
     }
 
-    // @GetMapping("/events/byaddress/{address}")
-    // public List<Event> getEventsByAddress(@PathVariable final String address) {
-    //     return eventRepository.findByAddress(address);
-    // }
-
-    
-
-
-
     @GetMapping("/filterEvents")
     public List<Event> filterEvent(@RequestParam HashMap<String,String> allParams){
-        Map<String, String> test = allParams;
+        List<Event> events = eventRepository.findAll();
 
-        List<Event> remainingEvents = eventRepository.findAll();
-
-        for (Map.Entry<String, String> pair : test.entrySet()) {
-            String key = pair.getKey();
-            String value = pair.getValue();
-            System.out.println(key);
-            System.out.println(value);
-
-            if (key.equals("age_limit")) {
-                System.out.println("hiiii");
-                int age_limit = Integer.parseInt(value);
-                for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
-                    Event event = curEvent.next();
-                    // System.out.println(event);
-                    if (event.getAgeLimit() > age_limit) {
-                        curEvent.remove();
-                    }
-                }
-                }
-            
-            if (key.equals("address")) {
-                for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
-                    Event event = curEvent.next();
-                    boolean findSub = event.getAddress().contains(value.toLowerCase());
-                    if (findSub == false) {
-                        curEvent.remove();
-                    }
-                }
-            }
-
-            if (key.equals("name")) {              
-                for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
-                    Event event = curEvent.next();
-                    boolean findSub = event.getName().contains(value.toLowerCase());
-                    if (findSub == false) {
-                        curEvent.remove();
-                    }
-
-                }
-            }
-
-            if (key.equals("description")) {
-                for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
-                    Event event = curEvent.next();
-                    boolean findSub = event.getDescription().contains(value.toLowerCase());
-                    if (findSub == false) {
-                        curEvent.remove();
-                    }
-                }
-            }
-
-            if (key.equals("cost")) {
-                int cost = Integer.parseInt(value);
-                for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
-                    Event event = curEvent.next();
-                    if (event.getCost() > cost) {
-                        curEvent.remove();
-                    }
-                }
-                }
-
-            if (key.equals("media")) {
-                for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
-                    Event event = curEvent.next();
-                    Boolean findSub = event.getMedia().contains(value.toLowerCase());
-                    if (findSub == false) {
-                        curEvent.remove();
-                    }
-                }
-            }
-
-            if (key.equals("start_timestamp")) {   
-                Timestamp start_timestamp = Timestamp.valueOf(value);
-                for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
-                    Event event = curEvent.next();
-                    int compareTime = event.getStartTimestamp().compareTo(start_timestamp);
-                    if (compareTime < 0) {
-                        curEvent.remove();
-                    }
-                }
-            }
-
-            if (key.equals("end_timestamp")) {   
-                Timestamp end_timestamp = Timestamp.valueOf(value);
-                for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
-                    Event event = curEvent.next();
-                    int compareTime = event.getEndTimestamp().compareTo(end_timestamp);
-                    if (compareTime < 0) {
-                        curEvent.remove();
-                    }
-                }
-            }
-
-            
-            }
+        List<Event> remainingEvents = eventService.filterEvents(allParams, events);
         
         return remainingEvents;
-        }
-    
-    
-
-    
+    }
 
     @PostMapping("/events")
     public Event createEvent(@RequestBody final Event newEvent) {
