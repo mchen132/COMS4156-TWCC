@@ -1,5 +1,0 @@
-com/TWCC/data/Builder.class
-com/TWCC/NycTodoServiceApplication.class
-com/TWCC/repository/EventRepository.class
-com/TWCC/exception/InvalidRequestException.class
-com/TWCC/data/Event.class

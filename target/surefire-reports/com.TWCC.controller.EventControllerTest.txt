@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.TWCC.controller.EventControllerTest
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 17.374 s - in com.TWCC.controller.EventControllerTest
