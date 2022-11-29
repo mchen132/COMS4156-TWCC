@@ -22,8 +22,5 @@ jobs:
       - name: Run tests
         run: mvn clean test
 
-      - name: Checkstyle
+      - name: Checkstyle, Jacoco (Code Coverage), SpotBugs (Static Analysis Bug Finder Tool)
         run: mvn site
-
-      - name: Static Analysis Bug Finder Tool
-        run: echo "TODO - Update static analysis bug finder tool script"
