@@ -112,6 +112,13 @@
 - Most recent Jacoco coverage run: `Instruction Coverage: 93%, Branch Coverage: 83%`
     ![Coverage report](./reports/t4-test-coverage-report.png)
 
+### Static Analysis Bug Finder Tool
+- Directions:
+    1. In `service/` directory: `mvn site`
+    2. Locate SpotBugs report in `target/site/spotbugs.html`
+- Most recent SpotBugs coverage run:
+    ![Coverage report](./reports/t5-static-analysis-bug-finder-report.png)
+
 ### CI/CD Workflow Reports
 - Any push and pull request triggers a Github Actions workflow run where each log can be located [here](https://github.com/mchen132/COMS4156-TWCC/actions/workflows/ci_cd_workflow.yml)
 
