@@ -16,7 +16,7 @@ if (localStorage.token) {
 const App = () => {
 	return (
 		<div className="App">
-			<CustomNavbar title="TWCC Events" links={[{ href: 'events', name: 'Events' }, { href: 'events/statistics', name: 'Event Statistics' }]} />
+			<CustomNavbar home="/events" title="TWCC Events" links={[{ href: 'events', name: 'Events' }, { href: 'events/statistics', name: 'Event Statistics' }]} />
 			<Router>
 				<>
 					<Routes>
