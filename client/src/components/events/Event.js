@@ -36,15 +36,16 @@ const Event = ({ event, onDeleteEventCallback }) => {
             // Format datetimes
             const eventToUpdate = {
                 ...updateEventData,
-                startTimestamp: moment(updateEventData.startTimestamp).utc().format("yyyy-MM-DD HH:mm:ss.SS"),
-                endTimestamp: moment(updateEventData.endTimestamp).utc().format("yyyy-MM-DD HH:mm:ss.SS")
+                startTimestamp: updateEventData.startTimestamp && moment(updateEventData.startTimestamp).utc().format("yyyy-MM-DD HH:mm:ss.SS"),
+                endTimestamp: updateEventData.endTimestamp && moment(updateEventData.endTimestamp).utc().format("yyyy-MM-DD HH:mm:ss.SS")
             };
+            console.log(eventToUpdate);
             const updatedEvent = await updateEvent(eventToUpdate);
             console.log("updated event");
             setLocalEvent(updatedEvent);
             setShowUpdateEventModal(false);
         } catch (err) {
-            console.error(err);
+            console.error('Failed to update event');
         }
     };
     

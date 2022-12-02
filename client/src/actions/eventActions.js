@@ -14,6 +14,7 @@ export const getEvents = async () => {
         }
 
         console.error(err);
+        throw err;
     }
 };
 
@@ -30,6 +31,7 @@ export const createEvent = async (newEvent) => {
         }
 
         console.error(err);
+        throw err;
     }
 };
 
@@ -46,6 +48,7 @@ export const updateEvent = async (updateEvent) => {
         }
 
         console.error(err);
+        throw err;
     }
 };
 
@@ -62,6 +65,7 @@ export const deleteEvent = async (eventId) => {
         }
 
         console.error(err);
+        throw err;
     }
 };
 
@@ -78,5 +82,6 @@ export const getEventStatistics = async () => {
         }
 
         console.error(err);
+        throw err;
     }
 };

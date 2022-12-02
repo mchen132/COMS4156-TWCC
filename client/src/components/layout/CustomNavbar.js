@@ -3,10 +3,28 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 
-const CustomNavbar = ({ home, title, links }) => {
-    const renderLinks = () => (
-        links.map((link, index) => 
-            <Nav.Link key={`${link.name.replace(/\s+/g, '')}-${index}`} href={`/${link.href}`}>{link.name}</Nav.Link>
+const CustomNavbar = ({ home, title, leftLinks, rightLinks }) => {
+    const renderLeftLinks = () => (
+        leftLinks.map((link, index) => 
+            <Nav.Link
+                key={`${link.name.replace(/\s+/g, '')}-${index}`}
+                href={link.href && `/${link.href}`}
+                onClick={link.onClick}
+            >
+                {link.name}
+            </Nav.Link>
+        )
+    );
+
+    const renderRightLinks = () => (
+        rightLinks.map((link, index) => 
+            <Nav.Link
+                key={`${link.name.replace(/\s+/g, '')}-${index}`}
+                href={link.href && `/${link.href}`}
+                onClick={link.onClick}
+            >
+                {link.name}
+            </Nav.Link>
         )
     );
 
@@ -17,7 +35,10 @@ const CustomNavbar = ({ home, title, links }) => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
-                    {renderLinks()}
+                    {renderLeftLinks()}
+                </Nav>
+                <Nav>
+                    {renderRightLinks()}
                 </Nav>
                 </Navbar.Collapse>
             </Container>
