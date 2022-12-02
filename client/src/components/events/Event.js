@@ -22,7 +22,8 @@ const Event = ({ event, onDeleteEventCallback }) => {
         longitude,
         media,
         startTimestamp,
-        host
+        host,
+        categories
     } = localEvent;
 
     const [showUpdateEventModal, setShowUpdateEventModal] = useState(false);
@@ -143,6 +144,15 @@ const Event = ({ event, onDeleteEventCallback }) => {
                             />
                         </div>
                         <div className="form-group">
+                            <input
+                                type="text"
+                                placeholder="Category1,category2,category3..."
+                                name="categories"
+                                value={updateEventData.categories}
+                                onChange={e => onUpdateEventModalChange(e)}
+                            />
+                        </div>
+                        <div className="form-group">
                             <DateTimePicker
                                 format="yyyy-MM-dd HH:mm:ss"
                                 onChange={dateTime => setUpdateEventData(
@@ -184,6 +194,7 @@ const Event = ({ event, onDeleteEventCallback }) => {
             <Card.Body>
                 <Card.Title>{name}</Card.Title>
                 <Card.Subtitle className="mb-2 text-muted">Host: {host}</Card.Subtitle>
+                <Card.Subtitle className="mb-2 text-muted">Categories: {categories}</Card.Subtitle>
                 <Card.Subtitle className="mb-2 text-muted">Address: {address}</Card.Subtitle>
                 <Card.Subtitle className="mb-2 text-muted">Age Restriction: {ageLimit}+</Card.Subtitle>
                 <Card.Subtitle className="mb-2 text-muted">Cost: ${cost}</Card.Subtitle>

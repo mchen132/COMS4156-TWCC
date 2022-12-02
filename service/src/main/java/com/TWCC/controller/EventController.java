@@ -144,6 +144,10 @@ public class EventController {
             existingEvent.setMedia(jsonObject.get("media"));
         }
 
+        if (jsonObject.containsKey("categories")) {
+            existingEvent.setCategories(jsonObject.get("categories"));
+        }
+
         if (jsonObject.containsKey("startTimestamp")) {
             String startTimestamp = jsonObject.get("startTimestamp");
             existingEvent.setStartTimestamp(startTimestamp != null ? Timestamp.valueOf(startTimestamp) : null);
