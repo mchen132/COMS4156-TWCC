@@ -31,5 +31,5 @@ jobs:
       - name: Screenshot Checkstyle
         uses: swinton/screenshot-website@v1.x
         with:
-          source: service/target/site/index.html
-          destination: service/reports/t3-checkstyle-report.png
+          source: ./service/target/site/index.html
+          destination: ./service/reports/t3-checkstyle-report.png
