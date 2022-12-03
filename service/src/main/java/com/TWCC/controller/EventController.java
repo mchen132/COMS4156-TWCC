@@ -144,12 +144,18 @@ public class EventController {
             existingEvent.setMedia(jsonObject.get("media"));
         }
 
+        if (jsonObject.containsKey("categories")) {
+            existingEvent.setCategories(jsonObject.get("categories"));
+        }
+
         if (jsonObject.containsKey("startTimestamp")) {
-            existingEvent.setStartTimestamp(Timestamp.valueOf(jsonObject.get("startTimestamp")));
+            String startTimestamp = jsonObject.get("startTimestamp");
+            existingEvent.setStartTimestamp(startTimestamp != null ? Timestamp.valueOf(startTimestamp) : null);
         }
 
         if (jsonObject.containsKey("endTimestamp")) {
-            existingEvent.setEndTimestamp(Timestamp.valueOf(jsonObject.get("endTimestamp")));
+            String endTimestamp = jsonObject.get("endTimestamp");
+            existingEvent.setEndTimestamp(endTimestamp != null ? Timestamp.valueOf(endTimestamp) : null);
         }
 
         return eventRepository.save(existingEvent);

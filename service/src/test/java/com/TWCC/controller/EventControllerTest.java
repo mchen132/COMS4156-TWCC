@@ -337,7 +337,8 @@ public class EventControllerTest {
 					put("latitude", "12.5");
 					put("longitude", "125.2");
 					put("cost", "5");
-					put("media", "www.columbia.edu");						
+					put("media", "www.columbia.edu");
+					put("categories", "category1,category2,category3");
 					put("startTimestamp", new Timestamp(new Date().getTime() + 5).toString());
 					put("endTimestamp", new Timestamp(new Date().getTime() + 10).toString());
 				}}))
@@ -354,7 +355,8 @@ public class EventControllerTest {
 				.andExpect(jsonPath("$.longitude", is(125.2)))
 				.andExpect(jsonPath("$.latitude", is(12.5)))
 				.andExpect(jsonPath("$.cost", is(5.0)))
-				.andExpect(jsonPath("$.media", is("www.columbia.edu")));
+				.andExpect(jsonPath("$.media", is("www.columbia.edu")))
+				.andExpect(jsonPath("$.categories", is("category1,category2,category3")));
 
 		} catch (Exception e) {
 			e.printStackTrace();

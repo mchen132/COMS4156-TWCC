@@ -19,8 +19,8 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Run tests
+      - name: Run tests and Jacoco (Code Coverage)
         run: mvn clean test
 
-      - name: Checkstyle, Jacoco (Code Coverage), SpotBugs (Static Analysis Bug Finder Tool)
+      - name: Checkstyle and SpotBugs (Static Analysis Bug Finder Tool)
         run: mvn site
