@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./twcc-service
+        working-directory: ./service
     steps:
       - uses: actions/checkout@v3 # action that checks out repository onto the runner
       - name: Set up JDK 17
@@ -25,5 +25,11 @@ jobs:
       - name: Checkstyle
         run: mvn site
 
-      - name: Static Analysis Bug Finder Tool
-        run: echo "TODO - Update static analysis bug finder tool script"
+  reports:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Screenshot Checkstyle
+        uses: swinton/screenshot-website@v1.x
+        with:
+          source: service/target/site/index.html
+          destination: service/reports/t3-checkstyle-report.png
