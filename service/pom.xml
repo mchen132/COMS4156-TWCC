@@ -110,6 +110,8 @@
 						<!-- Including NycTodoServiceApplicationTests requires DB configuration in application.properties, so we ignore this file in automated tests to prevent build failure -->
 						<!-- <include>NycTodoServiceApplicationTests.java</include> -->
                 		<include>EventControllerTest.java</include>
+                		<include>RequestServiceTest.java</include>
+                		<include>ResponseParserTest.java</include>
 						<include>EventServiceTest.java</include>
 						<include>UserControllerTest.java</include>
 						<include>EventStatisticServiceTest.java</include>
@@ -134,6 +136,11 @@
                         </goals>
                     </execution>
                 </executions>
+				<configuration>
+					<excludes>
+						<exclude>**/com/TWCC/data/Event.class</exclude>
+					</excludes>
+				</configuration>
             </plugin>
 		</plugins>
 	</build>

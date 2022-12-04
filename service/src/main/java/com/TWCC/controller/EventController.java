@@ -30,6 +30,7 @@ import com.TWCC.security.JwtUtils;
 import com.TWCC.security.UserDetailsExt;
 import com.TWCC.security.UserDetailsServiceExt;
 import com.TWCC.service.EventStatisticService;
+import com.TWCC.api.ApiHandler;
 
 @RestController
 public class EventController {
@@ -48,6 +49,13 @@ public class EventController {
 
     @Autowired
     private EventStatisticService eventStatisticService;
+
+    private ApiHandler apiHandler = new ApiHandler();
+
+    @GetMapping("/populateEvents")
+    public List<Event> populateEvents() {
+        return this.apiHandler.getAllEvents();
+    }
 
     @GetMapping("/events")
     public List<Event> getEvents() {
