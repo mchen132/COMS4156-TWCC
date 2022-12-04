@@ -1,0 +1,17 @@
+.events-statistics-header h5 {
+    margin-top: 3rem;
+}
+
+.event-statistics-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.event-statistics-container
+.event-statistics-chart {
+    width: 40vw;
+    margin: 0 auto;
+}
