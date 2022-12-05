@@ -23,6 +23,11 @@ public class ApiHandler {
     private EventRepository eventRepository;
 
 
+    /**
+     * Get first 200 events of all events from TicketMaster
+     * 
+     * @return a list of events
+     */
     public List<Event> getAllEvents() {
 
         String responseString = requester.getAllEvents();
@@ -30,6 +35,12 @@ public class ApiHandler {
 
     }
 
+    /**
+     * Stores a list of events to the Event DB
+     * 
+     * @param List<Event>
+     * @return a list of events that are actually stored
+     */
     public List<Event> populateEvents(List<Event> events) {
 
         List<Event> response = new ArrayList<>();
