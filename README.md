@@ -97,6 +97,11 @@
         }
     ```
 
+### **Data Generation**
+- `POST /populateEvents`: Populate database with events using Ticketmaster API
+    - Sample Request: localhost:8080/populateEvents
+    - This is an entrypoint only available to service admin. Therefore, users will not be exposed to this entrypoint.
+
 ## 3. Reports
 ### Checkstyle
 - Directions:
