@@ -114,8 +114,8 @@
 - Directions:
     1. In app root directory: `mvn clean test`
     2. Locate Checkstyle report in `target/site/jacoco/index.html`
-- Most recent Jacoco coverage run: `Instruction Coverage: 93%, Branch Coverage: 83%`
-    ![Coverage report](./service/reports/t4-test-coverage-report.png)
+- Most recent Jacoco coverage run: `Instruction Coverage: 81%, Branch Coverage: 73%`
+    ![Coverage report](./service/reports/t5-test-coverage-report.png)
 
 ### Static Analysis Bug Finder Tool
 - Directions:
