@@ -31,7 +31,7 @@ public class EventService {
                     int age_limit = Integer.parseInt(value);
                     for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
                         Event event = curEvent.next();
-                                            
+                        
                         if (event.getAgeLimit() > age_limit) {
                             curEvent.remove();
                         }
@@ -41,7 +41,7 @@ public class EventService {
                 if (key.equals("address")) {
                     for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
                         Event event = curEvent.next();
-                        boolean findSub = event.getAddress().toLowerCase().contains(value.toLowerCase());
+                        boolean findSub = event.getAddress() != null ? event.getAddress().toLowerCase().contains(value.toLowerCase()) : false;
                         if (findSub == false) {
                             curEvent.remove();
                         }
@@ -51,7 +51,7 @@ public class EventService {
                 if (key.equals("name")) {              
                     for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
                         Event event = curEvent.next();
-                        boolean findSub = event.getName().toLowerCase().contains(value.toLowerCase());
+                        boolean findSub = event.getName() != null ? event.getName().toLowerCase().contains(value.toLowerCase()) : false;
                         if (findSub == false) {
                             curEvent.remove();
                         }
@@ -62,7 +62,9 @@ public class EventService {
                 if (key.equals("description")) {
                     for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
                         Event event = curEvent.next();
-                        boolean findSub = event.getDescription().toLowerCase().contains(value.toLowerCase());
+                        boolean findSub = event.getDescription() != null
+                            ? event.getDescription().toLowerCase().contains(value.toLowerCase())
+                            : false;
                         if (findSub == false) {
                             curEvent.remove();
                         }
@@ -82,7 +84,9 @@ public class EventService {
                 if (key.equals("media")) {
                     for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
                         Event event = curEvent.next();
-                        Boolean findSub = event.getMedia().toLowerCase().contains(value.toLowerCase());
+                        Boolean findSub = event.getMedia() != null
+                            ? event.getMedia().toLowerCase().contains(value.toLowerCase())
+                            : false;
                         if (findSub == false) {
                             curEvent.remove();
                         }
@@ -93,7 +97,9 @@ public class EventService {
                     Timestamp start_timestamp = Timestamp.valueOf(value);
                     for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
                         Event event = curEvent.next();
-                        int compareTime = event.getStartTimestamp().compareTo(start_timestamp);
+                        int compareTime = event.getStartTimestamp() != null
+                            ? event.getStartTimestamp().compareTo(start_timestamp)
+                            : 0;
                         if (compareTime < 0) {
                             curEvent.remove();
                         }
@@ -104,7 +110,9 @@ public class EventService {
                     Timestamp end_timestamp = Timestamp.valueOf(value);
                     for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();) {
                         Event event = curEvent.next();
-                        int compareTime = event.getEndTimestamp().compareTo(end_timestamp);
+                        int compareTime = event.getEndTimestamp() != null
+                            ? event.getEndTimestamp().compareTo(end_timestamp)
+                            : 0;
                         if (compareTime < 0) {
                             curEvent.remove();
                         }
