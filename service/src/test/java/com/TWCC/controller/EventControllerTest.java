@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.util.NestedServletException;
@@ -31,12 +32,13 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
-import org.springframework.security.web.server.csrf.CsrfToken;
+import org.springframework.security.web.csrf.CsrfToken;
 
 import com.TWCC.data.Event;
 import com.TWCC.repository.EventRepository;
 import com.TWCC.service.EventService;
 import com.TWCC.security.JwtUtils;
+import com.TWCC.security.UserDetailsExt;
 import com.TWCC.security.UserDetailsServiceExt;
 import com.TWCC.service.EventStatisticService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -174,6 +176,21 @@ public class EventControllerTest {
 
 	@Test
 	@WithMockUser
+    void testGetEventsByIdNotFound() {
+        Mockito.when(eventRepository.findById(event1.getId())).thenReturn(Optional.empty());
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/events/1");
+        
+        try {
+            mockMvc.perform(request)
+				.andExpect(status().isNotFound());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+	@Test
+	@WithMockUser
 	void testFilterEvent() {
 		Mockito.when(eventRepository.findAll()).thenReturn(events);
 		Mockito.when(eventService.filterEvents(any(), any())).thenReturn(new ArrayList<Event>(Arrays.asList(event3)));
@@ -192,7 +209,7 @@ public class EventControllerTest {
 
 	@Test
 	@WithMockUser
-	void createEventSuccessfully() {
+	void testCreateEventSuccessfully() {
 		Event eventToCreate = new Event(
 			1,
 			"Columbia",
@@ -211,13 +228,17 @@ public class EventControllerTest {
         );
 		
 		Mockito.when(eventRepository.save(any())).thenReturn(eventToCreate);
-		
+		Mockito.when(userDetailsService.loadUserByUsername(any())).thenReturn(new UserDetailsExt(
+			3, null, null, null, null, null
+		));
 		
 		try {
 			CsrfToken csrfToken = (CsrfToken) csrfTokenRepo.generateToken(new MockHttpServletRequest());
 
 			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/events")
 					.sessionAttr(CSRF_TOKEN_NAME, csrfToken) // Need to pass CSRF Token for POST requests
+					.param(csrfToken.getParameterName(), csrfToken.getToken())
+					.header("Authorization", csrfToken.getToken())
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON)
 					.content(this.objectMapper.writeValueAsString(eventToCreate));
@@ -242,12 +263,14 @@ public class EventControllerTest {
 
     @Test
 	@WithMockUser
-	void createEventWithInvalidFields() {
+	void testCreateEventWithInvalidFields() {
 		try {
 			CsrfToken csrfToken = (CsrfToken) csrfTokenRepo.generateToken(new MockHttpServletRequest());
 
 			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/events")
 					.sessionAttr(CSRF_TOKEN_NAME, csrfToken) // Need to pass CSRF Token for POST requests
+					.param(csrfToken.getParameterName(), csrfToken.getToken())
+					.header("Authorization", csrfToken.getToken())
 					.content(this.objectMapper.writeValueAsString(new HashMap<String, Object>() {{					
 						put("address", "Columbia");
 						put("ageLimit", 18);
@@ -273,7 +296,7 @@ public class EventControllerTest {
 
 	@Test
 	@WithMockUser
-	void deleteEventByIdSuccessfully() {
+	void testDeleteEventByIdSuccessfully() {
 		Event eventToDelete = new Event(
 			2,
 			"Columbia",
@@ -297,6 +320,8 @@ public class EventControllerTest {
 			mockMvc.perform(MockMvcRequestBuilders
 					.delete("/events/2")
 					.sessionAttr(CSRF_TOKEN_NAME, csrfToken) // Need to pass CSRF Token for DELETE requests
+					.param(csrfToken.getParameterName(), csrfToken.getToken())
+					.header("Authorization", csrfToken.getToken())
 					.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk());
 		} catch (Exception e) {
@@ -306,31 +331,36 @@ public class EventControllerTest {
 
 	@Test
 	@WithMockUser
-	void deleteEventByIdNotFound() {
-		try{
+	void testDeleteEventByIdNotFound() {
+		try {
 			Mockito.when(eventRepository.findById(5)).thenReturn(Optional.empty());
 			CsrfToken csrfToken = (CsrfToken) csrfTokenRepo.generateToken(new MockHttpServletRequest());
 			mockMvc.perform(MockMvcRequestBuilders
-			   .delete("/events/2")
-			   .sessionAttr(CSRF_TOKEN_NAME, csrfToken) // Need to pass CSRF Token for DELETE requests
-			   .contentType(MediaType.APPLICATION_JSON));
+					.delete("/events/2")
+					.sessionAttr(CSRF_TOKEN_NAME, csrfToken) // Need to pass CSRF Token for DELETE requests
+					.param(csrfToken.getParameterName(), csrfToken.getToken())
+					.header("Authorization", csrfToken.getToken())
+					.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNotFound());
 		} catch (Exception e) {
-			if (e instanceof NestedServletException) {
-                assertTrue(e.getMessage().contains("NotFoundException"));
-            }
+			e.printStackTrace();
 		}
 	}
 
 	@Test
 	@WithMockUser
-	void updateEventSuccessfully() {
+	void testUpdateEventSuccessfully() {
+		Mockito.when(eventRepository.findById(any())).thenReturn(Optional.of(event1));
+
 		try {
 			CsrfToken csrfToken = (CsrfToken) csrfTokenRepo.generateToken(new MockHttpServletRequest());
 			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/events")
 				.sessionAttr(CSRF_TOKEN_NAME, csrfToken)
+				.param(csrfToken.getParameterName(), csrfToken.getToken())
+				.header("Authorization", csrfToken.getToken())
 				.content(this.objectMapper.writeValueAsString(new HashMap<String, String>() {{		
-					put("id", "1");			
-					put("address", "Columbia");
+					put("id", "1");
+					put("address", "Mudd");
 					put("ageLimit", "18");
 					put("name", "Midterm Study Session");
 					put("description", "This is a midterm study session");
@@ -347,8 +377,9 @@ public class EventControllerTest {
 
 			mockMvc.perform(mockRequest)
 				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", notNullValue()))
 				.andExpect(jsonPath("$.id", is(1)))
-				.andExpect(jsonPath("$.address", is("Columbia")))
+				.andExpect(jsonPath("$.address", is("Mudd")))
 				.andExpect(jsonPath("$.ageLimit", is(18)))
 				.andExpect(jsonPath("$.name", is("Midterm Study Session")))
 				.andExpect(jsonPath("$.description", is("This is a midterm study session")))
@@ -365,7 +396,7 @@ public class EventControllerTest {
 
 	@Test
 	@WithMockUser
-	void updateEventRecordNotFound() {
+	void testUpdateEventRecordNotFound() {
 
 		HashMap<String, String> event = new HashMap<String, String>();
 		event.put("id", "1000");
@@ -376,16 +407,16 @@ public class EventControllerTest {
 			CsrfToken csrfToken = (CsrfToken) csrfTokenRepo.generateToken(new MockHttpServletRequest());
 			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/events")
 				.sessionAttr((CSRF_TOKEN_NAME), csrfToken)
+				.param(csrfToken.getParameterName(), csrfToken.getToken())
+				.header("Authorization", csrfToken.getToken())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(this.objectMapper.writeValueAsString(event))
 				.accept(MediaType.APPLICATION_JSON);
 
-			mockMvc.perform(mockRequest);
-
+			mockMvc.perform(mockRequest)
+				.andExpect(status().isNotFound());
 		} catch (Exception e) {
-			if (e instanceof NestedServletException) {
-				assertTrue(e.getMessage().contains("NoutFoundException"));
-			}
+			e.printStackTrace();
 		}
 	}
 

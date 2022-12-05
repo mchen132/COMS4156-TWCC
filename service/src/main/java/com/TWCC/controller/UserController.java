@@ -1,6 +1,7 @@
 package com.TWCC.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -45,13 +46,19 @@ public class UserController {
     public ResponseEntity<?> registerUser(@RequestBody User newUser) {
         if (userRepository.existsByUsername(newUser.getUsername())) {
             return ResponseEntity.badRequest().body(
-                new MessageResponse("Username is already being used.")
+                new MessageResponse(
+                    "Username is already being used.",
+                    HttpStatus.BAD_REQUEST.value()
+                )
             );
         }
 
         if (userRepository.existsByEmail(newUser.getEmail())) {
             return ResponseEntity.badRequest().body(
-                new MessageResponse("Email is already being used.")
+                new MessageResponse(
+                    "Email is already being used.",
+                    HttpStatus.BAD_REQUEST.value()
+                )
             );
         }
 
@@ -73,7 +80,10 @@ public class UserController {
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
         if (loginRequest.getUsername() == null || loginRequest.getPassword() == null) {        
             return ResponseEntity.badRequest().body(
-                new MessageResponse("Username or password is empty")
+                new MessageResponse(
+                    "Username or password is empty",
+                    HttpStatus.BAD_REQUEST.value()
+                )
             );
         }
 
