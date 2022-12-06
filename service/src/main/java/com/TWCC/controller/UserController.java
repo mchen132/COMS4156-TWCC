@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.TWCC.data.User;
+import com.TWCC.data.TwccUser;
 import com.TWCC.payload.JwtResponse;
 import com.TWCC.payload.LoginRequest;
 import com.TWCC.payload.MessageResponse;
@@ -43,7 +43,7 @@ public class UserController {
      * @return ResponseEntity containing register user information
      */
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User newUser) {
+    public ResponseEntity<?> registerUser(@RequestBody TwccUser newUser) {
         if (userRepository.existsByUsername(newUser.getUsername())) {
             return ResponseEntity.badRequest().body(
                 new MessageResponse(

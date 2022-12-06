@@ -117,6 +117,7 @@
 						<include>EventStatisticServiceTest.java</include>
 						<include>ApiHandlerTest.java</include>
 						<include>AdminControllerTest.java</include>
+						<include>UserDetailsServiceExtTest.java</include>
             		</includes>
        	 		</configuration>
     		</plugin>
@@ -141,6 +142,11 @@
 				<configuration>
 					<excludes>
 						<exclude>**/com/TWCC/data/Event.class</exclude>
+						<exclude>**/security/AuthEntryPointExt.class</exclude>
+						<exclude>**/security/AuthTokenFilter.class</exclude>
+						<exclude>**/security/JwtUtils.class</exclude>
+						<exclude>**/security/UserDetailsExt.class</exclude>
+						<exclude>**/security/WebSecurityConfig.class</exclude>
 					</excludes>
 				</configuration>
             </plugin>

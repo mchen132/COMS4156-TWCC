@@ -36,7 +36,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
 
-import com.TWCC.data.User;
+import com.TWCC.data.TwccUser;
 import com.TWCC.payload.LoginRequest;
 import com.TWCC.repository.UserRepository;
 import com.TWCC.security.JwtUtils;
@@ -63,7 +63,7 @@ public class UserControllerTest {
     @MockBean
     JwtUtils jwtUtils;
 
-    private User testUser;
+    private TwccUser testUser;
     private static String CSRF_TOKEN_NAME;
 	private static HttpSessionCsrfTokenRepository csrfTokenRepo;
 
@@ -76,7 +76,7 @@ public class UserControllerTest {
 
     @BeforeEach
     void setUp() throws SQLException {
-        testUser = new User(
+        testUser = new TwccUser(
             1,
             "foo",
             "bar",

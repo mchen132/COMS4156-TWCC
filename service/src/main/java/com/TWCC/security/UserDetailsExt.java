@@ -6,9 +6,8 @@ import java.util.Objects;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.TWCC.data.TwccUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import com.TWCC.data.User;;
 
 public class UserDetailsExt implements UserDetails {
     private static final long serialVersionUID = 1L;
@@ -35,7 +34,7 @@ public class UserDetailsExt implements UserDetails {
 		this.password = password;
 	}
 
-	public static UserDetailsExt build(User user) {
+	public static UserDetailsExt build(TwccUser user) {
 		return new UserDetailsExt(
 				user.getId(),
                 user.getFirstName(),
