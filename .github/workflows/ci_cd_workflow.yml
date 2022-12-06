@@ -32,5 +32,6 @@ jobs:
       run:
         working-directory: ./service
     steps:
+      - uses: actions/checkout@v3 # action that checks out repository onto the runner
       - name: Update Reports with Recent Report Generation
         run: cp -r ./target/site ./reports
