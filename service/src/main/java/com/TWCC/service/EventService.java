@@ -118,6 +118,21 @@ public class EventService {
                         }
                     }
                 }
+
+                if (key.equals("categories")){
+                    for (Iterator<Event> curEvent = remainingEvents.iterator(); curEvent.hasNext();){
+                        Event event = curEvent.next();
+                        boolean findSub = event.getCategories() != null
+                            ? event.getCategories().toLowerCase().contains(value.toLowerCase())
+                            : false;
+                        if (findSub == false) {
+                            curEvent.remove();
+                        }
+                    }
+
+                }
+
+                
             }
             return remainingEvents;
         } else {

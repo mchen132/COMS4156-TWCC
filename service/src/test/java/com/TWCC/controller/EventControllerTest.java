@@ -196,12 +196,13 @@ public class EventControllerTest {
 		Mockito.when(eventService.filterEvents(any(), any())).thenReturn(new ArrayList<Event>(Arrays.asList(event3)));
 
 		try {
-			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/filterEvents?address=Columbia&description=UMD");
+			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/filterEvents?address=Columbia&description=UMD&categories=social");
 						
 			mockMvc.perform(mockRequest)
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].address", is("Columbia")))
-				.andExpect(jsonPath("$[0].description", is("This is a midterm study session at UMD")));
+				.andExpect(jsonPath("$[0].description", is("This is a midterm study session at UMD")))
+				.andExpect(jsonPath("$[0].categories", is("social, study")));
 		} catch (Exception e){
 			e.printStackTrace();
 		}

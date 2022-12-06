@@ -1,0 +1,5 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+nyc-todo-service,com.TWCC.exception,InvalidRequestException,4,0,0,0,2,0,1,0,1,0
+nyc-todo-service,com.TWCC,NycTodoServiceApplication,5,3,0,0,2,1,1,1,1,1
+nyc-todo-service,com.TWCC.controller,EventController,164,211,35,21,40,50,23,13,1,7
+nyc-todo-service,com.TWCC.data,Event,0,152,0,0,0,53,0,27,0,27
