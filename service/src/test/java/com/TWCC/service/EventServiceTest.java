@@ -66,6 +66,7 @@ public class EventServiceTest {
         Map<String, String> filterParams = new HashMap<String, String>() {{
             put("address", "Columbia");
             put("description", "UMD");
+            put("categories", "social, study");
         }};
 
         // When
@@ -75,6 +76,7 @@ public class EventServiceTest {
         assertEquals(1, remainingEvents.size());
         assertEquals("Columbia", remainingEvents.get(0).getAddress());
         assertEquals("This is a midterm study session at UMD", remainingEvents.get(0).getDescription());
+        assertEquals("social, study", remainingEvents.get(0).getCategories());
     }
 
     @Test
@@ -85,6 +87,7 @@ public class EventServiceTest {
             put("description", "umd");
             put("name", "midterm study session");
             put("media", "wWw.UmD.eDu");
+            put("categories", "social, study");
         }};
 
         // When
@@ -96,6 +99,7 @@ public class EventServiceTest {
         assertEquals("This is a midterm study session at UMD", remainingEvents.get(0).getDescription());
         assertEquals("Midterm Study session at UMD", remainingEvents.get(0).getName());
         assertEquals("www.umd.edu", remainingEvents.get(0).getMedia());
+        assertEquals("social, study", remainingEvents.get(0).getCategories());
     }
 
     @Test
@@ -127,6 +131,7 @@ public class EventServiceTest {
             put("description", "umd");
             put("name", "midterm study session");
             put("media", "wWw.UmD.eDu");
+            put("categories", "soCial, stUdy");
         }};
 
         // When
@@ -135,4 +140,6 @@ public class EventServiceTest {
         // Then
         assertEquals(0, remainingEvents.size());
     }
+
+
 }
