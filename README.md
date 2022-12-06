@@ -106,22 +106,22 @@
 ### Checkstyle
 - Directions:
     1. In app root directory: `mvn site`
-    2. Locate Checkstyle report in `target/site/index.html`
-- Most recent Checkstyle run: `0 warnings, 0 errors`
-    ![Checkstyle report](./service/reports/t3-checkstyle-report.png)
+    2. Locate Checkstyle report in `target/site/checkstyle.html`
+- Most recent Checkstyle run: `0 warnings, 338 errors`
+    ![Checkstyle report](./service/reports/t5-checkstyle-report.png)
 
 ### Test Coverage
 - Directions:
     1. In app root directory: `mvn clean test`
     2. Locate Checkstyle report in `target/site/jacoco/index.html`
-- Most recent Jacoco coverage run: `Instruction Coverage: 81%, Branch Coverage: 73%`
+- Most recent Jacoco coverage run: `Instruction Coverage: 89%, Branch Coverage: 75%`
     ![Coverage report](./service/reports/t5-test-coverage-report.png)
 
 ### Static Analysis Bug Finder Tool
 - Directions:
     1. In `service/` directory: `mvn site`
     2. Locate SpotBugs report in `target/site/spotbugs.html`
-- Most recent SpotBugs coverage run:
+- Most recent SpotBugs coverage run: `Classes 26, Bugs: 24, Errors: 0, Missing Classes: 0`
     ![Coverage report](./service/reports/t5-static-analysis-bug-finder-report.png)
 
 ### CI/CD Workflow Reports
