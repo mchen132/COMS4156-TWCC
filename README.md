@@ -154,22 +154,22 @@ Please note that the above sample flow is a "Golden Path" of the service. We hav
 ### Checkstyle
 - Directions:
     1. In app root directory: `mvn site`
-    2. Locate Checkstyle report in `target/site/index.html`
-- Most recent Checkstyle run: `0 warnings, 0 errors`
-    ![Checkstyle report](./service/reports/t3-checkstyle-report.png)
+    2. Locate Checkstyle report in `target/site/checkstyle.html`
+- Most recent Checkstyle run: `0 warnings, 338 errors`
+    ![Checkstyle report](./service/reports/t5-checkstyle-report.png)
 
 ### Test Coverage
 - Directions:
     1. In app root directory: `mvn clean test`
     2. Locate Checkstyle report in `target/site/jacoco/index.html`
-- Most recent Jacoco coverage run: `Instruction Coverage: 81%, Branch Coverage: 73%`
+- Most recent Jacoco coverage run: `Instruction Coverage: 89%, Branch Coverage: 75%`
     ![Coverage report](./service/reports/t5-test-coverage-report.png)
 
 ### Static Analysis Bug Finder Tool
 - Directions:
     1. In `service/` directory: `mvn site`
     2. Locate SpotBugs report in `target/site/spotbugs.html`
-- Most recent SpotBugs coverage run:
+- Most recent SpotBugs coverage run: `Classes 26, Bugs: 24, Errors: 0, Missing Classes: 0`
     ![Coverage report](./service/reports/t5-static-analysis-bug-finder-report.png)
 
 ### CI/CD Workflow Reports
@@ -183,3 +183,8 @@ Please note that the above sample flow is a "Golden Path" of the service. We hav
     3. In `client/` directory, run `npm start`
 - Directions to build client:
     1. In `client/` directory, run `npm build`
+
+## 5. 3rd Party Integrations (3PI)
+### User Authentication:
+- For user authentication we implemented authorization using JWT (JSON Web Token) tokens. The JWT architecture in our service application is built off of Spring Security following the guide: https://www.bezkoder.com/spring-boot-jwt-authentication/.
+- A lot of the classes are extensions of the framework which make it either difficult to test or already tested by the 3PI. For this reason, some of the `security/**` files are excluded from Jacoco test coverage.

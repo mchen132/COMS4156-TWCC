@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-public class User {
+public class TwccUser {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
@@ -34,9 +34,18 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    public User() {}
+    public TwccUser() {}
 
-    public User(int id, String firstName, String lastName, int age, String username, String password, String email) {
+    public TwccUser(String firstName, String lastName, int age, String username, String password, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
+    public TwccUser(int id, String firstName, String lastName, int age, String username, String password, String email) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
