@@ -19,11 +19,12 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Run tests
+      - name: Run tests and Jacoco (Code Coverage)
         run: mvn clean test
 
-      - name: Checkstyle
+      - name: Checkstyle and SpotBugs (Static Analysis Bug Finder Tool)
         run: mvn site
+<<<<<<< HEAD
 
   reports:
     runs-on: ubuntu-latest
@@ -33,3 +34,5 @@ jobs:
         with:
           source: ./service/target/site/index.html
           destination: ./service/reports/t3-checkstyle-report.png
+=======
+>>>>>>> 47207dd654b04629fb9903c833591defeccc25dc
