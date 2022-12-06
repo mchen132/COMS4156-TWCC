@@ -24,14 +24,6 @@ jobs:
 
       - name: Checkstyle and SpotBugs (Static Analysis Bug Finder Tool)
         run: mvn site
-
-  reports:
-    needs: build
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./service
-    steps:
-      - uses: actions/checkout@v3 # action that checks out repository onto the runner
-      - name: Update Reports with Recent Report Generation
+      
+      - name: Update Reports Directory with Recent Report Generation
         run: cp -r ./target/site ./reports
