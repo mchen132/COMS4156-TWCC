@@ -2,12 +2,9 @@ package com.TWCC.security;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.TWCC.data.TwccUser;
@@ -21,16 +18,6 @@ public class UserDetailsServiceExtTest {
 
     @Autowired
     UserRepository userRepository;
-
-    @BeforeAll
-    static void beforeClass() {
-        
-    }
-
-    @BeforeEach
-    void setup() {
-        
-    }
 
     @Test
     void testLoadUserByUsername() {

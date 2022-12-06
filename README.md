@@ -135,3 +135,8 @@
     3. In `client/` directory, run `npm start`
 - Directions to build client:
     1. In `client/` directory, run `npm build`
+
+## 5. 3rd Party Integrations (3PI)
+### User Authentication:
+- For user authentication we implemented authorization using JWT (JSON Web Token) tokens. The JWT architecture in our service application is built off of Spring Security following the guide: https://www.bezkoder.com/spring-boot-jwt-authentication/.
+- A lot of the classes are extensions of the framework which make it either difficult to test or already tested by the 3PI. For this reason, some of the `security/**` files are excluded from Jacoco test coverage.
