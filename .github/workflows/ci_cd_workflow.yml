@@ -27,3 +27,17 @@ jobs:
       
       - name: Update Reports Directory with Recent Report Generation
         run: cp -r ./target/site ./reports
+
+      - name: Test GitHub Run Variables
+        run: |
+          echo "Commit from GitHub Actions ${{ github.job }}-run#${{GITHUB_RUN_NUMBER}}: 
+          Add and Commit Recent Report Generation"
+
+      - name: Add and Commit Recent Report Generation
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: ./reports
+          message: |
+            "Commit from GitHub Actions ${{ github.job }}-run#${{GITHUB_RUN_NUMBER}}: 
+            Add and Commit Recent Report Generation"
+      
