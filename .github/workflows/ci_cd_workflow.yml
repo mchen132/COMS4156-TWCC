@@ -11,7 +11,11 @@ jobs:
       run:
         working-directory: ./service
     steps:
-      - uses: actions/checkout@v3 # action that checks out repository onto the runner
+      - name: Checkout COMS4156-TWCC Repository
+        uses: actions/checkout@v3 # action that checks out repository onto the runner
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
