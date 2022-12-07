@@ -45,5 +45,5 @@ jobs:
           message: |
             "Commit from GitHub Actions ${{ github.job }}-run-${{ github.run_number }}: 
             Add and Commit Recent Report Generation"
-          push: origin ${{ github.head_ref }} --set-upstream --force
+          push: origin ${{ github.ref_name }} --set-upstream --force
       
