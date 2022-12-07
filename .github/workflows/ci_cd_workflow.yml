@@ -35,7 +35,8 @@ jobs:
       - name: Test GitHub Run Variables
         run: |
           echo "Commit from GitHub Actions $github.job-run-${{ github.run_number }}: 
-          Add and Commit Recent Report Generation"
+          Add and Commit Recent Report Generation
+          Current branch: ${{ github.head_ref }}"
 
       - name: Add and Commit Recent Report Generation
         uses: EndBug/add-and-commit@v9
@@ -44,5 +45,5 @@ jobs:
           message: |
             "Commit from GitHub Actions ${{ github.job }}-run-${{ github.run_number }}: 
             Add and Commit Recent Report Generation"
-          push: origin ${{github.head_ref}}
+          push: origin ${{ github.head_ref }} --set-upstream --force
       
