@@ -208,80 +208,152 @@ public class Event {
         this.endTimestamp = endTimestamp;
     }
 
+    @Override
+    @SuppressWarnings("checkstyle:AvoidInlineConditionals")
+    @SuppressWarnings("checkstyle:MagicNumber")
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + id;
+        result = prime * result + ((address == null) ? 0 : address.hashCode());
+        result = prime * result + ageLimit;
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result
+                + ((description == null) ? 0 : description.hashCode());
+        long temp;
+        temp = Double.doubleToLongBits(longitude);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(latitude);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = prime * result + Float.floatToIntBits(cost);
+        result = prime * result + ((media == null) ? 0 : media.hashCode());
+        result = prime * result + host;
+        result = prime * result
+                + ((categories == null) ? 0 : categories.hashCode());
+        result = prime * result + ((creationTimestamp == null) ? 0
+                : creationTimestamp.hashCode());
+        result = prime * result
+                + ((startTimestamp == null) ? 0 : startTimestamp.hashCode());
+        result = prime * result
+                + ((endTimestamp == null) ? 0 : endTimestamp.hashCode());
+        return result;
+    }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
+
         Event other = (Event) obj;
-        if (id != other.id)
+
+        if (id != other.id) {
             return false;
+        }
+
         if (address == null) {
-            if (other.address != null)
+            if (other.address != null) {
                 return false;
-        } else if (!address.equals(other.address))
+            }
+        } else if (!address.equals(other.address)) {
             return false;
-        if (ageLimit != other.ageLimit)
+        }
+
+        if (ageLimit != other.ageLimit) {
             return false;
+        }
+
         if (name == null) {
-            if (other.name != null)
+            if (other.name != null) {
                 return false;
-        } else if (!name.equals(other.name))
+            }
+        } else if (!name.equals(other.name)) {
             return false;
+        }
+
         if (description == null) {
-            if (other.description != null)
+            if (other.description != null) {
                 return false;
-        } else if (!description.equals(other.description))
+            }
+        } else if (!description.equals(other.description)) {
             return false;
-        if (Double.doubleToLongBits(longitude) != Double.doubleToLongBits(other.longitude))
+        }
+
+        if (
+            Double.doubleToLongBits(longitude)
+            != Double.doubleToLongBits(other.longitude)
+        ) {
             return false;
-        if (Double.doubleToLongBits(latitude) != Double.doubleToLongBits(other.latitude))
+        }
+        if (
+            Double.doubleToLongBits(latitude)
+            != Double.doubleToLongBits(other.latitude)
+        ) {
             return false;
-        if (Float.floatToIntBits(cost) != Float.floatToIntBits(other.cost))
+        }
+
+        if (
+            Float.floatToIntBits(cost)
+            != Float.floatToIntBits(other.cost)
+        ) {
             return false;
+        }
+
         if (media == null) {
-            if (other.media != null)
+            if (other.media != null) {
                 return false;
-        } else if (!media.equals(other.media))
+            }
+        } else if (!media.equals(other.media)) {
             return false;
+        }
+
         if (creationTimestamp == null) {
-            if (other.creationTimestamp != null)
+            if (other.creationTimestamp != null) {
                 return false;
-        } else if (!creationTimestamp.equals(other.creationTimestamp))
+            }
+        } else if (!creationTimestamp.equals(other.creationTimestamp)) {
             return false;
+        }
         if (startTimestamp == null) {
-            if (other.startTimestamp != null)
+            if (other.startTimestamp != null) {
                 return false;
-        } else if (!startTimestamp.equals(other.startTimestamp))
+            }
+        } else if (!startTimestamp.equals(other.startTimestamp)) {
             return false;
+        }
         if (endTimestamp == null) {
-            if (other.endTimestamp != null)
+            if (other.endTimestamp != null) {
                 return false;
-        } else if (!endTimestamp.equals(other.endTimestamp))
+            }
+        } else if (!endTimestamp.equals(other.endTimestamp)) {
             return false;
+        }
+
         return true;
     }
 
     @Override
     public String toString() {
         return "Event [id=" + id
-                + ", address=" + address
-                + ", ageLimit=" + ageLimit
-                + ", name=" + name
-                + ", description=" + description
-                + ", longitude=" + longitude
-                + ", latitude=" + latitude
-                + ", cost=" + cost
-                + ", media=" + media
-                + ", host=" + host
-                + ", categories=" + categories
-                + ", creationTimestamp=" + creationTimestamp
-                + ", startTimestamp=" + startTimestamp
-                + ", endTimestamp=" + endTimestamp + "]";
+            + ", address=" + address
+            + ", ageLimit=" + ageLimit
+            + ", name=" + name
+            + ", description=" + description
+            + ", longitude=" + longitude
+            + ", latitude=" + latitude
+            + ", cost=" + cost
+            + ", media=" + media
+            + ", host=" + host
+            + ", categories=" + categories
+            + ", creationTimestamp=" + creationTimestamp
+            + ", startTimestamp=" + startTimestamp
+            + ", endTimestamp=" + endTimestamp + "]";
     }
 
 }

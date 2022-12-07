@@ -14,15 +14,15 @@ public class AdminController {
 
     @Autowired
     private ApiHandler apiHandler;
-    
+
     /**
      * Populates Event DB with events extracted from Ticketmaster API
-     * 
+     *
      * @return a list of events that are extracted from Ticketmaster API
      */
     @PostMapping("/populateEvents")
     public List<Event> populateEvents() {
-        
+
         List<Event> eventList = apiHandler.getAllEvents();
         return apiHandler.populateEvents(eventList);
 

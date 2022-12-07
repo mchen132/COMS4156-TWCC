@@ -102,7 +102,7 @@
 
         <!-- Checks for imports                              -->
         <!-- See http://checkstyle.sf.net/config_import.html -->
-        <module name="AvoidStarImport"/>
+        <!-- <module name="AvoidStarImport"/> -->
         <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
         <module name="RedundantImport"/>
         <module name="UnusedImports">
@@ -175,6 +175,8 @@
         </module> -->
         <module name="SuppressWarningsHolder" />
     </module>
-    <module name="LineLength"/>
+    <module name="LineLength">
+      <property name="max" value="100"/>
+    </module>
 
 </module>

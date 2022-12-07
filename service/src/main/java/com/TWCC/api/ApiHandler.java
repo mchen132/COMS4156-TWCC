@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.TWCC.data.Event;
@@ -12,10 +11,9 @@ import com.TWCC.repository.EventRepository;
 
 @Service
 public class ApiHandler {
-    
     @Autowired
     private RequestService requester;
-    
+
     @Autowired
     private ResponseParser parser;
 
@@ -25,7 +23,7 @@ public class ApiHandler {
 
     /**
      * Get first 200 events of all events from TicketMaster
-     * 
+     *
      * @return a list of events
      */
     public List<Event> getAllEvents() {
@@ -37,7 +35,7 @@ public class ApiHandler {
 
     /**
      * Stores a list of events to the Event DB
-     * 
+     *
      * @param List<Event>
      * @return a list of events that are actually stored
      */
@@ -45,7 +43,7 @@ public class ApiHandler {
 
         List<Event> response = new ArrayList<>();
 
-        for(Event event: events) {
+        for (Event event: events) {
 
             try {
                 response.add(eventRepository.save(event));
