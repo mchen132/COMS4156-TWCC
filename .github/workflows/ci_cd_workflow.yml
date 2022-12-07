@@ -30,7 +30,7 @@ jobs:
 
       - name: Test GitHub Run Variables
         run: |
-          echo "Commit from GitHub Actions ${{ github.job }}-run#${{GITHUB_RUN_NUMBER}}: 
+          echo "Commit from GitHub Actions $github.job-run#$env.GITHUB_RUN_NUMBER: 
           Add and Commit Recent Report Generation"
 
       - name: Add and Commit Recent Report Generation
@@ -38,6 +38,6 @@ jobs:
         with:
           add: ./reports
           message: |
-            "Commit from GitHub Actions ${{ github.job }}-run#${{GITHUB_RUN_NUMBER}}: 
+            "Commit from GitHub Actions ${{ github.job }}-run#${{ env.GITHUB_RUN_NUMBER }}: 
             Add and Commit Recent Report Generation"
       
