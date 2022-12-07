@@ -36,7 +36,7 @@ jobs:
       - name: Add and Commit Recent Report Generation
         uses: EndBug/add-and-commit@v9
         with:
-          add: '/reports'
+          add: './reports'
           message: |
             "Commit from GitHub Actions ${{ github.job }}-run-${{ github.run_number }}: 
             Add and Commit Recent Report Generation"
