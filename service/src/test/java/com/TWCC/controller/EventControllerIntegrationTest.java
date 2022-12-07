@@ -97,7 +97,7 @@ public class EventControllerIntegrationTest {
             // Then
             assertEquals(HttpStatus.OK, response.getStatusCode());
             Optional<Event> eventResponse = (Optional<Event>) response.getBody();
-            assertEquals(event1.getName(), eventResponse.get().getName());
+            assertEquals(event2.getName(), eventResponse.get().getName());
         } catch (Exception e) {
             e.printStackTrace();
             assertTrue(false);
