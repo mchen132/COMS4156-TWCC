@@ -111,7 +111,7 @@
 
         <!-- Checks for Size Violations.                    -->
         <!-- See http://checkstyle.sf.net/config_sizes.html -->
-        <module name="LineLength"/>
+        <!-- <module name="LineLength"/> --> <!-- Moved outside of TreeWalker because of error being a child of TreeWalker -->
         <module name="MethodLength"/>
         <!-- <module name="ParameterNumber"> -->
 
@@ -175,5 +175,6 @@
         </module> -->
         <module name="SuppressWarningsHolder" />
     </module>
+    <module name="LineLength"/>
 
 </module>
