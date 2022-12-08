@@ -39,30 +39,31 @@ jobs:
           Current branch: ${{ github.ref_name }}
           PR Source Branch: ${{ github.head_ref }}
           PR Target Branch: ${{ github.base_ref }}
-          Github event name: ${{ github.event_name }}"
+          Github event name: ${{ github.event_name }}
+          Github commit message that triggered this workflow : ${{ github.event.head_commit.message }}"
       
       - name: Setup Python
-        if: github.event_name == 'pull_request' && contains(github.base_ref, 'feature/')
+        if: "!contains(github.event.head_commit.message, '[ci_cd_skip]') && github.event_name == 'pull_request' && contains(github.base_ref, 'feature/')"
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
       - name: Install Python Dependencies
-        if: github.event_name == 'pull_request' && contains(github.base_ref, 'feature/')
+        if: "!contains(github.event.head_commit.message, '[ci_cd_skip]') && github.event_name == 'pull_request' && contains(github.base_ref, 'feature/')"
         run: | # newer version of pyppeteer requires websockets or else Chromium driver hangs
           python -m pip install --upgrade pip
           pip install pyppeteer==1.0.2 websockets==10.1
       - name: Take Screenshot of Reports
-        if: github.event_name == 'pull_request' && contains(github.base_ref, 'feature/')
+        if: "!contains(github.event.head_commit.message, '[ci_cd_skip]') && github.event_name == 'pull_request' && contains(github.base_ref, 'feature/')"
         run: python screenshot-reports.py
         working-directory: ./scripts
       
       - name: Add, Commit, and Push Recent Report Generation
-        if: github.event_name == 'pull_request' && contains(github.base_ref, 'feature/')
+        if: "!contains(github.event.head_commit.message, '[ci_cd_skip]') && github.event_name == 'pull_request' && contains(github.base_ref, 'feature/')"
         uses: EndBug/add-and-commit@v9
         with:
-          default_author: github_actor
+          default_author: github_actions
           add: 'service/reports'
           message: |
-            "Commit from GitHub Actions ${{ github.job }}-run-${{ github.run_number }}: 
-            - Add and Commit Recent Report Generation"
+            '[ci_cd_skip] Commit from GitHub Actions ${{ github.job }}-run-${{ github.run_number }}: 
+            - Add and Commit Recent Report Generation'
           push: origin ${{ github.head_ref }} --set-upstream --force
