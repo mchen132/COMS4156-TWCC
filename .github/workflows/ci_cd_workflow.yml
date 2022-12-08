@@ -11,7 +11,11 @@ jobs:
       run:
         working-directory: ./service
     steps:
-      - uses: actions/checkout@v3 # action that checks out repository onto the runner
+      - name: Checkout COMS4156-TWCC Repository
+        uses: actions/checkout@v3 # action that checks out repository onto the runner
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -24,3 +28,18 @@ jobs:
 
       - name: Checkstyle and SpotBugs (Static Analysis Bug Finder Tool)
         run: mvn site
+      
+      - name: Update Reports Directory with Recent Report Generation
+        run: cp -r ./target/site ./reports
+
+      - name: Add, Commit, and Push Recent Report Generation
+        if: github.event_name == 'pull_request'
+        uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github-actions
+          add: 'service/reports'
+          message: |
+            "Commit from GitHub Actions ${{ github.job }}-run-${{ github.run_number }}
+            - Add and Commit Recent Report Generation"
+          push: origin ${{ github.ref_name }} --set-upstream --force
+      
