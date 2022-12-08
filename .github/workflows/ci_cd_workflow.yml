@@ -39,9 +39,10 @@ jobs:
           Current branch: ${{ github.ref_name }}"
 
       - name: Add, Commit, and Push Recent Report Generation
+        if: github.event_name == 'push' && contains('feature/', github.ref_name)
         uses: EndBug/add-and-commit@v9
         with:
-          add: '["./reports", "service/reports", "./service/reports"]'
+          add: 'service/reports'
           message: |
             "Commit from GitHub Actions ${{ github.job }}-run-${{ github.run_number }}: 
             Add and Commit Recent Report Generation"
