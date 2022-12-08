@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<rss version="0.91">
+  <channel>
+    <title>nyc-todo-service - Checkstyle report</title>
+    <link>https://spring.io/projects/spring-boot/nyc-todo-service</link>
+    <description>nyc-todo-service - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2022</copyright>
+    <item>
+      <title>File: 26,
+             Errors: 341,
+             Warnings: 0,
+             Infos: 0
+      </title>
+            <link>https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html</link>
+      <description>
+        <p>Click <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.api.ApiHandler.java">com/TWCC/api/ApiHandler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.api.ResponseParser.java">com/TWCC/api/ResponseParser.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  87
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.data.Event.java">com/TWCC/data/Event.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  25
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.controller.UserController.java">com/TWCC/controller/UserController.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  10
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.data.Builder.java">com/TWCC/data/Builder.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.security.AuthTokenFilter.java">com/TWCC/security/AuthTokenFilter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  12
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.service.EventStatisticService.java">com/TWCC/service/EventStatisticService.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  52
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.security.JwtUtils.java">com/TWCC/security/JwtUtils.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  12
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.controller.AdminController.java">com/TWCC/controller/AdminController.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#application.properties">application.properties</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.security.UserDetailsServiceExt.java">com/TWCC/security/UserDetailsServiceExt.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.controller.EventController.java">com/TWCC/controller/EventController.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  35
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.NycTodoServiceApplication.java">com/TWCC/NycTodoServiceApplication.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.repository.UserRepository.java">com/TWCC/repository/UserRepository.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.payload.MessageResponse.java">com/TWCC/payload/MessageResponse.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.payload.LoginRequest.java">com/TWCC/payload/LoginRequest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.security.WebSecurityConfig.java">com/TWCC/security/WebSecurityConfig.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  11
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.api.RequestService.java">com/TWCC/api/RequestService.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.security.AuthEntryPointExt.java">com/TWCC/security/AuthEntryPointExt.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  8
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.data.EventStatistics.java">com/TWCC/data/EventStatistics.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.security.UserDetailsExt.java">com/TWCC/security/UserDetailsExt.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.data.User.java">com/TWCC/data/User.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.payload.JwtResponse.java">com/TWCC/payload/JwtResponse.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.service.EventService.java">com/TWCC/service/EventService.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  43
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.exception.InvalidRequestException.java">com/TWCC/exception/InvalidRequestException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://spring.io/projects/spring-boot/nyc-todo-service/checkstyle.html#com.TWCC.repository.EventRepository.java">com/TWCC/repository/EventRepository.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+

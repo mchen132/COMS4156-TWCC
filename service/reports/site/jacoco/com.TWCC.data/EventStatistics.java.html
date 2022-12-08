@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventStatistics.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">nyc-todo-service</a> &gt; <a href="index.source.html" class="el_package">com.TWCC.data</a> &gt; <span class="el_source">EventStatistics.java</span></div><h1>EventStatistics.java</h1><pre class="source lang-java linenums">package com.TWCC.data;
+
+import java.util.Map;
+
+<span class="fc" id="L5">public class EventStatistics {</span>
+    private int totalNumberOfEvents;
+    private Map&lt;String, Integer&gt; numberOfEventsByCategory;
+    private int averageAgeLimitForEvents;
+    private float averageCostForEvents;
+    private Map&lt;String, Float&gt; averageCostOfEventsByCategory;
+    private Map&lt;String, Integer&gt; averageAgeLimitOfEventsByCategory;
+    private Map&lt;String, Map&lt;String, Integer&gt;&gt; numberOfEventsByCategoryTimeRanges;
+
+    public int getTotalNumberOfEvents() {
+<span class="fc" id="L15">        return totalNumberOfEvents;</span>
+    }
+
+    public EventStatistics setTotalNumberOfEvents(int totalNumberOfEvents) {
+<span class="fc" id="L19">        this.totalNumberOfEvents = totalNumberOfEvents;</span>
+<span class="fc" id="L20">        return this;</span>
+    }
+
+    public Map&lt;String, Integer&gt; getNumberOfEventsByCategory() {
+<span class="fc" id="L24">        return numberOfEventsByCategory;</span>
+    }
+
+    public EventStatistics setNumberOfEventsByCategory(Map&lt;String, Integer&gt; numberOfEventsByCategory) {
+<span class="fc" id="L28">        this.numberOfEventsByCategory = numberOfEventsByCategory;</span>
+<span class="fc" id="L29">        return this;</span>
+    }
+
+    public int getAverageAgeLimitForEvents() {
+<span class="fc" id="L33">        return averageAgeLimitForEvents;</span>
+    }
+
+    public EventStatistics setAverageAgeLimitForEvents(int averageAgeLimitForEvents) {
+<span class="fc" id="L37">        this.averageAgeLimitForEvents = averageAgeLimitForEvents;</span>
+<span class="fc" id="L38">        return this;</span>
+    }
+
+    public float getAverageCostForEvents() {
+<span class="fc" id="L42">        return averageCostForEvents;</span>
+    }
+
+    public EventStatistics setAverageCostForEvents(float averageCostForEvents) {
+<span class="fc" id="L46">        this.averageCostForEvents = averageCostForEvents;</span>
+<span class="fc" id="L47">        return this;</span>
+    }
+
+    public Map&lt;String, Float&gt; getAverageCostOfEventsByCategory() {
+<span class="fc" id="L51">        return averageCostOfEventsByCategory;</span>
+    }
+
+    public EventStatistics setAverageCostOfEventsByCategory(Map&lt;String, Float&gt; averageCostOfEventsByCategory) {
+<span class="fc" id="L55">        this.averageCostOfEventsByCategory = averageCostOfEventsByCategory;</span>
+<span class="fc" id="L56">        return this;</span>
+    }
+
+    public Map&lt;String, Integer&gt; getAverageAgeLimitOfEventsByCategory() {
+<span class="fc" id="L60">        return averageAgeLimitOfEventsByCategory;</span>
+    }
+
+    public EventStatistics setAverageAgeLimitOfEventsByCategory(Map&lt;String, Integer&gt; averageAgeLimitOfEventsByCategory) {
+<span class="fc" id="L64">        this.averageAgeLimitOfEventsByCategory = averageAgeLimitOfEventsByCategory;</span>
+<span class="fc" id="L65">        return this;</span>
+    }
+
+    public Map&lt;String, Map&lt;String, Integer&gt;&gt; getNumberOfEventsByCategoryTimeRanges() {
+<span class="fc" id="L69">        return numberOfEventsByCategoryTimeRanges;</span>
+    }
+
+    public EventStatistics setNumberOfEventsByCategoryTimeRanges(Map&lt;String, Map&lt;String, Integer&gt;&gt; numberOfEventsByCategoryTimeRanges) {
+<span class="fc" id="L73">        this.numberOfEventsByCategoryTimeRanges = numberOfEventsByCategoryTimeRanges;</span>
+<span class="fc" id="L74">        return this;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

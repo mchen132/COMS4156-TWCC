@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ResponseParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">nyc-todo-service</a> &gt; <a href="index.source.html" class="el_package">com.TWCC.api</a> &gt; <span class="el_source">ResponseParser.java</span></div><h1>ResponseParser.java</h1><pre class="source lang-java linenums">package com.TWCC.api;
+
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Component;
+
+import com.TWCC.data.Event;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.BooleanNode;
+import com.fasterxml.jackson.databind.node.DoubleNode;
+import com.fasterxml.jackson.databind.node.TextNode;
+
+@Component
+<span class="fc" id="L24">public class ResponseParser {</span>
+    
+
+<span class="fc" id="L27">    private ObjectMapper mapper = new ObjectMapper();</span>
+
+    /**
+     * convert a ticketmaster events JSON response to a list of events
+     * 
+     * @param jsonString
+     * @return List&lt;Event&gt; a list of events
+     */
+    public List&lt;Event&gt; processResponse(String jsonString) {
+
+<span class="fc" id="L37">        Map&lt;String, Object&gt; responseMap = this.jsonStringToMap(jsonString);</span>
+
+        @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L40">        Map&lt;String, Object&gt; eventMap = (HashMap&lt;String, Object&gt;) responseMap.get(&quot;_embedded&quot;);</span>
+        
+        @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L43">        ArrayList&lt;Object&gt; eventList = (ArrayList&lt;Object&gt;) eventMap.get(&quot;events&quot;);</span>
+
+<span class="fc" id="L45">        return objectListToEventList(eventList);</span>
+
+    }
+
+    /**
+     * convert a list of Objects to a list of Event objects
+     * 
+     * @param objList
+     * @return List&lt;Event&gt; a list of events
+     */
+    private List&lt;Event&gt; objectListToEventList(List&lt;Object&gt; objList) {
+        
+<span class="fc" id="L57">        return objList.stream().map(this::objectToEvent).collect(Collectors.toList());</span>
+
+    }
+
+    /**
+     * convert an hash map that is cast to an Object, to an Event object
+     * 
+     * @param obj
+     * @return an Event object
+     */
+    private Event objectToEvent(Object obj) {
+
+        @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L70">        Map&lt;String, Object&gt; eventMap = (HashMap&lt;String, Object&gt;) obj;</span>
+
+<span class="fc" id="L72">        int id = -1;</span>
+<span class="fc" id="L73">        String address = this.extractAddress(eventMap);</span>
+
+<span class="fc" id="L75">        int ageLimit = this.extractAgeLimit(eventMap);</span>
+
+<span class="fc" id="L77">        String name = String.valueOf(eventMap.get(&quot;name&quot;));</span>
+
+        // remove surrounding double-quotes
+<span class="fc" id="L80">        name = name.substring(1, name.length() - 1); </span>
+
+        // ticketmater event API does not have description field
+<span class="fc" id="L83">        String description = name;</span>
+
+<span class="fc" id="L85">        List&lt;Double&gt; locationPair = this.extractCoordinates(eventMap);</span>
+
+<span class="fc" id="L87">        double longitude = locationPair.get(0).doubleValue();</span>
+<span class="fc" id="L88">        double latitude = locationPair.get(1).doubleValue();</span>
+
+<span class="fc" id="L90">        float cost = this.extractCost(eventMap);</span>
+
+<span class="fc" id="L92">        String media = String.valueOf(eventMap.get(&quot;url&quot;));</span>
+
+        // Remove surrounding double-quotes
+<span class="fc" id="L95">        media = media.substring(1, media.length() - 1);</span>
+
+        // Ticketmaster API does not provide event end time and creation time
+<span class="fc" id="L98">        Timestamp startTimestamp = this.extractStartTimestamp(eventMap);</span>
+<span class="fc" id="L99">        Timestamp creationTimestamp = startTimestamp;</span>
+<span class="fc" id="L100">        Timestamp endTimestamp = startTimestamp;</span>
+
+<span class="fc" id="L102">        return new Event(id, address, ageLimit, name, description, longitude, latitude, cost, media, -1, &quot;testCategory&quot;, creationTimestamp, startTimestamp, endTimestamp);</span>
+    }
+
+    /**
+     * extract the &quot;venues&quot; attribue from JSON response
+     * 
+     * @param eventMap
+     * @return Map&lt;String, Object&gt; of the value of the &quot;venues&quot; attribue 
+     * from JSON response
+     */
+    private Map&lt;String, Object&gt; extractVenueMap(Map&lt;String, Object&gt; eventMap) {
+        
+        // All location related info are embedded in events[_embedded][venues]
+        @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L116">        Map&lt;String, Object&gt; venueMap = (HashMap&lt;String, Object&gt;)</span>
+                                        ((ArrayList&lt;Object&gt;)
+                                        ((HashMap&lt;String, Object&gt;) 
+                                        eventMap
+<span class="fc" id="L120">                                        .get(&quot;_embedded&quot;))</span>
+<span class="fc" id="L121">                                        .get(&quot;venues&quot;))</span>
+<span class="fc" id="L122">                                        .get(0);</span>
+        
+<span class="fc" id="L124">        return venueMap;</span>
+    }
+
+    /**
+     * extract venue location coordinates
+     * 
+     * @param eventMap
+     * @return List&lt;Double&gt; where list[0]=longitude, list[1]=latitude 
+     */
+    private List&lt;Double&gt; extractCoordinates(Map&lt;String, Object&gt; eventMap) {
+
+<span class="fc" id="L135">        List&lt;Double&gt; res = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L137">        Map&lt;String, Object&gt; venueMap = this.extractVenueMap(eventMap);</span>
+
+        @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L140">        Map&lt;String, Object&gt; locationMap = (HashMap&lt;String, Object&gt;)venueMap.get(&quot;location&quot;);</span>
+
+<span class="fc bfc" id="L142" title="All 2 branches covered.">        if (locationMap != null) {</span>
+<span class="fc" id="L143">            String longitudeString = ((TextNode)locationMap.get(&quot;longitude&quot;)).toString();</span>
+
+            // remove surrounding quotes
+<span class="fc" id="L146">            longitudeString = longitudeString.substring(1, longitudeString.length() - 1);</span>
+
+<span class="fc" id="L148">            String latitudeString = ((TextNode)locationMap.get(&quot;latitude&quot;)).toString();</span>
+
+            // remove surrounding quotes
+<span class="fc" id="L151">            latitudeString = latitudeString.substring(1, latitudeString.length() - 1);</span>
+
+<span class="fc" id="L153">            res.add(Double.valueOf(longitudeString));</span>
+<span class="fc" id="L154">            res.add(Double.valueOf(latitudeString));</span>
+<span class="fc" id="L155">        } else {</span>
+            // set coordinates to 0 if the event doesn't have a venue
+
+<span class="fc" id="L158">            res.add(Double.valueOf(&quot;0.000000&quot;));</span>
+<span class="fc" id="L159">            res.add(Double.valueOf(&quot;0.000000&quot;));</span>
+        }
+        
+
+<span class="fc" id="L163">        return res;</span>
+        
+    }
+
+    /**
+     * extract address
+     * 
+     * @param eventMap
+     * @return String in the following format:
+     * 
+     * &quot;&lt;venue name&gt;, &lt;street address&gt;, &lt;city&gt;, &lt;state code&gt;, &lt;country code&gt;&quot;
+     * 
+     * if the event doesn't have an venue, &quot;online&quot; be returned
+     */
+    private String extractAddress(Map&lt;String, Object&gt; eventMap) {
+
+<span class="fc" id="L179">        Map&lt;String, Object&gt; venueMap = this.extractVenueMap(eventMap);</span>
+
+        // venue JSON sometimes containes only a {href: String} pair
+        // which directs to another API call to get venue details. 
+        // venue JSON sometimes also contain the detailed information 
+        // about the venue. 
+        // Such pattern is unpredictable
+
+<span class="fc bfc" id="L187" title="All 2 branches covered.">        if (venueMap.size() == 1) {</span>
+<span class="fc" id="L188">            return &quot;online&quot;;</span>
+        }
+
+        // venue name
+<span class="fc" id="L192">        String name = String.valueOf(venueMap.get(&quot;name&quot;));</span>
+
+        // removing double quotes from the original string value
+<span class="fc" id="L195">        name = name.substring(1, name.length() - 1); </span>
+
+        @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L198">        Map&lt;String, Object&gt; streetAddrMap = (HashMap&lt;String, Object&gt;)venueMap.get(&quot;address&quot;);</span>
+
+<span class="fc" id="L200">        String streetAddr = &quot;&quot;;</span>
+
+<span class="fc bfc" id="L202" title="All 2 branches covered.">        for (String key : streetAddrMap.keySet()) {</span>
+
+<span class="fc" id="L204">            String addr = String.valueOf(streetAddrMap.get(key));</span>
+
+            // removing double quotes from the original string value
+<span class="fc" id="L207">            addr = &quot; &quot; + addr.substring(1, addr.length() - 1);</span>
+
+<span class="fc" id="L209">            streetAddr += addr;</span>
+<span class="fc" id="L210">        }</span>
+
+        @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L213">        String city = String.valueOf(((HashMap&lt;String, Object&gt;)venueMap.get(&quot;city&quot;)).get(&quot;name&quot;));</span>
+
+        // removing double quotes from the original string value
+<span class="fc" id="L216">        city = city.substring(1, city.length() - 1);</span>
+
+        @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L219">        String state = String.valueOf(((HashMap&lt;String, Object&gt;)venueMap.get(&quot;state&quot;)).get(&quot;stateCode&quot;));</span>
+
+        // removing double quotes from the original string value
+<span class="fc" id="L222">        state = state.substring(1, state.length() - 1);</span>
+
+        @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L225">        String country = String.valueOf(((HashMap&lt;String, Object&gt;)venueMap.get(&quot;country&quot;)).get(&quot;countryCode&quot;));</span>
+
+        // removing double quotes from the original string value
+<span class="fc" id="L228">        country = country.substring(1, country.length() - 1);</span>
+
+<span class="fc" id="L230">        return String.format(&quot;%s,%s, %s, %s, %s&quot;, name, streetAddr, city, state, country);</span>
+    }
+
+    /**
+     * extract event start timestamp
+     * 
+     * @param eventMap
+     * @return Timestamp: the timestamp of the start time. 
+     * 
+     * If &quot;dateTime&quot; attribute is missing, &quot;localdate 00:00:00&quot; 
+     * will be used
+     */
+    private Timestamp extractStartTimestamp (Map&lt;String, Object&gt; eventMap) {
+
+
+        @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L246">        Map&lt;String, Object&gt; startTimeMap = (HashMap&lt;String, Object&gt;)((HashMap&lt;String, Object&gt;)eventMap.get(&quot;dates&quot;)).get(&quot;start&quot;);</span>
+
+        // start time's DateTime is missing from the response body
+<span class="fc bfc" id="L249" title="All 2 branches covered.">        if (!startTimeMap.containsKey(&quot;dateTime&quot;)) {</span>
+<span class="fc" id="L250">            String localDateString = String.valueOf(startTimeMap.get(&quot;localDate&quot;));</span>
+
+<span class="fc" id="L252">            localDateString = localDateString.substring(1, localDateString.length() - 1);</span>
+
+<span class="fc" id="L254">            localDateString += &quot; 00:00:00&quot;;</span>
+
+<span class="fc" id="L256">            System.out.println(localDateString);</span>
+
+<span class="fc" id="L258">            return Timestamp.valueOf(localDateString);</span>
+        }
+
+<span class="fc" id="L261">        String startTimestampString = String.valueOf(startTimeMap.get(&quot;dateTime&quot;));</span>
+
+<span class="fc" id="L263">        startTimestampString = startTimestampString.substring(1, startTimestampString.length() - 1);</span>
+
+<span class="fc" id="L265">        Instant dateTime = Instant.parse(startTimestampString);</span>
+
+<span class="fc" id="L267">        return Timestamp.from(dateTime);</span>
+    }
+
+    /**
+     * extract event cost
+     * 
+     * @param eventMap
+     * @return float: min event cost. 
+     * 
+     * returns 0 if &quot;priceRanges&quot; or &quot;min&quot; attribute is missing
+     */
+    private float extractCost (Map&lt;String, Object&gt; eventMap) {
+
+<span class="fc" id="L280">        float res = 0;</span>
+
+<span class="fc bfc" id="L282" title="All 2 branches covered.">        if (eventMap.get(&quot;priceRanges&quot;) == null){</span>
+<span class="fc" id="L283">            return res;</span>
+        }
+
+        @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L287">        ArrayList&lt;Object&gt; rangeList = (ArrayList&lt;Object&gt;)eventMap.get(&quot;priceRanges&quot;);</span>
+
+<span class="fc bfc" id="L289" title="All 2 branches covered.">        if (rangeList.size() == 0) {</span>
+<span class="fc" id="L290">            return res;</span>
+        }
+        
+        @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L294">        Map&lt;String, Object&gt; priceMap = (HashMap&lt;String, Object&gt;) rangeList.get(0);</span>
+
+<span class="fc bfc" id="L296" title="All 2 branches covered.">        if (priceMap.get(&quot;min&quot;) == null) {</span>
+<span class="fc" id="L297">            return res;</span>
+        }
+
+<span class="fc" id="L300">        return (float) ((DoubleNode)priceMap.get(&quot;min&quot;)).asDouble();</span>
+    }
+
+    /**
+     * extract age limit
+     * 
+     * @param eventMap
+     * @return int: 0 if &quot;ageRestrictions&quot; or &quot;legalAgeEnforced&quot; attribue is missing, or 
+     * &quot;legalAgeEnforced&quot; attribue is false; 18 if &quot;legalAgeEnforced&quot; is true
+     */
+    private int extractAgeLimit (Map&lt;String, Object&gt; eventMap) {
+
+<span class="fc" id="L312">        int ageLimit = 0;</span>
+
+<span class="fc bfc" id="L314" title="All 2 branches covered.">        if (!eventMap.containsKey(&quot;ageRestrictions&quot;)) {</span>
+<span class="fc" id="L315">            return ageLimit;</span>
+        }
+
+        @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L319">        Map&lt;String, Object&gt; restrictionMap = (HashMap&lt;String, Object&gt;) eventMap.get(&quot;ageRestrictions&quot;);</span>
+
+<span class="fc bfc" id="L321" title="All 2 branches covered.">        if (!restrictionMap.containsKey(&quot;legalAgeEnforced&quot;)) {</span>
+<span class="fc" id="L322">            return ageLimit;</span>
+        }
+
+<span class="fc" id="L325">        boolean ageRestriction = ((BooleanNode)restrictionMap.get(&quot;legalAgeEnforced&quot;)).booleanValue();</span>
+
+<span class="fc bfc" id="L327" title="All 2 branches covered.">        ageLimit = ageRestriction ? 18 : 0;</span>
+
+<span class="fc" id="L329">        return ageLimit;</span>
+    }
+
+    // NOTE: stringToMap(), toMap(), and toList() are inspired by the following
+    // stackoverflow post: https://stackoverflow.com/a/24012023
+
+    /**
+     * Convert a JSON string in to a Map&lt;String, Object&gt;
+     * 
+     * @param jsonString
+     * @return Map&lt;String, Object&gt;: JSON attribute names in string, all values are cast to Object
+     */
+    private Map&lt;String, Object&gt; jsonStringToMap(String jsonString) {
+<span class="fc" id="L342">        Map&lt;String, Object&gt; retMap = new HashMap&lt;&gt;();</span>
+
+        try {
+<span class="fc" id="L345">            JsonNode node = this.mapper.readTree(jsonString);</span>
+
+<span class="pc bpc" id="L347" title="1 of 2 branches missed.">            if (node != null) {</span>
+<span class="fc" id="L348">                retMap = this.toMap(node);</span>
+            }
+
+<span class="fc" id="L351">            return retMap;</span>
+
+<span class="nc" id="L353">        } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L354">            e.printStackTrace();</span>
+        }
+
+<span class="nc" id="L357">        return retMap;</span>
+    }
+
+    /**
+     * Convert a JsonNode tree to a Json in the form of a Map
+     * where map's value are essentially JsonNode objects;
+     * we can use JsonNode's own methods to check and get values 
+     * 
+     * @param rootNode
+     * @return Map&lt;String, Object&gt; representing the underlying structure 
+     * of the JsonNode
+     */
+    private Map&lt;String, Object&gt; toMap(JsonNode rootNode) {
+        
+<span class="fc" id="L371">        Map&lt;String, Object&gt; retMap = new HashMap&lt;&gt;();</span>
+
+<span class="fc" id="L373">        Iterator&lt;Entry&lt;String, JsonNode&gt;&gt; iter = rootNode.fields();</span>
+
+<span class="fc" id="L375">        iter.forEachRemaining(field -&gt; {</span>
+<span class="fc" id="L376">            String key = field.getKey();</span>
+<span class="fc" id="L377">            JsonNode currNode = field.getValue();</span>
+<span class="fc" id="L378">            Object value = currNode;</span>
+
+<span class="fc bfc" id="L380" title="All 2 branches covered.">            if (currNode.isArray()) {</span>
+<span class="fc" id="L381">                value = this.toList(currNode);</span>
+<span class="fc bfc" id="L382" title="All 2 branches covered.">            }else if (currNode.isObject()){</span>
+<span class="fc" id="L383">                value = this.toMap(currNode);</span>
+            }
+
+<span class="fc" id="L386">            retMap.put(key, value);</span>
+
+<span class="fc" id="L388">        });</span>
+
+<span class="fc" id="L390">        return retMap;</span>
+
+    }
+
+    /**
+     * convert an Array JsonNode to a list of JsonNodes
+     * 
+     * @param rootNode
+     * @return List&lt;Object&gt; representing the underlying structure 
+     * of an Array JsonNode
+     */
+    private List&lt;Object&gt; toList(JsonNode rootNode) {
+<span class="fc" id="L402">        List&lt;Object&gt; retList = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L404">        Iterator&lt;JsonNode&gt; iter = rootNode.elements();</span>
+
+<span class="fc" id="L406">        iter.forEachRemaining(currNode -&gt; {</span>
+<span class="fc" id="L407">            Object value = currNode;</span>
+
+<span class="pc bpc" id="L409" title="1 of 2 branches missed.">            if (currNode.isObject()) {</span>
+<span class="fc" id="L410">                value = this.toMap(currNode);</span>
+<span class="nc bnc" id="L411" title="All 2 branches missed.">            } else if (currNode.isArray()) {</span>
+<span class="nc" id="L412">                value = this.toList(currNode);</span>
+            }
+
+<span class="fc" id="L415">            retList.add(value);</span>
+<span class="fc" id="L416">        });</span>
+
+<span class="fc" id="L418">        return retList;</span>
+
+    }
+
+};
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
