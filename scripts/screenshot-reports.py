@@ -3,9 +3,11 @@ import asyncio
 from pyppeteer import launch
 import os
 
-project_root = os.path.dirname(os.path.dirname(__file__))
-generated_report_path = '/service/target/site'
-custom_reports_path = '/service/reports'
+# project_root = os.path.dirname(os.path.dirname(__file__))
+file_path = 'file://'
+project_root = os.path.abspath(os.sep)
+generated_report_path = 'service/target/site'
+custom_reports_path = 'service/reports'
 
 print(f'Project Root: {project_root}')
 
@@ -16,7 +18,7 @@ async def screenshot_reports():
     page = await browser.newPage()
 
     # Screenshot Checkstyle Report HTML Page
-    await page.goto(f'{project_root}{generated_report_path}/checkstyle.html', {
+    await page.goto(f'{file_path}{project_root}{generated_report_path}/checkstyle.html', {
         'waitUntil': 'networkidle0'
     })
     await page.screenshot({
@@ -30,7 +32,7 @@ async def screenshot_reports():
     })
 
     # Screenshot Jacoco Test Coverage Report HTML Page
-    await page.goto(f'{project_root}{generated_report_path}/jacoco/index.html', {
+    await page.goto(f'{file_path}{project_root}{generated_report_path}/jacoco/index.html', {
         'waitUntil': 'networkidle0'
     })
     await page.screenshot({
@@ -39,7 +41,7 @@ async def screenshot_reports():
     })
 
     # Screenshot SpotBugs (Static Analysis Bug Finder Tool) Report HTML Page
-    await page.goto(f'{project_root}{generated_report_path}/spotbugs.html', {
+    await page.goto(f'{file_path}{project_root}{generated_report_path}/spotbugs.html', {
         'waitUntil': 'networkidle0'
     })
     await page.screenshot({
