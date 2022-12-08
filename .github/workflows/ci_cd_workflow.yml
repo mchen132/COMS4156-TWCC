@@ -49,7 +49,7 @@ jobs:
 
       - name: Take Screenshot of Reports
         if: github.event_name == 'pull_request' && contains(github.base_ref, 'feature/')
-        run: python screenshot-reports.py
+        run: python screenshot_reports.py
         working-directory: ./scripts
 
       - name: Add, Commit, and Push Recent Report Generation
