@@ -36,7 +36,8 @@ jobs:
         run: |
           echo "Commit from GitHub Actions $github.job-run-${{ github.run_number }}: 
           Add and Commit Recent Report Generation
-          Current branch: ${{ github.ref_name }}"
+          Current branch: ${{ github.ref_name }}
+          Github event name: ${{ github.event_name }}"
 
       - name: Add, Commit, and Push Recent Report Generation
         if: github.event_name == 'push' && contains('feature/', github.ref_name)
