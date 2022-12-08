@@ -10,7 +10,9 @@ custom_reports_path = '/service/reports'
 print(f'Project Root: {project_root}')
 
 async def screenshot_reports():
-    browser = await launch()
+    browser = await launch({ 'headless': False })
+    print('browser: ')
+    print(browser)
     page = await browser.newPage()
 
     # Screenshot Checkstyle Report HTML Page
