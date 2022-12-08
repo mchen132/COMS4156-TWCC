@@ -161,22 +161,22 @@ updates and subsequently `main` will after the feature is merged into main.*
 - Directions:
     1. In app root directory: `mvn site`
     2. Locate Checkstyle report in `target/site/checkstyle.html`
-- Most recent Checkstyle run: `0 warnings, 338 errors`
-    ![Checkstyle report](./service/reports/t5-checkstyle-report.png)
+- Most recent Checkstyle run:
+    ![Checkstyle report](./service/reports/checkstyle-report.png)
 
 ### Test Coverage
 - Directions:
     1. In app root directory: `mvn clean test`
     2. Locate Checkstyle report in `target/site/jacoco/index.html`
-- Most recent Jacoco coverage run: `Instruction Coverage: 89%, Branch Coverage: 75%`
-    ![Coverage report](./service/reports/t5-test-coverage-report.png)
+- Most recent Jacoco coverage run:
+    ![Coverage report](./service/reports/test-coverage-report.png)
 
 ### Static Analysis Bug Finder Tool
 - Directions:
     1. In `service/` directory: `mvn site`
     2. Locate SpotBugs report in `target/site/spotbugs.html`
-- Most recent SpotBugs coverage run: `Classes 26, Bugs: 24, Errors: 0, Missing Classes: 0`
-    ![Coverage report](./service/reports/t5-static-analysis-bug-finder-report.png)
+- Most recent SpotBugs coverage run:
+    ![Coverage report](./service/reports/static-analysis-bug-finder-report.png)
 
 ### CI/CD Workflow Reports
 - Any push and pull request triggers a Github Actions workflow run where each log can be located [here](https://github.com/mchen132/COMS4156-TWCC/actions/workflows/ci_cd_workflow.yml)
