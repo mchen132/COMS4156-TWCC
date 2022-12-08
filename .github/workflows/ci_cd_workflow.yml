@@ -48,25 +48,25 @@ jobs:
 
   build-client:
     runs-on: ubuntu-latest
-      defaults:
-        run:
-          working-directory: ./client
-      steps:
-        - name: Checkout COMS4156-TWCC Repository
-          uses: actions/checkout@v3 # action that checks out repository onto the runner
-          with:
-            repository: ${{ github.event.pull_request.head.repo.full_name }}
-            ref: ${{ github.event.pull_request.head.ref }}
+    defaults:
+      run:
+        working-directory: ./client
+    steps:
+      - name: Checkout COMS4156-TWCC Repository
+        uses: actions/checkout@v3 # action that checks out repository onto the runner
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
 
-        - name: Setup Node
-          uses: actions/setup-node@v3
-          with:
-            node-version: 16
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
 
-        - name: Install Node Modules
-          run: npm install
+      - name: Install Node Modules
+        run: npm install
 
-        - name: Build Client
-          run: npm run build
+      - name: Build Client
+        run: npm run build
         
       
