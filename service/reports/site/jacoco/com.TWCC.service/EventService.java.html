@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">nyc-todo-service</a> &gt; <a href="index.source.html" class="el_package">com.TWCC.service</a> &gt; <span class="el_source">EventService.java</span></div><h1>EventService.java</h1><pre class="source lang-java linenums">package com.TWCC.service;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+import com.TWCC.data.Event;
+
+@Service
+<span class="fc" id="L14">public class EventService {</span>
+
+    /**
+     * Gets back a list of filtered events based on the filter params and events passed in.
+     * 
+     * @param filterParams Map&lt;String, String&gt; of Event fields as keys and their values to filter on
+     * @param events List of events
+     * @return Filtered list of events
+     */
+    public List&lt;Event&gt; filterEvents(Map&lt;String, String&gt; filterParams, List&lt;Event&gt; events) {
+<span class="fc bfc" id="L24" title="All 4 branches covered.">        if (filterParams != null &amp;&amp; events != null) {</span>
+<span class="fc" id="L25">            List&lt;Event&gt; remainingEvents = new ArrayList&lt;&gt;(events);</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">            for (Map.Entry&lt;String, String&gt; pair : filterParams.entrySet()) {</span>
+<span class="fc" id="L27">                String key = pair.getKey();</span>
+<span class="fc" id="L28">                String value = pair.getValue();</span>
+    
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">                if (key.equals(&quot;ageLimit&quot;)) {</span>
+<span class="nc" id="L31">                    int age_limit = Integer.parseInt(value);</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">                    for (Iterator&lt;Event&gt; curEvent = remainingEvents.iterator(); curEvent.hasNext();) {</span>
+<span class="nc" id="L33">                        Event event = curEvent.next();</span>
+                        
+<span class="nc bnc" id="L35" title="All 2 branches missed.">                        if (event.getAgeLimit() &gt; age_limit) {</span>
+<span class="nc" id="L36">                            curEvent.remove();</span>
+                        }
+<span class="nc" id="L38">                    }</span>
+                }
+                
+<span class="fc bfc" id="L41" title="All 2 branches covered.">                if (key.equals(&quot;address&quot;)) {</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">                    for (Iterator&lt;Event&gt; curEvent = remainingEvents.iterator(); curEvent.hasNext();) {</span>
+<span class="fc" id="L43">                        Event event = curEvent.next();</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">                        boolean findSub = event.getAddress() != null ? event.getAddress().toLowerCase().contains(value.toLowerCase()) : false;</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">                        if (findSub == false) {</span>
+<span class="fc" id="L46">                            curEvent.remove();</span>
+                        }
+<span class="fc" id="L48">                    }</span>
+                }
+    
+<span class="fc bfc" id="L51" title="All 2 branches covered.">                if (key.equals(&quot;name&quot;)) {              </span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">                    for (Iterator&lt;Event&gt; curEvent = remainingEvents.iterator(); curEvent.hasNext();) {</span>
+<span class="fc" id="L53">                        Event event = curEvent.next();</span>
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">                        boolean findSub = event.getName() != null ? event.getName().toLowerCase().contains(value.toLowerCase()) : false;</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">                        if (findSub == false) {</span>
+<span class="nc" id="L56">                            curEvent.remove();</span>
+                        }
+    
+<span class="fc" id="L59">                    }</span>
+                }
+    
+<span class="fc bfc" id="L62" title="All 2 branches covered.">                if (key.equals(&quot;description&quot;)) {</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">                    for (Iterator&lt;Event&gt; curEvent = remainingEvents.iterator(); curEvent.hasNext();) {</span>
+<span class="fc" id="L64">                        Event event = curEvent.next();</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">                        boolean findSub = event.getDescription() != null</span>
+<span class="fc" id="L66">                            ? event.getDescription().toLowerCase().contains(value.toLowerCase())</span>
+<span class="pc" id="L67">                            : false;</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">                        if (findSub == false) {</span>
+<span class="fc" id="L69">                            curEvent.remove();</span>
+                        }
+<span class="fc" id="L71">                    }</span>
+                }
+    
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">                if (key.equals(&quot;cost&quot;)) {</span>
+<span class="nc" id="L75">                    int cost = Integer.parseInt(value);</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">                    for (Iterator&lt;Event&gt; curEvent = remainingEvents.iterator(); curEvent.hasNext();) {</span>
+<span class="nc" id="L77">                        Event event = curEvent.next();</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">                        if (event.getCost() &gt; cost) {</span>
+<span class="nc" id="L79">                            curEvent.remove();</span>
+                        }
+<span class="nc" id="L81">                    }</span>
+                    }
+    
+<span class="fc bfc" id="L84" title="All 2 branches covered.">                if (key.equals(&quot;media&quot;)) {</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">                    for (Iterator&lt;Event&gt; curEvent = remainingEvents.iterator(); curEvent.hasNext();) {</span>
+<span class="fc" id="L86">                        Event event = curEvent.next();</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">                        Boolean findSub = event.getMedia() != null</span>
+<span class="fc" id="L88">                            ? event.getMedia().toLowerCase().contains(value.toLowerCase())</span>
+<span class="nc" id="L89">                            : false;</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">                        if (findSub == false) {</span>
+<span class="nc" id="L91">                            curEvent.remove();</span>
+                        }
+<span class="fc" id="L93">                    }</span>
+                }
+    
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">                if (key.equals(&quot;startTimestamp&quot;)) {   </span>
+<span class="nc" id="L97">                    Timestamp start_timestamp = Timestamp.valueOf(value);</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">                    for (Iterator&lt;Event&gt; curEvent = remainingEvents.iterator(); curEvent.hasNext();) {</span>
+<span class="nc" id="L99">                        Event event = curEvent.next();</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">                        int compareTime = event.getStartTimestamp() != null</span>
+<span class="nc" id="L101">                            ? event.getStartTimestamp().compareTo(start_timestamp)</span>
+<span class="nc" id="L102">                            : 0;</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">                        if (compareTime &lt; 0) {</span>
+<span class="nc" id="L104">                            curEvent.remove();</span>
+                        }
+<span class="nc" id="L106">                    }</span>
+                }
+    
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">                if (key.equals(&quot;endTimestamp&quot;)) {   </span>
+<span class="nc" id="L110">                    Timestamp end_timestamp = Timestamp.valueOf(value);</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">                    for (Iterator&lt;Event&gt; curEvent = remainingEvents.iterator(); curEvent.hasNext();) {</span>
+<span class="nc" id="L112">                        Event event = curEvent.next();</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">                        int compareTime = event.getEndTimestamp() != null</span>
+<span class="nc" id="L114">                            ? event.getEndTimestamp().compareTo(end_timestamp)</span>
+<span class="nc" id="L115">                            : 0;</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">                        if (compareTime &lt; 0) {</span>
+<span class="nc" id="L117">                            curEvent.remove();</span>
+                        }
+<span class="nc" id="L119">                    }</span>
+                }
+<span class="fc" id="L121">            }</span>
+<span class="fc" id="L122">            return remainingEvents;</span>
+        } else {
+<span class="fc" id="L124">            return new ArrayList&lt;Event&gt;();</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
