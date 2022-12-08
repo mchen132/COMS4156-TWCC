@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">nyc-todo-service</a> &gt; <a href="index.source.html" class="el_package">com.TWCC.controller</a> &gt; <span class="el_source">EventController.java</span></div><h1>EventController.java</h1><pre class="source lang-java linenums">package com.TWCC.controller;
+
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.TWCC.data.Event;
+import com.TWCC.data.EventStatistics;
+import com.TWCC.payload.MessageResponse;
+import com.TWCC.repository.EventRepository;
+import com.TWCC.service.EventService;
+import com.TWCC.security.JwtUtils;
+import com.TWCC.security.UserDetailsExt;
+import com.TWCC.security.UserDetailsServiceExt;
+import com.TWCC.service.EventStatisticService;
+
+@RestController
+<span class="fc" id="L32">public class EventController {</span>
+
+    @Autowired
+    private EventRepository eventRepository;
+
+    @Autowired
+    private EventService eventService;
+
+    @Autowired
+    private JwtUtils jwtUtils;
+
+    @Autowired
+    private UserDetailsServiceExt userDetailsService;
+
+    @Autowired
+    private EventStatisticService eventStatisticService;
+
+    /**
+     * Gets a list of all events
+     *
+     * @return a list of events
+     */
+    @GetMapping(&quot;/events&quot;)
+    public List&lt;Event&gt; getEvents() {
+<span class="fc" id="L56">        System.out.println(&quot;getEvents() is called&quot;);</span>
+<span class="fc" id="L57">        return eventRepository.findAll();</span>
+    }
+
+    /**
+     * Gets a single event matching the specified event Id
+     *
+     * @param id event Id
+     * @return ResponseEntity containing event or failure
+     */
+    @GetMapping(&quot;/events/{id}&quot;)
+    public ResponseEntity&lt;?&gt; getEventsById(@PathVariable final Integer id) {
+<span class="fc" id="L68">        Optional&lt;Event&gt; result = eventRepository.findById(id);</span>
+
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (result.isEmpty()) {</span>
+<span class="fc" id="L71">            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(</span>
+                new MessageResponse(
+                    &quot;Event ID: &quot; + id + &quot; does not exist&quot;,
+<span class="fc" id="L74">                    HttpStatus.NOT_FOUND.value()</span>
+                )
+            );
+        }
+
+<span class="fc" id="L79">        return ResponseEntity.ok().body(result);</span>
+    }
+
+    /**
+     * Gets events that match a specified address
+     *
+     * @param address full address of the event
+     * @return a list of events matching an address
+     */
+    @GetMapping(&quot;/events/byaddress/{address}&quot;)
+    public List&lt;Event&gt; getEventsByAddress(@PathVariable final String address) {
+<span class="fc" id="L90">        return eventRepository.findByAddress(address);</span>
+    }
+
+    /**
+     * Gets a list of filtered events from the filter query parameters.
+     *
+     * @param allParams Query parameters based on event fields
+     * @return list of filtered events
+     */
+    @GetMapping(&quot;/filterEvents&quot;)
+    public List&lt;Event&gt; filterEvent(
+        @RequestParam HashMap&lt;String, String&gt; allParams
+    ) {
+<span class="fc" id="L103">        List&lt;Event&gt; events = eventRepository.findAll();</span>
+
+<span class="fc" id="L105">        List&lt;Event&gt; remainingEvents = eventService</span>
+<span class="fc" id="L106">            .filterEvents(allParams, events);</span>
+
+<span class="fc" id="L108">        return remainingEvents;</span>
+    }
+
+    /**
+     * Creates an event with the host of the event being the authorized user
+     *
+     * @param newEvent event object with event fields
+     * @param jwt the user JWT token
+     * @return ResponseEntity of the saved event or failure
+     */
+    @PostMapping(&quot;/events&quot;)
+    public ResponseEntity&lt;?&gt; createEvent(
+        @RequestBody final Event newEvent,
+        @RequestHeader (name = &quot;Authorization&quot;) String jwt
+    ) {
+        // Get user details from JWT and set host Id to new event
+<span class="fc" id="L124">        String username = jwtUtils</span>
+<span class="fc" id="L125">            .getUserNameFromJwtToken(</span>
+<span class="fc" id="L126">                jwt.substring(&quot;Bearer &quot;.length())</span>
+            );
+<span class="fc" id="L128">        UserDetailsExt userDetails = (UserDetailsExt) userDetailsService</span>
+<span class="fc" id="L129">            .loadUserByUsername(username);</span>
+<span class="fc" id="L130">        newEvent.setHost(userDetails.getId());</span>
+
+<span class="fc" id="L132">        System.out.println(&quot;new event: &quot; + newEvent.toString());</span>
+
+        try {
+<span class="fc" id="L135">            Event savedEvent = eventRepository.save(newEvent);</span>
+<span class="fc" id="L136">            return ResponseEntity.ok().body(savedEvent);</span>
+<span class="nc" id="L137">        } catch (Exception e) {</span>
+<span class="nc" id="L138">            return ResponseEntity.internalServerError().body(</span>
+                new MessageResponse(
+<span class="nc" id="L140">                    e.getMessage(),</span>
+<span class="nc" id="L141">                    HttpStatus.INTERNAL_SERVER_ERROR.value()</span>
+                )
+            );
+        }
+    }
+
+    /**
+     * Updates the existing event with the provided event fields
+     *
+     * @param jsonObject Event object
+     * @return ResponseEntity of the updated event or failure
+     */
+    @PutMapping(&quot;/events&quot;)
+    @SuppressWarnings(&quot;checkstyle:AvoidInlineConditionals&quot;)
+    public ResponseEntity&lt;?&gt; updateEvent(
+        @RequestBody HashMap&lt;String, String&gt; jsonObject
+    ) {
+<span class="fc" id="L158">        Optional&lt;Event&gt; optionalEvent = eventRepository</span>
+<span class="fc" id="L159">            .findById(</span>
+<span class="fc" id="L160">                Integer.parseInt(jsonObject.get(&quot;id&quot;))</span>
+            );
+
+<span class="fc bfc" id="L163" title="All 2 branches covered.">        if (optionalEvent.isEmpty()) {</span>
+<span class="fc" id="L164">            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(</span>
+                new MessageResponse(
+<span class="fc" id="L166">                    &quot;Event ID: &quot; + jsonObject.get(&quot;id&quot;) + &quot; does not exist&quot;,</span>
+<span class="fc" id="L167">                    HttpStatus.NOT_FOUND.value()</span>
+                )
+            );
+        }
+
+<span class="fc" id="L172">        Event existingEvent = optionalEvent.get();</span>
+
+<span class="pc bpc" id="L174" title="1 of 2 branches missed.">        if (jsonObject.containsKey(&quot;address&quot;)) {</span>
+<span class="fc" id="L175">            existingEvent.setAddress(jsonObject.get(&quot;address&quot;));</span>
+        }
+
+<span class="pc bpc" id="L178" title="1 of 2 branches missed.">        if (jsonObject.containsKey(&quot;ageLimit&quot;)) {</span>
+<span class="fc" id="L179">            existingEvent.setAgeLimit(</span>
+<span class="fc" id="L180">                Integer.parseInt(jsonObject.get(&quot;ageLimit&quot;))</span>
+            );
+        }
+
+<span class="pc bpc" id="L184" title="1 of 2 branches missed.">        if (jsonObject.containsKey(&quot;name&quot;)) {</span>
+<span class="fc" id="L185">            existingEvent.setName(jsonObject.get(&quot;name&quot;));</span>
+        }
+
+<span class="pc bpc" id="L188" title="1 of 2 branches missed.">        if (jsonObject.containsKey(&quot;description&quot;)) {</span>
+<span class="fc" id="L189">            existingEvent.setDescription(jsonObject.get(&quot;description&quot;));</span>
+        }
+
+<span class="pc bpc" id="L192" title="1 of 2 branches missed.">        if (jsonObject.containsKey(&quot;longitude&quot;)) {</span>
+<span class="fc" id="L193">            existingEvent.setLongitude(</span>
+<span class="fc" id="L194">                Double.parseDouble(jsonObject.get(&quot;longitude&quot;))</span>
+            );
+        }
+
+<span class="pc bpc" id="L198" title="1 of 2 branches missed.">        if (jsonObject.containsKey(&quot;latitude&quot;)) {</span>
+<span class="fc" id="L199">            existingEvent.setLatitude(</span>
+<span class="fc" id="L200">                Double.parseDouble(jsonObject.get(&quot;latitude&quot;))</span>
+            );
+        }
+
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">        if (jsonObject.containsKey(&quot;cost&quot;)) {</span>
+<span class="fc" id="L205">            existingEvent.setCost(Float.parseFloat(jsonObject.get(&quot;cost&quot;)));</span>
+        }
+
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">        if (jsonObject.containsKey(&quot;media&quot;)) {</span>
+<span class="fc" id="L209">            existingEvent.setMedia(jsonObject.get(&quot;media&quot;));</span>
+        }
+
+<span class="pc bpc" id="L212" title="1 of 2 branches missed.">        if (jsonObject.containsKey(&quot;categories&quot;)) {</span>
+<span class="fc" id="L213">            existingEvent.setCategories(jsonObject.get(&quot;categories&quot;));</span>
+        }
+
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">        if (jsonObject.containsKey(&quot;startTimestamp&quot;)) {</span>
+<span class="fc" id="L217">            String startTimestamp = jsonObject.get(&quot;startTimestamp&quot;);</span>
+<span class="fc" id="L218">            existingEvent.setStartTimestamp(</span>
+<span class="pc bpc" id="L219" title="1 of 2 branches missed.">                startTimestamp != null</span>
+<span class="fc" id="L220">                    ? Timestamp.valueOf(startTimestamp)</span>
+<span class="nc" id="L221">                    : null</span>
+                );
+        }
+
+<span class="pc bpc" id="L225" title="1 of 2 branches missed.">        if (jsonObject.containsKey(&quot;endTimestamp&quot;)) {</span>
+<span class="fc" id="L226">            String endTimestamp = jsonObject.get(&quot;endTimestamp&quot;);</span>
+<span class="fc" id="L227">            existingEvent.setEndTimestamp(</span>
+<span class="pc bpc" id="L228" title="1 of 2 branches missed.">                endTimestamp != null</span>
+<span class="fc" id="L229">                    ? Timestamp.valueOf(endTimestamp)</span>
+<span class="nc" id="L230">                    : null</span>
+                );
+        }
+
+        try {
+<span class="fc" id="L235">            Event updatedEvent = eventRepository.save(existingEvent);</span>
+<span class="fc" id="L236">            return ResponseEntity.ok().body(</span>
+<span class="pc bpc" id="L237" title="1 of 2 branches missed.">                updatedEvent != null</span>
+<span class="nc" id="L238">                    ? updatedEvent</span>
+<span class="fc" id="L239">                    : existingEvent</span>
+                );
+<span class="nc" id="L241">        } catch (Exception e) {</span>
+<span class="nc" id="L242">            return ResponseEntity.internalServerError().body(</span>
+                new MessageResponse(
+<span class="nc" id="L244">                    e.getMessage(),</span>
+<span class="nc" id="L245">                    HttpStatus.INTERNAL_SERVER_ERROR.value()</span>
+                )
+            );
+        }
+    }
+
+    /**
+     * Deletes the event matching the given Id
+     *
+     * @param eventId the event Id
+     */
+    @DeleteMapping(&quot;/events/{eventId}&quot;)
+    public ResponseEntity&lt;?&gt; deleteEventById(
+        @PathVariable(value = &quot;eventId&quot;) Integer eventId
+    ) {
+<span class="fc bfc" id="L260" title="All 2 branches covered.">        if (eventRepository.findById(eventId).isEmpty()) {</span>
+<span class="fc" id="L261">            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(</span>
+                new MessageResponse(
+                    &quot;Event ID: &quot; + eventId + &quot; does not exist&quot;,
+<span class="fc" id="L264">                    HttpStatus.NOT_FOUND.value()</span>
+                )
+            );
+        }
+
+        try {
+<span class="fc" id="L270">            eventRepository.deleteById(eventId);</span>
+<span class="fc" id="L271">            return ResponseEntity.ok().build();</span>
+<span class="nc" id="L272">        } catch (Exception e) {</span>
+<span class="nc" id="L273">            return ResponseEntity.internalServerError().body(</span>
+                new MessageResponse(
+<span class="nc" id="L275">                    e.getMessage(),</span>
+<span class="nc" id="L276">                    HttpStatus.INTERNAL_SERVER_ERROR.value()</span>
+                )
+            );
+        }
+    }
+
+    /**
+     * Gets various statistics about TWCC events including:
+     * total number of events, number of events by category,
+     * average age limit for events, average age limit of events
+     * by category, average cost for events, average cost of
+     * events by category, and number of events by category in
+     * multiple time ranges
+     *
+     * @return ResponseEntity containing various TWCC event statistics
+     */
+    @GetMapping(&quot;/events/statistics&quot;)
+    public ResponseEntity&lt;?&gt; getEventStatistics() {
+<span class="fc" id="L294">        EventStatistics eventStats = new EventStatistics();</span>
+<span class="fc" id="L295">        List&lt;Event&gt; events = eventRepository.findAll();</span>
+
+        try {
+<span class="fc" id="L298">            eventStats = eventStats</span>
+<span class="fc" id="L299">                .setTotalNumberOfEvents(</span>
+<span class="fc" id="L300">                    events.size()</span>
+<span class="fc" id="L301">                ).setNumberOfEventsByCategory(</span>
+<span class="fc" id="L302">                    eventStatisticService.getNumberOfEventsByCategory(events)</span>
+<span class="fc" id="L303">                ).setAverageAgeLimitForEvents(</span>
+<span class="fc" id="L304">                    eventStatisticService.getAverageAgeLimitForEvents(events)</span>
+<span class="fc" id="L305">                ).setAverageAgeLimitOfEventsByCategory(</span>
+                    eventStatisticService
+<span class="fc" id="L307">                        .getAverageAgeLimitOfEventsByCategory(events)</span>
+<span class="fc" id="L308">                ).setAverageCostForEvents(</span>
+<span class="fc" id="L309">                    eventStatisticService.getAverageCostForEvents(events)</span>
+<span class="fc" id="L310">                ).setAverageCostOfEventsByCategory(</span>
+                    eventStatisticService
+<span class="fc" id="L312">                        .getAverageCostOfEventsByCategory(events)</span>
+<span class="fc" id="L313">                ).setNumberOfEventsByCategoryTimeRanges(</span>
+                    eventStatisticService
+<span class="fc" id="L315">                        .getNumberOfEventsByCategoryTimeRanges(events)</span>
+                );
+
+<span class="fc" id="L318">            return ResponseEntity.ok().body(eventStats);</span>
+<span class="nc" id="L319">        } catch (Exception e) {</span>
+<span class="nc" id="L320">            return ResponseEntity.badRequest().body(e);</span>
+        }
+    }
+}
+
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
