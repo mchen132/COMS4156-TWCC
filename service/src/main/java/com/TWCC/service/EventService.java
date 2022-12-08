@@ -20,8 +20,7 @@ public class EventService {
      * @param events List of events
      * @return Filtered list of events
      */
-    @SuppressWarnings("checkstyle:AvoidInlineConditionals")
-    @SuppressWarnings("checkstyle:MethodLength")
+    @SuppressWarnings({"checkstyle:AvoidInlineConditionals", "checkstyle:MethodLength"})
     public List<Event> filterEvents(Map<String, String> filterParams, List<Event> events) {
         if (filterParams != null && events != null) {
             List<Event> remainingEvents = new ArrayList<>(events);

@@ -209,8 +209,7 @@ public class Event {
     }
 
     @Override
-    @SuppressWarnings("checkstyle:AvoidInlineConditionals")
-    @SuppressWarnings("checkstyle:MagicNumber")
+    @SuppressWarnings({"checkstyle:AvoidInlineConditionals", "checkstyle:MagicNumber"})
     public int hashCode() {
         final int prime = 31;
         int result = 1;
