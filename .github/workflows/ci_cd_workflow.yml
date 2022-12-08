@@ -43,6 +43,7 @@ jobs:
         if: github.event_name == 'push' && contains(github.ref_name, 'feature/')
         uses: EndBug/add-and-commit@v9
         with:
+          default_author: user_info
           add: 'service/reports'
           message: |
             "Commit from GitHub Actions ${{ github.job }}-run-${{ github.run_number }}: 
