@@ -5,8 +5,8 @@ import os
 
 project_root = os.path.dirname(os.path.dirname(__file__))
 file_path = 'file://'
-generated_report_path = 'service/target/site'
-custom_reports_path = 'service/reports'
+generated_report_path = '/service/target/site'
+custom_reports_path = '/service/reports'
 
 print(f'Project Root: {project_root}')
 
