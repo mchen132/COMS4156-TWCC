@@ -38,10 +38,10 @@ jobs:
           Add and Commit Recent Report Generation
           Current branch: ${{ github.ref_name }}"
 
-      - name: Add and Commit Recent Report Generation
+      - name: Add, Commit, and Push Recent Report Generation
         uses: EndBug/add-and-commit@v9
         with:
-          add: './reports'
+          add: '["./reports", "service/reports", "./service/reports"]'
           message: |
             "Commit from GitHub Actions ${{ github.job }}-run-${{ github.run_number }}: 
             Add and Commit Recent Report Generation"
