@@ -10,7 +10,7 @@ custom_reports_path = '/service/reports'
 print(f'Project Root: {project_root}')
 
 async def screenshot_reports():
-    browser = await launch({ 'headless': False })
+    browser = await launch(options={ 'args': ['--no-sandbox'], 'headless': False })
     print('browser: ')
     print(browser)
     page = await browser.newPage()
