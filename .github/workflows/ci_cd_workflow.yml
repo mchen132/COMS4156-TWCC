@@ -2,13 +2,7 @@
 
 name: TWCC CI/CD Workflow
 
-on:
-  push:
-    branches-ignore:
-      - 'features/**'
-  pull_request:
-    branches:
-      - '*'
+on: [push, pull_request]
 
 jobs:
   build:
