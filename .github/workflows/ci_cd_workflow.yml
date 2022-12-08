@@ -51,7 +51,7 @@ jobs:
         if: github.event_name == 'pull_request' && contains(github.base_ref, 'feature/')
         run: | # newer version of pyppeteer requires websockets or else Chromium driver hangs
           python -m pip install --upgrade pip
-          pip install pyppeteer websockets -U
+          pip install pyppeteer websockets==10.1
       - name: Take Screenshot of Reports
         if: github.event_name == 'pull_request' && contains(github.base_ref, 'feature/')
         run: python screenshot-reports.py
