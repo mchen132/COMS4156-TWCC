@@ -35,16 +35,33 @@ jobs:
       - name: Update Reports Directory with Recent Report Generation
         run: cp -r ./target/site ./reports
 
+      - name: Setup Python
+        if: github.event_name == 'pull_request' && contains(github.base_ref, 'feature/')
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Python Dependencies
+        if: github.event_name == 'pull_request' && contains(github.base_ref, 'feature/')
+        run: | # newer version of pyppeteer requires websockets or else Chromium driver hangs
+          python -m pip install --upgrade pip
+          pip install pyppeteer==1.0.2 websockets==10.1
+
+      - name: Take Screenshot of Reports
+        if: github.event_name == 'pull_request' && contains(github.base_ref, 'feature/')
+        run: python screenshot-reports.py
+        working-directory: ./scripts
+
       - name: Add, Commit, and Push Recent Report Generation
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && contains(github.base_ref, 'feature/')
         uses: EndBug/add-and-commit@v9
         with:
           default_author: github-actions
           add: 'service/reports'
           message: |
-            "Commit from GitHub Actions ${{ github.job }}-run-${{ github.run_number }}
-            - Add and Commit Recent Report Generation"
-          push: origin ${{ github.ref_name }} --set-upstream --force
+            Commit from GitHub Actions ${{ github.job }}-run-${{ github.run_number }}
+            - Add and Commit Recent Report Generation
+          push: origin ${{ github.head_ref }} --set-upstream --force
 
   build-client:
     runs-on: ubuntu-latest
@@ -68,5 +85,3 @@ jobs:
 
       - name: Build Client
         run: CI=false npm run build # Bypass warning as errors: Treating warnings as errors because process.env.CI = true.
-        
-      
