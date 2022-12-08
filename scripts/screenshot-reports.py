@@ -7,12 +7,16 @@ project_root = os.path.dirname(os.path.dirname(__file__))
 generated_report_path = '/service/target/site'
 custom_reports_path = '/service/reports'
 
+print(f'Project Root: {project_root}')
+
 async def screenshot_reports():
     browser = await launch()
     page = await browser.newPage()
 
     # Screenshot Checkstyle Report HTML Page
-    await page.goto(f'{project_root}{generated_report_path}/checkstyle.html')
+    await page.goto(f'{project_root}{generated_report_path}/checkstyle.html', {
+        waitUntil: 'networkidle0'
+    })
     await page.screenshot({
         'path': f'{project_root}{custom_reports_path}/checkstyle-report.png',
         'clip': {
@@ -24,14 +28,18 @@ async def screenshot_reports():
     })
 
     # Screenshot Jacoco Test Coverage Report HTML Page
-    await page.goto(f'{project_root}{generated_report_path}/jacoco/index.html')
+    await page.goto(f'{project_root}{generated_report_path}/jacoco/index.html', {
+        waitUntil: 'networkidle0'
+    })
     await page.screenshot({
         'path': f'{project_root}{custom_reports_path}/test-coverage-report.png',
         'fullPage': 'true'
     })
 
     # Screenshot SpotBugs (Static Analysis Bug Finder Tool) Report HTML Page
-    await page.goto(f'{project_root}{generated_report_path}/spotbugs.html')
+    await page.goto(f'{project_root}{generated_report_path}/spotbugs.html', {
+        waitUntil: 'networkidle0'
+    })
     await page.screenshot({
         'path': f'{project_root}{custom_reports_path}/static-analysis-bug-finder-report.png',
         'clip': {
