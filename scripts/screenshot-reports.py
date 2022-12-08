@@ -3,9 +3,8 @@ import asyncio
 from pyppeteer import launch
 import os
 
-# project_root = os.path.dirname(os.path.dirname(__file__))
+project_root = os.path.dirname(os.path.dirname(__file__))
 file_path = 'file://'
-project_root = os.path.abspath(os.sep)
 generated_report_path = 'service/target/site'
 custom_reports_path = 'service/reports'
 
