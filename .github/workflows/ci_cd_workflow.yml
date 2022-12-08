@@ -38,31 +38,32 @@ jobs:
           echo "Commit from GitHub Actions $github.job-run-${{ github.run_number }}: 
           Add and Commit Recent Report Generation
           Current branch: ${{ github.ref_name }}
+          PR Source Branch: ${{ github.head_ref }}
+          PR Target Branch: ${{ github.base_ref }}
           Github event name: ${{ github.event_name }}"
-
+      
+      - name: Setup Python
+        if: github.event_name == 'pull_request' && contains(github.base_ref, 'feature/')
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install Python Dependencies
+        if: github.event_name == 'pull_request' && contains(github.base_ref, 'feature/')
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyppeteer
+      - name: Take Screenshot of Reports
+        if: github.event_name == 'pull_request' && contains(github.base_ref, 'feature/')
+        run: python screenshot-reports.py
+        working-directory: ./scripts
+      
       - name: Add, Commit, and Push Recent Report Generation
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && contains(github.base_ref, 'feature/')
         uses: EndBug/add-and-commit@v9
         with:
           default_author: user_info
           add: 'service/reports'
           message: |
             "Commit from GitHub Actions ${{ github.job }}-run-${{ github.run_number }}: 
-            Add and Commit Recent Report Generation"
+            - Add and Commit Recent Report Generation"
           push: origin ${{ github.ref_name }} --set-upstream --force
-      
-      - name: Setup Python
-        if: github.event_name == 'pull_request'
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-      - name: Install Python Dependencies
-        if: github.event_name == 'pull_request'
-        run: |
-          python -m pip install --upgrade pip
-          pip install pyppeteer
-      - name: Take Screenshot of Reports
-        if: github.event_name == 'pull_request'
-        run: python screenshot-reports.py
-        working-directory: ./scripts
-      
