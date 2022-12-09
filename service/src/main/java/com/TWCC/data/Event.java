@@ -119,7 +119,7 @@ public class Event {
     public void setAgeLimit(final int ageLimit) {
         this.ageLimit = ageLimit;
     }
-
+ 
     public String getName() {
         return name;
     }
