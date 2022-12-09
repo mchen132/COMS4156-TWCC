@@ -5,13 +5,20 @@ name: TWCC CI/CD Workflow
 on: [push, pull_request]
 
 jobs:
-  build:
+  build-server:
+    if: "!contains(github.event.head_commit.message, '[ci_cd_skip]')"
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./service
     steps:
-      - uses: actions/checkout@v3 # action that checks out repository onto the runner
+      - name: Checkout COMS4156-TWCC Repository
+        uses: actions/checkout@v3 # action that checks out repository onto the runner
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.TWCC_WORKFLOW_TEST }}
+
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -22,5 +29,62 @@ jobs:
       - name: Run tests and Jacoco (Code Coverage)
         run: mvn clean test
 
-      - name: Checkstyle and SpotBugs (Static Analysis Bug Finder Tool)
+      - name: Run Checkstyle Check
+        run: mvn checkstyle:checkstyle
+
+      - name: Reports for Checkstyle and SpotBugs (Static Analysis Bug Finder Tool)
         run: mvn site
+      
+      - name: Update Reports Directory with Recent Report Generation
+        run: cp -r ./target/site ./reports
+
+      - name: Setup Python
+        if: github.event_name == 'push' && contains(github.ref_name, 'feature/')
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Python Dependencies
+        if: github.event_name == 'push' && contains(github.ref_name, 'feature/')
+        run: | # newer version of pyppeteer requires websockets or else Chromium driver hangs
+          python -m pip install --upgrade pip
+          pip install pyppeteer==1.0.2 websockets==10.1
+
+      - name: Take Screenshot of Reports
+        if: github.event_name == 'push' && contains(github.ref_name, 'feature/')
+        run: python screenshot_reports.py
+        working-directory: ./scripts
+
+      - name: Add, Commit, and Push Recent Report Generation
+        if: github.event_name == 'push' && contains(github.ref_name, 'feature/')
+        uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          add: 'service/reports'
+          message: |
+            [ci_cd_skip] Commit from GitHub Actions ${{ github.job }}-run-${{ github.run_number }}
+            - Add and Commit Recent Report Generation
+          push: origin ${{ github.ref_name }} --set-upstream --force
+
+  build-client:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./client
+    steps:
+      - name: Checkout COMS4156-TWCC Repository
+        uses: actions/checkout@v3 # action that checks out repository onto the runner
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install Node Modules
+        run: npm install
+
+      - name: Build Client
+        run: CI=false npm run build # Bypass warning as errors: Treating warnings as errors because process.env.CI = true.

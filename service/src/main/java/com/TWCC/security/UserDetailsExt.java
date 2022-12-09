@@ -12,46 +12,54 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class UserDetailsExt implements UserDetails {
     private static final long serialVersionUID = 1L;
 
-	private int id;
+    private int id;
 
     private String firstName;
 
     private String lastName;
 
-	private String username;
+    private String username;
 
-	private String email;
+    private String email;
 
-	@JsonIgnore
-	private String password;
+    @JsonIgnore
+    private String password;
 
-	public UserDetailsExt(int id, String firstName, String lastName, String username, String email, String password) {
-		this.id = id;
+    public UserDetailsExt(
+        int id,
+        String firstName,
+        String lastName,
+        String username,
+        String email,
+        String password
+    ) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-		this.username = username;
-		this.email = email;
-		this.password = password;
-	}
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
 
-	public static UserDetailsExt build(TwccUser user) {
-		return new UserDetailsExt(
-				user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-				user.getUsername(),
-				user.getEmail(),
-				user.getPassword());
-	}
+    public static UserDetailsExt build(TwccUser user) {
+        return new UserDetailsExt(
+            user.getId(),
+            user.getFirstName(),
+            user.getLastName(),
+            user.getUsername(),
+            user.getEmail(),
+            user.getPassword()
+        );
+    }
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
-	}
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
 
-	public int getId() {
-		return id;
-	}
+    public int getId() {
+        return id;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -61,47 +69,69 @@ public class UserDetailsExt implements UserDetails {
         return lastName;
     }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	@Override
-	public String getPassword() {
-		return password;
-	}
+    @Override
+    public String getPassword() {
+        return password;
+    }
 
-	@Override
-	public String getUsername() {
-		return username;
-	}
+    @Override
+    public String getUsername() {
+        return username;
+    }
 
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
 
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
-	@Override
-	public boolean isEnabled() {
-		return true;
-	}
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-		UserDetailsExt user = (UserDetailsExt) o;
-		return Objects.equals(id, user.id);
-	}
+    @Override
+    @SuppressWarnings("checkstyle:AvoidInlineConditionals")
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + id;
+        result = prime * result
+                + ((firstName == null) ? 0 : firstName.hashCode());
+        result = prime * result
+                + ((lastName == null) ? 0 : lastName.hashCode());
+        result = prime * result
+                + ((username == null) ? 0 : username.hashCode());
+        result = prime * result + ((email == null) ? 0 : email.hashCode());
+        result = prime * result
+                + ((password == null) ? 0 : password.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        UserDetailsExt user = (UserDetailsExt) o;
+        return Objects.equals(id, user.id);
+    }
 }

@@ -14,14 +14,24 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AuthEntryPointExt implements AuthenticationEntryPoint {
-    private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointExt.class);
+    private static final Logger LOGGER = LoggerFactory
+        .getLogger(AuthEntryPointExt.class);
 
-    /* Method triggered whenever unauthorized user tries to make an HTTP request.
-    This method returns a 401 status code as a result. */
-	@Override
-	public void commence(HttpServletRequest request, HttpServletResponse response,
-			AuthenticationException authException) throws IOException, ServletException {
-		logger.error("Unauthorized error: {}", authException.getMessage());
-		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error: Unauthorized");
-	}
+    /**
+     *  Method triggered whenever unauthorized user tries to
+     *  make an HTTP request. This method returns a 401 status
+     *  code as a result.
+     */
+    @Override
+    public void commence(
+        HttpServletRequest request,
+        HttpServletResponse response,
+        AuthenticationException authException
+    ) throws IOException, ServletException {
+        LOGGER.error("Unauthorized error: {}", authException.getMessage());
+        response.sendError(
+            HttpServletResponse.SC_UNAUTHORIZED,
+            "Error: Unauthorized"
+        );
+    }
 }

@@ -13,14 +13,16 @@ import com.TWCC.repository.UserRepository;
 @Service
 public class UserDetailsServiceExt implements UserDetailsService {
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		TwccUser user = userRepository.findByUsername(username)
-				.orElseThrow(() -> new UsernameNotFoundException("User not found with the username of: " + username));
+        TwccUser user = userRepository.findByUsername(username)
+            .orElseThrow(() ->
+                new UsernameNotFoundException("User not found with the username of: " + username)
+            );
 
-		return UserDetailsExt.build(user);
-	}
+        return UserDetailsExt.build(user);
+    }
 }

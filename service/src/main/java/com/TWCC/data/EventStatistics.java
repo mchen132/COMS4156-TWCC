@@ -9,7 +9,8 @@ public class EventStatistics {
     private float averageCostForEvents;
     private Map<String, Float> averageCostOfEventsByCategory;
     private Map<String, Integer> averageAgeLimitOfEventsByCategory;
-    private Map<String, Map<String, Integer>> numberOfEventsByCategoryTimeRanges;
+    private Map<String, Map<String, Integer>>
+        numberOfEventsByCategoryTimeRanges;
 
     public int getTotalNumberOfEvents() {
         return totalNumberOfEvents;
@@ -24,7 +25,9 @@ public class EventStatistics {
         return numberOfEventsByCategory;
     }
 
-    public EventStatistics setNumberOfEventsByCategory(Map<String, Integer> numberOfEventsByCategory) {
+    public EventStatistics setNumberOfEventsByCategory(
+        Map<String, Integer> numberOfEventsByCategory
+    ) {
         this.numberOfEventsByCategory = numberOfEventsByCategory;
         return this;
     }
@@ -33,7 +36,9 @@ public class EventStatistics {
         return averageAgeLimitForEvents;
     }
 
-    public EventStatistics setAverageAgeLimitForEvents(int averageAgeLimitForEvents) {
+    public EventStatistics setAverageAgeLimitForEvents(
+        int averageAgeLimitForEvents
+    ) {
         this.averageAgeLimitForEvents = averageAgeLimitForEvents;
         return this;
     }
@@ -51,7 +56,9 @@ public class EventStatistics {
         return averageCostOfEventsByCategory;
     }
 
-    public EventStatistics setAverageCostOfEventsByCategory(Map<String, Float> averageCostOfEventsByCategory) {
+    public EventStatistics setAverageCostOfEventsByCategory(
+        Map<String, Float> averageCostOfEventsByCategory
+    ) {
         this.averageCostOfEventsByCategory = averageCostOfEventsByCategory;
         return this;
     }
@@ -60,17 +67,24 @@ public class EventStatistics {
         return averageAgeLimitOfEventsByCategory;
     }
 
-    public EventStatistics setAverageAgeLimitOfEventsByCategory(Map<String, Integer> averageAgeLimitOfEventsByCategory) {
-        this.averageAgeLimitOfEventsByCategory = averageAgeLimitOfEventsByCategory;
+    public EventStatistics setAverageAgeLimitOfEventsByCategory(
+        Map<String, Integer> averageAgeLimitOfEventsByCategory
+    ) {
+        this.averageAgeLimitOfEventsByCategory =
+            averageAgeLimitOfEventsByCategory;
         return this;
     }
 
-    public Map<String, Map<String, Integer>> getNumberOfEventsByCategoryTimeRanges() {
+    public Map<String, Map<String, Integer>>
+        getNumberOfEventsByCategoryTimeRanges() {
         return numberOfEventsByCategoryTimeRanges;
     }
 
-    public EventStatistics setNumberOfEventsByCategoryTimeRanges(Map<String, Map<String, Integer>> numberOfEventsByCategoryTimeRanges) {
-        this.numberOfEventsByCategoryTimeRanges = numberOfEventsByCategoryTimeRanges;
+    public EventStatistics setNumberOfEventsByCategoryTimeRanges(
+        Map<String, Map<String, Integer>> numberOfEventsByCategoryTimeRanges
+    ) {
+        this.numberOfEventsByCategoryTimeRanges =
+            numberOfEventsByCategoryTimeRanges;
         return this;
     }
 }

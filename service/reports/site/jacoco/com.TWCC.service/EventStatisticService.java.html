@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventStatisticService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">nyc-todo-service</a> &gt; <a href="index.source.html" class="el_package">com.TWCC.service</a> &gt; <span class="el_source">EventStatisticService.java</span></div><h1>EventStatisticService.java</h1><pre class="source lang-java linenums">package com.TWCC.service;
+
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+import com.TWCC.data.Event;
+
+@Service
+<span class="fc" id="L14">public class EventStatisticService {</span>
+    /**
+     * Gets number of events per event category
+     *
+     * @param events list of events
+     * @return Map&lt;String, Integer&gt; of number of events per category of events
+     */
+    public Map&lt;String, Integer&gt; getNumberOfEventsByCategory(List&lt;Event&gt; events) {
+<span class="fc" id="L22">        Map&lt;String, Integer&gt; numberOfEventsByCategory = new HashMap&lt;String, Integer&gt;();</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (events != null) {</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">            for (Event event: events) {</span>
+<span class="fc bfc" id="L25" title="All 2 branches covered.">                if (event.getCategories() != null) {</span>
+<span class="fc" id="L26">                    String[] categories = event.getCategories().split(&quot;,&quot;);</span>
+
+<span class="fc bfc" id="L28" title="All 2 branches covered.">                    for (int i = 0; i &lt; categories.length; i++) {</span>
+<span class="fc" id="L29">                        String category = categories[i].trim();</span>
+
+<span class="fc bfc" id="L31" title="All 2 branches covered.">                        if (category.length() &gt; 0) {</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">                            if (numberOfEventsByCategory.containsKey(category)) {</span>
+<span class="fc" id="L33">                                numberOfEventsByCategory.put(</span>
+                                    category,
+<span class="fc" id="L35">                                    numberOfEventsByCategory.get(category) + 1);</span>
+                            } else {
+<span class="fc" id="L37">                                numberOfEventsByCategory.put(category, 1);</span>
+                            }
+                        }
+                    }
+                }
+<span class="fc" id="L42">            }</span>
+        }
+
+<span class="fc" id="L45">        return numberOfEventsByCategory;</span>
+    }
+
+    /**
+     * Gets the average age limit out of all of the existing events
+     *
+     * @param events list of events
+     * @return the average age limit for events
+     */
+    public int getAverageAgeLimitForEvents(List&lt;Event&gt; events) {
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (events != null) {</span>
+<span class="fc" id="L56">            int totalNumberOfEvents = events.size();</span>
+<span class="fc" id="L57">            int ageLimitTotal = 0;</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">            for (Event event: events) {</span>
+<span class="fc" id="L59">                ageLimitTotal += event.getAgeLimit();</span>
+<span class="fc" id="L60">            }</span>
+
+<span class="fc" id="L62">            return ageLimitTotal / totalNumberOfEvents;</span>
+        }
+
+<span class="fc" id="L65">        return 0;</span>
+    }
+
+    /**
+     * Gets the average age limit of events per event category
+     *
+     * @param events list of events
+     * @return the average age limit of events per event category
+     */
+    public Map&lt;String, Integer&gt; getAverageAgeLimitOfEventsByCategory(List&lt;Event&gt; events) {
+<span class="fc" id="L75">        Map&lt;String, Integer&gt; averageAgeLimitOfEventsByCategory = new HashMap&lt;String, Integer&gt;();</span>
+<span class="fc" id="L76">        Map&lt;String, Integer&gt; numberOfEventsByCategory = new HashMap&lt;String, Integer&gt;();</span>
+
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        if (events != null) {</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">            for (Event event: events) {</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">                if (event.getCategories() != null) {</span>
+<span class="fc" id="L81">                    String[] categories = event.getCategories().split(&quot;,&quot;);</span>
+
+<span class="fc bfc" id="L83" title="All 2 branches covered.">                    for (int i = 0; i &lt; categories.length; i++) {</span>
+<span class="fc" id="L84">                        String category = categories[i].trim();</span>
+
+<span class="fc bfc" id="L86" title="All 2 branches covered.">                        if (category.length() &gt; 0) {</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">                            if (averageAgeLimitOfEventsByCategory.containsKey(category)) {</span>
+<span class="fc" id="L88">                                averageAgeLimitOfEventsByCategory.put(</span>
+                                    category,
+                                    averageAgeLimitOfEventsByCategory
+<span class="fc" id="L91">                                        .get(category) + event.getAgeLimit()</span>
+                                );
+<span class="fc" id="L93">                                numberOfEventsByCategory.put(</span>
+                                    category,
+<span class="fc" id="L95">                                    numberOfEventsByCategory.get(category) + 1</span>
+                                );
+                            } else {
+<span class="fc" id="L98">                                averageAgeLimitOfEventsByCategory.put(</span>
+                                    category,
+<span class="fc" id="L100">                                    event.getAgeLimit()</span>
+                                );
+<span class="fc" id="L102">                                numberOfEventsByCategory.put(category, 1);</span>
+                            }
+                        }
+                    }
+                }
+<span class="fc" id="L107">            }</span>
+
+            // Calculate average
+<span class="fc bfc" id="L110" title="All 2 branches covered.">            for (String category: averageAgeLimitOfEventsByCategory.keySet()) {</span>
+<span class="fc" id="L111">                int averageAgeLimit = averageAgeLimitOfEventsByCategory.get(category)</span>
+<span class="fc" id="L112">                    / numberOfEventsByCategory.get(category);</span>
+<span class="fc" id="L113">                averageAgeLimitOfEventsByCategory.put(category, averageAgeLimit);</span>
+<span class="fc" id="L114">            }</span>
+        }
+
+<span class="fc" id="L117">        return averageAgeLimitOfEventsByCategory;</span>
+    }
+
+    /**
+     * Gets the average cost for all of the existing events
+     *
+     * @param events list of events
+     * @return the average cost for events
+     */
+    public float getAverageCostForEvents(List&lt;Event&gt; events) {
+<span class="fc bfc" id="L127" title="All 2 branches covered.">        if (events != null) {</span>
+<span class="fc" id="L128">            int totalNumberOfEvents = events.size();</span>
+<span class="fc" id="L129">            float costTotal = 0;</span>
+
+<span class="fc bfc" id="L131" title="All 2 branches covered.">            for (Event event: events) {</span>
+<span class="fc" id="L132">                costTotal += event.getCost();</span>
+<span class="fc" id="L133">            }</span>
+
+<span class="fc" id="L135">            return costTotal / totalNumberOfEvents;</span>
+        } else {
+<span class="fc" id="L137">            return 0;</span>
+        }
+    }
+
+    /**
+     * Gets the average cost of events per event category
+     *
+     * @param events list of events
+     * @return the average cost of events per event category
+     */
+    public Map&lt;String, Float&gt; getAverageCostOfEventsByCategory(List&lt;Event&gt; events) {
+<span class="fc" id="L148">        Map&lt;String, Float&gt; averageCostOfEventsByCategory = new HashMap&lt;String, Float&gt;();</span>
+<span class="fc" id="L149">        Map&lt;String, Integer&gt; numberOfEventsByCategory = new HashMap&lt;String, Integer&gt;();</span>
+
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        if (events != null) {</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">            for (Event event: events) {</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">                if (event.getCategories() != null) {</span>
+<span class="fc" id="L154">                    String[] categories = event.getCategories().split(&quot;,&quot;);</span>
+
+<span class="fc bfc" id="L156" title="All 2 branches covered.">                    for (int i = 0; i &lt; categories.length; i++) {</span>
+<span class="fc" id="L157">                        String category = categories[i].trim();</span>
+
+<span class="fc bfc" id="L159" title="All 2 branches covered.">                        if (category.length() &gt; 0) {</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">                            if (averageCostOfEventsByCategory.containsKey(category)) {</span>
+<span class="fc" id="L161">                                averageCostOfEventsByCategory.put(</span>
+                                    category,
+<span class="fc" id="L163">                                    averageCostOfEventsByCategory.get(category) + event.getCost()</span>
+                                );
+<span class="fc" id="L165">                                numberOfEventsByCategory.put(</span>
+                                    category,
+<span class="fc" id="L167">                                    numberOfEventsByCategory.get(category) + 1</span>
+                                );
+                            } else {
+<span class="fc" id="L170">                                averageCostOfEventsByCategory.put(category, event.getCost());</span>
+<span class="fc" id="L171">                                numberOfEventsByCategory.put(category, 1);</span>
+                            }
+                        }
+                    }
+                }
+<span class="fc" id="L176">            }</span>
+
+            // Calculate average
+<span class="fc bfc" id="L179" title="All 2 branches covered.">            for (String category: averageCostOfEventsByCategory.keySet()) {</span>
+<span class="fc" id="L180">                Float averageCost = averageCostOfEventsByCategory.get(category)</span>
+<span class="fc" id="L181">                    / numberOfEventsByCategory.get(category);</span>
+<span class="fc" id="L182">                averageCostOfEventsByCategory.put(category, averageCost);</span>
+<span class="fc" id="L183">            }</span>
+        }
+
+<span class="fc" id="L186">        return averageCostOfEventsByCategory;</span>
+    }
+
+    /**
+     * Gets the number of events for a category in a given time range (month-year-weekInMonth)
+     * for all existing events
+     *
+     * @param events list of events
+     * @return the number of events for a category in a given time range
+     */
+    public Map&lt;String, Map&lt;String, Integer&gt;&gt; getNumberOfEventsByCategoryTimeRanges(
+        List&lt;Event&gt; events
+    ) {
+<span class="fc" id="L199">        Map&lt;String, Map&lt;String, Integer&gt;&gt; numberOfEventsByCategoryTimeRanges =</span>
+            new HashMap&lt;String, Map&lt;String, Integer&gt;&gt;();
+<span class="fc" id="L201">        Calendar cal = Calendar.getInstance();</span>
+
+<span class="fc bfc" id="L203" title="All 2 branches covered.">        if (events != null) {</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">            for (Event event: events) {</span>
+<span class="pc bpc" id="L205" title="1 of 4 branches missed.">                if (event.getStartTimestamp() != null &amp;&amp; event.getCategories() != null) {</span>
+<span class="fc" id="L206">                    Timestamp startTimestamp = event.getStartTimestamp();</span>
+<span class="fc" id="L207">                    String[] categories = event.getCategories().split(&quot;,&quot;);</span>
+
+<span class="fc" id="L209">                    cal.setTimeInMillis(startTimestamp.getTime());</span>
+<span class="fc" id="L210">                    int eventMonth = cal.get(Calendar.MONTH);</span>
+<span class="fc" id="L211">                    int eventYear = cal.get(Calendar.YEAR);</span>
+<span class="fc" id="L212">                    int eventWeekOfMonth = cal.get(Calendar.WEEK_OF_MONTH);</span>
+<span class="fc" id="L213">                    System.out.println(&quot;eventMonth: &quot; + eventMonth);</span>
+<span class="fc" id="L214">                    System.out.println(&quot;eventYear: &quot; + eventYear);</span>
+<span class="fc" id="L215">                    System.out.println(&quot;eventWeekOfMonth&quot; + eventWeekOfMonth);</span>
+
+<span class="fc" id="L217">                    String monthYearWeek = String.format(</span>
+                        &quot;%d-%d-%d&quot;,
+<span class="fc" id="L219">                        eventMonth,</span>
+<span class="fc" id="L220">                        eventYear,</span>
+<span class="fc" id="L221">                        eventWeekOfMonth</span>
+                    );
+<span class="fc bfc" id="L223" title="All 2 branches covered.">                    for (int i = 0; i &lt; categories.length; i++) {</span>
+<span class="fc" id="L224">                        String category = categories[i].trim();</span>
+
+<span class="fc bfc" id="L226" title="All 2 branches covered.">                        if (category.length() &gt; 0) {</span>
+<span class="fc bfc" id="L227" title="All 2 branches covered.">                            if (numberOfEventsByCategoryTimeRanges.containsKey(monthYearWeek)) {</span>
+<span class="fc" id="L228">                                Map&lt;String, Integer&gt; numOfEventsByCategory =</span>
+<span class="fc" id="L229">                                    numberOfEventsByCategoryTimeRanges.get(monthYearWeek);</span>
+
+<span class="fc bfc" id="L231" title="All 2 branches covered.">                                if (numOfEventsByCategory.containsKey(category)) {</span>
+<span class="fc" id="L232">                                    numOfEventsByCategory.put(</span>
+                                        category,
+<span class="fc" id="L234">                                        numOfEventsByCategory.get(category) + 1</span>
+                                    );
+<span class="fc" id="L236">                                    numberOfEventsByCategoryTimeRanges.put(</span>
+                                        monthYearWeek,
+                                        numOfEventsByCategory
+                                    );
+                                } else {
+<span class="fc" id="L241">                                    numOfEventsByCategory.put(category, 1);</span>
+<span class="fc" id="L242">                                    numberOfEventsByCategoryTimeRanges.put(</span>
+                                        monthYearWeek,
+                                        numOfEventsByCategory
+                                    );
+                                }
+<span class="fc" id="L247">                            } else {</span>
+<span class="fc" id="L248">                                Map&lt;String, Integer&gt; numOfEventsByCategory =</span>
+                                    new HashMap&lt;String, Integer&gt;();
+<span class="fc" id="L250">                                numOfEventsByCategory.put(category, 1);</span>
+<span class="fc" id="L251">                                numberOfEventsByCategoryTimeRanges.put(</span>
+                                    monthYearWeek,
+                                    numOfEventsByCategory
+                                );
+                            }
+                        }
+                    }
+                }
+<span class="fc" id="L259">            }</span>
+        }
+
+<span class="fc" id="L262">        return numberOfEventsByCategoryTimeRanges;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
