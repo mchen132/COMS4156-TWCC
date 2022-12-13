@@ -98,7 +98,10 @@ public class ResponseParser {
         Timestamp creationTimestamp = startTimestamp;
         Timestamp endTimestamp = startTimestamp;
 
-        String categories = this.extractCategory(eventMap);
+        @SuppressWarnings("checkstyle:AvoidInlineConditionals")
+        String categories = this.extractCategory(eventMap).compareTo("") != 0
+                                ? this.extractCategory(eventMap)
+                                : null;
 
         return new Event(
             id,
@@ -409,10 +412,13 @@ public class ResponseParser {
         }
 
         @SuppressWarnings("unchecked")
-        String segment = (String)
-                            (
-                                (HashMap<String, Object>) categoryMap.get("segment")
-                            ).get("name");
+        String segment = (
+                            (TextNode)
+                                (
+                                    (HashMap<String, Object>)
+                                        categoryMap.get("segment")
+                                ).get("name")
+                        ).toString();
 
         category += segment;
 
@@ -421,10 +427,13 @@ public class ResponseParser {
         }
 
         @SuppressWarnings("unchecked")
-        String genre = (String)
-                            (
-                                (HashMap<String, Object>) categoryMap.get("genre")
-                            ).get("name");
+        String genre = (
+                            (TextNode)
+                                (
+                                    (HashMap<String, Object>)
+                                        categoryMap.get("genre")
+                                ).get("name")
+                        ).toString();
 
         category += "," + genre;
 
@@ -433,10 +442,13 @@ public class ResponseParser {
         }
 
         @SuppressWarnings("unchecked")
-        String subGenre = (String)
-                            (
-                                (HashMap<String, Object>) categoryMap.get("subGenre")
-                            ).get("name");
+        String subGenre = (
+                            (TextNode)
+                                (
+                                    (HashMap<String, Object>)
+                                        categoryMap.get("subGenre")
+                                ).get("name")
+                        ).toString();
 
         category += "," + subGenre;
 
