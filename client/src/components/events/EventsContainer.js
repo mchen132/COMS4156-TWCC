@@ -11,7 +11,7 @@ import Accordion from 'react-bootstrap/Accordion';
 import Select from 'react-select';
 import DateTimePicker from 'react-datetime-picker';
 import '../../styles/events.css';
-import { getEvents, createEvent } from '../../actions/eventActions';
+import { getEvents, createEvent, filterEvents } from '../../actions/eventActions';
 import moment from 'moment';
 
 const EventsContainer = () => {
@@ -215,6 +215,126 @@ const EventsContainer = () => {
         );
     };
 
+    const onFilterEventsDataChange = e => {
+        console.log(e);
+        setFilterEventsData({
+            ...filterEventsData,
+            [e.target.name]: e.target.value
+        })
+    };
+
+    const onFilterEvents = async e => {
+        e.preventDefault();
+
+        try {
+            const filterEventsQueryParams = {};
+            for (const queryParam in filterEventsData) {
+                const queryValue = filterEventsData[queryParam];
+
+                if (queryValue && queryValue.length > 0) {
+                    filterEventsQueryParams[queryParam] = queryValue;
+                }
+            }
+
+            const filteredEvents = await filterEvents(filterEventsQueryParams);
+            
+            setLocalEvents(filteredEvents);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const renderFilterEventsSection = () => (
+        <Accordion>
+            <Accordion.Item eventKey="0">
+                <Accordion.Header>Filter Events</Accordion.Header>
+                <Accordion.Body>
+                    <Form onSubmit={onFilterEvents}>
+                        <Row>
+                            <Form.Group as={Col}>
+                                <Form.Label>Name</Form.Label>
+                                <Form.Control
+                                    name="name"
+                                    placeholder="Name"                                                        
+                                    onChange={onFilterEventsDataChange}
+                                />
+                            </Form.Group>
+                            <Form.Group as={Col}>
+                                <Form.Label>Description</Form.Label>
+                                <Form.Control 
+                                    name="description"
+                                    placeholder="Description"
+                                    onChange={onFilterEventsDataChange}
+                                />                                                
+                            </Form.Group>
+                        </Row>
+                        <Row>
+                            <Form.Group as={Col}>
+                                <Form.Label>Address</Form.Label>
+                                <Form.Control
+                                    name="address"
+                                    placeholder="Address"
+                                    onChange={onFilterEventsDataChange}
+                                />                                                    
+                            </Form.Group>
+                            <Form.Group as={Col}>
+                                <Form.Label>Age Limit</Form.Label>
+                                <Form.Control
+                                    name="ageLimit"
+                                    placeholder="Age Limit"
+                                    type="number"
+                                    onChange={onFilterEventsDataChange}
+                                />                                                    
+                            </Form.Group>
+                        </Row>
+                        <Row>
+                            <Form.Group as={Col}>
+                                <Form.Label>Cost</Form.Label>
+                                <Form.Control
+                                    name="cost"
+                                    placeholder="Cost"
+                                    type="number"
+                                    onChange={onFilterEventsDataChange}
+                                />                                                    
+                            </Form.Group>
+                            <Form.Group as={Col}>
+                                <Form.Label>Media</Form.Label>
+                                <Form.Control
+                                    name="media"
+                                    placeholder="Media"
+                                    onChange={onFilterEventsDataChange}
+                                />                                                    
+                            </Form.Group>
+                        </Row>
+                        <Row>
+                            <Form.Group as={Col}>
+                                <Form.Label>Host</Form.Label>
+                                <Form.Control
+                                    name="host"
+                                    placeholder="Host"
+                                    type="number"
+                                    onChange={onFilterEventsDataChange}
+                                />                                                    
+                            </Form.Group>                                                
+                            <Form.Group as={Col}>
+                                <Form.Label>Categories</Form.Label>
+                                <Select
+                                    isMulti
+                                    options={categories}
+                                    onChange={categories => setFilterEventsData({ 
+                                        ...filterEventsData,
+                                        categories: categories.map(category => category.value)
+                                    })}
+                                />
+                            </Form.Group>
+                        </Row>
+                        <Button type="submit" variant="primary">Filter Events</Button>
+                    </Form>
+                </Accordion.Body>
+            </Accordion.Item>
+        </Accordion>
+    );
+
     return (
         <>
             <div className='events-container-header'>
@@ -228,80 +348,7 @@ const EventsContainer = () => {
                                 </Button>
                                 {renderCreateEventModal()}
                                 {/* Filter Events */}
-                                <Accordion>
-                                    <Accordion.Item eventKey="0">
-                                        <Accordion.Header>Filter Events</Accordion.Header>
-                                        <Accordion.Body>
-                                            <Form>
-                                                <Row>
-                                                    <Form.Group as={Col}>
-                                                        <Form.Label>Name</Form.Label>
-                                                        <Form.Control 
-                                                            placeholder="Name"
-                                                            onKeyUp={(e) => console.log(e.target.value)}
-                                                        />
-                                                    </Form.Group>
-                                                    <Form.Group as={Col}>
-                                                        <Form.Label>Description</Form.Label>
-                                                        <Form.Control 
-                                                            placeholder="Description"
-                                                        />                                                
-                                                    </Form.Group>
-                                                </Row>
-                                                <Row>
-                                                    <Form.Group as={Col}>
-                                                        <Form.Label>Address</Form.Label>
-                                                        <Form.Control 
-                                                            placeholder="Address"
-                                                        />                                                    
-                                                    </Form.Group>
-                                                    <Form.Group as={Col}>
-                                                        <Form.Label>Age Limit</Form.Label>
-                                                        <Form.Control
-                                                            placeholder="Age Limit"
-                                                            type="number"
-                                                        />                                                    
-                                                    </Form.Group>
-                                                </Row>
-                                                <Row>
-                                                    <Form.Group as={Col}>
-                                                        <Form.Label>Cost</Form.Label>
-                                                        <Form.Control 
-                                                            placeholder="Cost"
-                                                            type="number"
-                                                        />                                                    
-                                                    </Form.Group>
-                                                    <Form.Group as={Col}>
-                                                        <Form.Label>Media</Form.Label>
-                                                        <Form.Control 
-                                                            placeholder="Media"
-                                                        />                                                    
-                                                    </Form.Group>
-                                                </Row>
-                                                <Row>
-                                                    <Form.Group as={Col}>
-                                                        <Form.Label>Host</Form.Label>
-                                                        <Form.Control 
-                                                            placeholder="Host"
-                                                            type="number"
-                                                        />                                                    
-                                                    </Form.Group>                                                
-                                                    <Form.Group as={Col}>
-                                                        <Form.Label>Categories</Form.Label>
-                                                        <Select
-                                                            isMulti
-                                                            options={categories}
-                                                            onChange={categories => setFilterEventsData({ 
-                                                                ...filterEventsData,
-                                                                categories: categories.map(category => category.value)
-                                                            })}
-                                                        />
-                                                    </Form.Group>
-                                                </Row>
-                                            </Form>
-                                        </Accordion.Body>
-                                    </Accordion.Item>
-                                </Accordion>            
+                                {renderFilterEventsSection()}
                             </>
                             : <>                        
                                 <h2>Login to view events</h2>
