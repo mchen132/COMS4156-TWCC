@@ -98,6 +98,8 @@ public class ResponseParser {
         Timestamp creationTimestamp = startTimestamp;
         Timestamp endTimestamp = startTimestamp;
 
+        String categories = this.extractCategory(eventMap);
+
         return new Event(
             id,
             address,
@@ -109,7 +111,7 @@ public class ResponseParser {
             cost,
             media,
             -1,
-            "testCategory",
+            categories,
             creationTimestamp,
             startTimestamp,
             endTimestamp
@@ -373,6 +375,72 @@ public class ResponseParser {
         ageLimit = ageRestriction ? LEGAL_AGE : 0;
 
         return ageLimit;
+    }
+
+    /**
+     *
+     * @param jsonString
+     * @return
+     */
+    private String extractCategory(Map<String, Object> eventMap) {
+
+        String category = "";
+
+        if (eventMap.get("classifications") == null) {
+            return category;
+        }
+
+        @SuppressWarnings("unchecked")
+        ArrayList<Object> classificationList = (ArrayList<Object>) eventMap.get(
+            "classifications"
+        );
+
+        if (classificationList.size() == 0) {
+            return category;
+        }
+
+        @SuppressWarnings("unchecked")
+        Map<String, Object> categoryMap = (HashMap<String, Object>) classificationList.get(
+            0
+        );
+
+        if (categoryMap.get("segment") == null) {
+            return category;
+        }
+
+        @SuppressWarnings("unchecked")
+        String segment = (String)
+                            (
+                                (HashMap<String, Object>) categoryMap.get("segment")
+                            ).get("name");
+
+        category += segment;
+
+        if (categoryMap.get("genre") == null) {
+            return category;
+        }
+
+        @SuppressWarnings("unchecked")
+        String genre = (String)
+                            (
+                                (HashMap<String, Object>) categoryMap.get("genre")
+                            ).get("name");
+
+        category += "," + genre;
+
+        if (categoryMap.get("subGenre") == null) {
+            return category;
+        }
+
+        @SuppressWarnings("unchecked")
+        String subGenre = (String)
+                            (
+                                (HashMap<String, Object>) categoryMap.get("subGenre")
+                            ).get("name");
+
+        category += "," + subGenre;
+
+        return category;
     }
 
     // NOTE: stringToMap(), toMap(), and toList() are inspired by the following
