@@ -28,18 +28,18 @@ import com.TWCC.data.Event;
 <span class="fc" id="L28">                String key = pair.getKey();</span>
 <span class="fc" id="L29">                String value = pair.getValue();</span>
 
-<span class="pc bpc" id="L31" title="1 of 2 branches missed.">                if (key.equals(&quot;ageLimit&quot;)) {</span>
-<span class="nc" id="L32">                    int ageLimit = Integer.parseInt(value);</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">                if (key.equals(&quot;ageLimit&quot;)) {</span>
+<span class="fc" id="L32">                    int ageLimit = Integer.parseInt(value);</span>
                     for (
-<span class="nc" id="L34">                        Iterator&lt;Event&gt; curEvent = remainingEvents.iterator();</span>
-<span class="nc bnc" id="L35" title="All 2 branches missed.">                        curEvent.hasNext();</span>
+<span class="fc" id="L34">                        Iterator&lt;Event&gt; curEvent = remainingEvents.iterator();</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">                        curEvent.hasNext();</span>
                     ) {
-<span class="nc" id="L37">                        Event event = curEvent.next();</span>
+<span class="fc" id="L37">                        Event event = curEvent.next();</span>
 
-<span class="nc bnc" id="L39" title="All 2 branches missed.">                        if (event.getAgeLimit() &gt; ageLimit) {</span>
-<span class="nc" id="L40">                            curEvent.remove();</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">                        if (event.getAgeLimit() &gt; ageLimit) {</span>
+<span class="fc" id="L40">                            curEvent.remove();</span>
                         }
-<span class="nc" id="L42">                    }</span>
+<span class="fc" id="L42">                    }</span>
                 }
 
 <span class="fc bfc" id="L45" title="All 2 branches covered.">                if (key.equals(&quot;address&quot;)) {</span>
@@ -90,17 +90,17 @@ import com.TWCC.data.Event;
 <span class="fc" id="L90">                    }</span>
                 }
 
-<span class="pc bpc" id="L93" title="1 of 2 branches missed.">                if (key.equals(&quot;cost&quot;)) {</span>
-<span class="nc" id="L94">                    int cost = Integer.parseInt(value);</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">                if (key.equals(&quot;cost&quot;)) {</span>
+<span class="fc" id="L94">                    int cost = Integer.parseInt(value);</span>
                     for (
-<span class="nc" id="L96">                        Iterator&lt;Event&gt; curEvent = remainingEvents.iterator();</span>
-<span class="nc bnc" id="L97" title="All 2 branches missed.">                        curEvent.hasNext();</span>
+<span class="fc" id="L96">                        Iterator&lt;Event&gt; curEvent = remainingEvents.iterator();</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">                        curEvent.hasNext();</span>
                     ) {
-<span class="nc" id="L99">                        Event event = curEvent.next();</span>
-<span class="nc bnc" id="L100" title="All 2 branches missed.">                        if (event.getCost() &gt; cost) {</span>
-<span class="nc" id="L101">                            curEvent.remove();</span>
+<span class="fc" id="L99">                        Event event = curEvent.next();</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">                        if (event.getCost() &gt; cost) {</span>
+<span class="fc" id="L101">                            curEvent.remove();</span>
                         }
-<span class="nc" id="L103">                    }</span>
+<span class="fc" id="L103">                    }</span>
                 }
 
 <span class="fc bfc" id="L106" title="All 2 branches covered.">                if (key.equals(&quot;media&quot;)) {</span>
@@ -118,36 +118,36 @@ import com.TWCC.data.Event;
 <span class="fc" id="L118">                    }</span>
                 }
 
-<span class="pc bpc" id="L121" title="1 of 2 branches missed.">                if (key.equals(&quot;startTimestamp&quot;)) {</span>
-<span class="nc" id="L122">                    Timestamp startTimestamp = Timestamp.valueOf(value);</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">                if (key.equals(&quot;startTimestamp&quot;)) {</span>
+<span class="fc" id="L122">                    Timestamp startTimestamp = Timestamp.valueOf(value);</span>
                     for (
-<span class="nc" id="L124">                        Iterator&lt;Event&gt; curEvent = remainingEvents.iterator();</span>
-<span class="nc bnc" id="L125" title="All 2 branches missed.">                        curEvent.hasNext();</span>
+<span class="fc" id="L124">                        Iterator&lt;Event&gt; curEvent = remainingEvents.iterator();</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">                        curEvent.hasNext();</span>
                     ) {
-<span class="nc" id="L127">                        Event event = curEvent.next();</span>
-<span class="nc bnc" id="L128" title="All 2 branches missed.">                        int compareTime = event.getStartTimestamp() != null</span>
-<span class="nc" id="L129">                            ? event.getStartTimestamp().compareTo(startTimestamp)</span>
-<span class="nc" id="L130">                            : 0;</span>
-<span class="nc bnc" id="L131" title="All 2 branches missed.">                        if (compareTime &lt; 0) {</span>
-<span class="nc" id="L132">                            curEvent.remove();</span>
+<span class="fc" id="L127">                        Event event = curEvent.next();</span>
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">                        int compareTime = event.getStartTimestamp() != null</span>
+<span class="fc" id="L129">                            ? event.getStartTimestamp().compareTo(startTimestamp)</span>
+<span class="pc" id="L130">                            : 0;</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">                        if (compareTime &lt; 0) {</span>
+<span class="fc" id="L132">                            curEvent.remove();</span>
                         }
-<span class="nc" id="L134">                    }</span>
+<span class="fc" id="L134">                    }</span>
                 }
 
-<span class="pc bpc" id="L137" title="1 of 2 branches missed.">                if (key.equals(&quot;endTimestamp&quot;)) {</span>
-<span class="nc" id="L138">                    Timestamp endTimestamp = Timestamp.valueOf(value);</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">                if (key.equals(&quot;endTimestamp&quot;)) {</span>
+<span class="fc" id="L138">                    Timestamp endTimestamp = Timestamp.valueOf(value);</span>
                     for (
-<span class="nc" id="L140">                        Iterator&lt;Event&gt; curEvent = remainingEvents.iterator();</span>
-<span class="nc bnc" id="L141" title="All 2 branches missed.">                        curEvent.hasNext();</span>
+<span class="fc" id="L140">                        Iterator&lt;Event&gt; curEvent = remainingEvents.iterator();</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">                        curEvent.hasNext();</span>
                     ) {
-<span class="nc" id="L143">                        Event event = curEvent.next();</span>
-<span class="nc bnc" id="L144" title="All 2 branches missed.">                        int compareTime = event.getEndTimestamp() != null</span>
-<span class="nc" id="L145">                            ? event.getEndTimestamp().compareTo(endTimestamp)</span>
-<span class="nc" id="L146">                            : 0;</span>
-<span class="nc bnc" id="L147" title="All 2 branches missed.">                        if (compareTime &lt; 0) {</span>
-<span class="nc" id="L148">                            curEvent.remove();</span>
+<span class="fc" id="L143">                        Event event = curEvent.next();</span>
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">                        int compareTime = event.getEndTimestamp() != null</span>
+<span class="fc" id="L145">                            ? event.getEndTimestamp().compareTo(endTimestamp)</span>
+<span class="pc" id="L146">                            : 0;</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">                        if (compareTime &gt; 0) {</span>
+<span class="fc" id="L148">                            curEvent.remove();</span>
                         }
-<span class="nc" id="L150">                    }</span>
+<span class="fc" id="L150">                    }</span>
                 }
 
 <span class="fc bfc" id="L153" title="All 2 branches covered.">                if (key.equals(&quot;categories&quot;)) {</span>
