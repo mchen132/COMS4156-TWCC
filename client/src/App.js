@@ -5,7 +5,7 @@ import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import EventsContainer from './components/events/EventsContainer';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { clearAuthLocalStorageInfo, setAuthToken } from './utils/authUtil';
+import { clearAuthLocalStorageInfo, setAuthToken, getAuthInformation } from './utils/authUtil';
 import CustomNavbar from './components/layout/CustomNavbar';
 import EventStatistics from './components/statistics/EventStatistics';
 
@@ -26,7 +26,7 @@ const App = () => {
 				home="/events"
 				title="TWCC Events"
 				leftLinks={[{ href: 'events', name: 'Events' }, { href: 'events/statistics', name: 'Event Statistics' }]}
-				rightLinks={[{ name: 'Logout', onClick: onLogout }]}
+				rightLinks={getAuthInformation('token') ? [{ name: 'Logout', onClick: onLogout }] : []}
 			/>
 			<Routes>
 				<Route exact path='/' element={<Landing />} />            

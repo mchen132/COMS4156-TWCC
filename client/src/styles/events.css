@@ -12,3 +12,13 @@
 .events-container .event-card {
     margin: 0.2rem;
 }
+
+.filter-events-section {
+    margin: 2rem auto;
+    width: 80vw;
+}
+
+.filter-events-section
+.filter-events-row {
+    margin-bottom: 1rem;
+}
