@@ -11,7 +11,6 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +22,7 @@ import com.TWCC.repository.EventRepository;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@SuppressWarnings({"checkstyle:AvoidInlineConditionals", "checkstyle:LineLengthCheck", "checkstyle:StaticVariableNameCheck", "checkstyle:MagicNumberCheck", "checkstyle:VisibilityModifierCheck", "checkstyle:FileTabCharacterCheck"})
 public class EventControllerIntegrationTest {
     @Autowired
     EventController eventController;
@@ -35,33 +35,33 @@ public class EventControllerIntegrationTest {
 
 	@BeforeEach
     void setUp() {
-        event1 = new Event(1, "Columbia", 18, 
-            "Midterm Study session", 
-            "This is a midterm study session", 
+        event1 = new Event(1, "Columbia", 18,
+            "Midterm Study session",
+            "This is a midterm study session",
             12.5, 122.34, 0, "www.columbia.edu", 1,
             "social, study",
-            new Timestamp(new Date().getTime() - 10), 
+            new Timestamp(new Date().getTime() - 10),
             new Timestamp(new Date().getTime() + 5),
             new Timestamp(new Date().getTime() + 10)
         );
 
-        event2 = new Event(2, "UW", 18, 
-            "Midterm Study session at UW", 
-            "This is a midterm study session at UW", 
+        event2 = new Event(2, "UW", 18,
+            "Midterm Study session at UW",
+            "This is a midterm study session at UW",
             12.5, 122.34, 0, "www.uw.edu", 2,
             "social, study",
-            new Timestamp(new Date().getTime() - 10), 
-            new Timestamp(new Date().getTime() + 5), 
+            new Timestamp(new Date().getTime() - 10),
+            new Timestamp(new Date().getTime() + 5),
             new Timestamp(new Date().getTime() + 10)
         );
 
-        event3 = new Event(3, "Columbia", 18, 
-            "Midterm Study session at UMD", 
-            "This is a midterm study session at UMD", 
+        event3 = new Event(3, "Columbia", 18,
+            "Midterm Study session at UMD",
+            "This is a midterm study session at UMD",
             12.5, 122.34, 0, "www.umd.edu", 3,
             "social, study",
-            new Timestamp(new Date().getTime() - 10), 
-            new Timestamp(new Date().getTime() + 5), 
+            new Timestamp(new Date().getTime() - 10),
+            new Timestamp(new Date().getTime() + 5),
             new Timestamp(new Date().getTime() + 10)
         );
 
@@ -69,7 +69,7 @@ public class EventControllerIntegrationTest {
         events.add(event2);
         events.add(event3);
     }
-    
+
     @Test
     void testGetEvents() {
         // Given
