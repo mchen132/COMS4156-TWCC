@@ -84,7 +84,7 @@ public class UserController {
         ) {
             return ResponseEntity.badRequest().body(
                 new MessageResponse(
-                    "Username or password is empty",
+                    "Username or password is empty.",
                     HttpStatus.BAD_REQUEST.value()
                 )
             );

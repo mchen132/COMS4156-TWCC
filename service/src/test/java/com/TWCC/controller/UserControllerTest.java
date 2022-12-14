@@ -214,7 +214,7 @@ public class UserControllerTest {
             mockMvc.perform(mockRequest)
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$.message", is("Username or password is empty")));
+                .andExpect(jsonPath("$.message", is("Username or password is empty.")));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -242,7 +242,7 @@ public class UserControllerTest {
             mockMvc.perform(mockRequest)
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$.message", is("Username or password is empty")));
+                .andExpect(jsonPath("$.message", is("Username or password is empty.")));
         } catch (Exception e) {
             e.printStackTrace();
         }

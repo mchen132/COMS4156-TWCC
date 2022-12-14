@@ -2,7 +2,11 @@ package com.TWCC.security;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -10,6 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import com.TWCC.data.TwccUser;
 import com.TWCC.repository.UserRepository;
 
+@TestMethodOrder(MethodOrderer.Random.class)
 @SpringBootTest
 @ActiveProfiles("test")
 public class UserDetailsServiceExtTest {
@@ -19,10 +24,11 @@ public class UserDetailsServiceExtTest {
     @Autowired
     UserRepository userRepository;
 
-    @Test
-    void testLoadUserByUsername() {
-        // Given
-        TwccUser testUser = userRepository.save(new TwccUser(
+    private TwccUser testUser;
+
+    @BeforeEach
+    void setup() {
+        testUser = userRepository.save(new TwccUser(
             "Foo",
             "Bar",
             100,
@@ -30,12 +36,19 @@ public class UserDetailsServiceExtTest {
             "Baz",
             "foobar@baz.com"
         ));
+    }
 
+    @AfterEach
+    void tearDown() {
+        userRepository.deleteAll();
+    }
+
+    @Test
+    void testLoadUserByUsername() {
         // When
         UserDetailsExt userDetails = (UserDetailsExt) userDetailsService.loadUserByUsername(testUser.getUsername());
 
         // Then
-        assertEquals(1, userDetails.getId());
         assertEquals("Foo", userDetails.getFirstName());
         assertEquals("Bar", userDetails.getLastName());
         assertEquals("FooBar", userDetails.getUsername());
@@ -45,16 +58,6 @@ public class UserDetailsServiceExtTest {
 
     @Test
     void testLoadUserByUsernameWithNonExistingUsername() {
-        // Given
-        userRepository.save(new TwccUser(
-            "Foo",
-            "Bar",
-            100,
-            "FooBar",
-            "Baz",
-            "foobar@baz.com"
-        ));
-
         try {
             // When
             userDetailsService.loadUserByUsername("FooBaz");
