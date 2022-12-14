@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import static org.mockito.ArgumentMatchers.*;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.sql.Timestamp;
@@ -18,16 +17,16 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.util.NestedServletException;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -43,6 +42,7 @@ import com.TWCC.security.UserDetailsServiceExt;
 import com.TWCC.service.EventStatisticService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@TestMethodOrder(MethodOrderer.Random.class)
 @WebMvcTest(EventController.class)
 public class EventControllerTest {
     @Autowired
