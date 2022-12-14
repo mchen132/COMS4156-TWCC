@@ -234,6 +234,11 @@ const EventsContainer = () => {
 
                 if (queryValue && queryValue.length > 0) {
                     filterEventsQueryParams[queryParam] = queryValue;
+                } else if (queryValue && queryValue instanceof Date) {
+                    // startTimestamp and endTimestamp
+                    filterEventsQueryParams[queryParam] = moment(queryValue)
+                        .utc()
+                        .format("yyyy-MM-DD HH:mm:ss.SS");
                 }
             }
 
@@ -310,6 +315,28 @@ const EventsContainer = () => {
                                         placeholder="Media"
                                         onChange={onFilterEventsDataChange}
                                     />                                                    
+                                </Form.Group>
+                            </Row>
+                            <Row className="filter-events-row">
+                                <Form.Group as={Col}>
+                                    <Form.Label>Start Date Time</Form.Label>
+                                    <DateTimePicker
+                                        format="yyyy-MM-dd HH:mm:ss"
+                                        onChange={dateTime => setFilterEventsData(
+                                            { ...filterEventsData, startTimestamp: dateTime }
+                                        )}
+                                        value={filterEventsData.startTimestamp}
+                                    />
+                                </Form.Group>
+                                <Form.Group as={Col}>
+                                    <Form.Label>End Date Time</Form.Label>
+                                    <DateTimePicker
+                                        format="yyyy-MM-dd HH:mm:ss"
+                                        onChange={dateTime => setFilterEventsData(
+                                            { ...filterEventsData, endTimestamp: dateTime }
+                                        )}
+                                        value={filterEventsData.endTimestamp}
+                                    />
                                 </Form.Group>
                             </Row>
                             <Row className="filter-events-row">
