@@ -67,6 +67,7 @@ jobs:
           push: origin ${{ github.ref_name }} --set-upstream --force
 
   build-client:
+    if: "!contains(github.event.head_commit.message, '[ci_cd_skip]')"
     runs-on: ubuntu-latest
     defaults:
       run:
