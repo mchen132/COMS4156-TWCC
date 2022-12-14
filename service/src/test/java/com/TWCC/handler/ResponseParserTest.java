@@ -86,14 +86,6 @@ public class ResponseParserTest {
                                     \"subGenre\": {
                                         \"id\": \"KZazBEonSMnZfZ7vFEE\",
                                         \"name\": \"NHL\"
-                                    },
-                                    \"type\": {
-                                        \"id\": \"KZAyXgnZfZ7v7l1\",
-                                        \"name\": \"Group\"
-                                    },
-                                    \"subType\": {
-                                        \"id\": \"KZFzBErXgnZfZ7vA7d\",
-                                        \"name\": \"Team\"
                                     }
                                 }
                             ]
@@ -128,7 +120,7 @@ public class ResponseParserTest {
         double longitude = -112.071313;
         double latitude = 33.445899;
 
-        String categories = "Sports,Hockey,NHL,Group,Team";
+        String categories = "Sports,Hockey,NHL";
 
         event = new Event(-1, address, ageLimit, eventName, description, longitude, latitude, cost, media, -1, categories, creatioTimestamp, startTimestamp, endTimestamp);
     }
@@ -1143,183 +1135,10 @@ public class ResponseParserTest {
                 }
             }
                 """;
-            
 
         List<Event> testEventList = parser.processResponse(jsonStringLegalAgeRequired);
-        
+
         event.setCategories("Sports,Hockey");
-        expectedEventList.add(event);
-
-        assertEquals(testEventList, expectedEventList);
-    }
-
-    @Test
-    void testGetAllEventsNoType() {
-        String jsonStringLegalAgeRequired = """
-            {
-                \"_embedded\": {
-                    \"events\": [
-                        {
-                            \"name\": \"Phoenix Suns vs. Utah Jazz\", 
-                            \"url\": \"https://www.ticketmaster.com/phoenix-suns-vs-utah-jazz-phoenix-arizona-11-26-2022/event/19005D0B8FA91548\",
-                            \"_embedded\": {
-                                \"venues\": [
-                                    {
-                                        \"name\": \"Footprint Center\",
-                                        \"city\": {
-                                            \"name\": \"Phoenix\"
-                                        }, 
-                                        \"state\": {
-                                            \"name\": \"Arizona\", 
-                                            \"stateCode\": \"AZ\"
-                                        },
-                                        \"country\": {
-                                            \"name\": \"United States of America\", 
-                                            \"countryCode\": \"US\"
-                                        }, 
-                                        \"address\": {
-                                            \"line1\": \"201 East Jefferson Street\"
-                                        }, 
-                                        \"location\": {
-                                            \"longitude\": \"-112.071313\", 
-                                            \"latitude\": \"33.445899\"
-                                        }
-                                    }
-                                ]
-                            }, 
-                            \"priceRanges\": [
-                                {
-                                    \"type\": \"standard\", 
-                                    \"currency\": \"USD\", 
-                                    \"min\": 46.0, 
-                                    \"max\": 574.0
-                                }
-                            ], 
-                            \"ageRestrictions\": {
-                                \"legalAgeEnforced\": false
-                            },
-                            \"dates\": {
-                                \"start\": {
-                                    \"localDate\": \"2022-11-26\",
-                                    \"localTime\": \"19:00:00\",
-                                    \"dateTime\": \"2022-11-27T02:00:00Z\"
-                                }
-                            },
-                            \"classifications\": [
-                                {
-                                    \"primary\": true,
-                                    \"segment\": {
-                                        \"id\": \"KZFzniwnSyZfZ7v7nE\",
-                                        \"name\": \"Sports\"
-                                    },
-                                    \"genre\": {
-                                        \"id\": \"KnvZfZ7vAdI\",
-                                        \"name\": \"Hockey\"
-                                    },
-                                    \"subGenre\": {
-                                        \"id\": \"KZazBEonSMnZfZ7vFEE\",
-                                        \"name\": \"NHL\"
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-                """;
-            
-
-        List<Event> testEventList = parser.processResponse(jsonStringLegalAgeRequired);
-        
-        event.setCategories("Sports,Hockey,NHL");
-        expectedEventList.add(event);
-
-        assertEquals(testEventList, expectedEventList);
-    }
-
-    @Test
-    void testGetAllEventsNoSubType() {
-        String jsonStringLegalAgeRequired = """
-            {
-                \"_embedded\": {
-                    \"events\": [
-                        {
-                            \"name\": \"Phoenix Suns vs. Utah Jazz\", 
-                            \"url\": \"https://www.ticketmaster.com/phoenix-suns-vs-utah-jazz-phoenix-arizona-11-26-2022/event/19005D0B8FA91548\",
-                            \"_embedded\": {
-                                \"venues\": [
-                                    {
-                                        \"name\": \"Footprint Center\",
-                                        \"city\": {
-                                            \"name\": \"Phoenix\"
-                                        }, 
-                                        \"state\": {
-                                            \"name\": \"Arizona\", 
-                                            \"stateCode\": \"AZ\"
-                                        },
-                                        \"country\": {
-                                            \"name\": \"United States of America\", 
-                                            \"countryCode\": \"US\"
-                                        }, 
-                                        \"address\": {
-                                            \"line1\": \"201 East Jefferson Street\"
-                                        }, 
-                                        \"location\": {
-                                            \"longitude\": \"-112.071313\", 
-                                            \"latitude\": \"33.445899\"
-                                        }
-                                    }
-                                ]
-                            }, 
-                            \"priceRanges\": [
-                                {
-                                    \"type\": \"standard\", 
-                                    \"currency\": \"USD\", 
-                                    \"min\": 46.0, 
-                                    \"max\": 574.0
-                                }
-                            ], 
-                            \"ageRestrictions\": {
-                                \"legalAgeEnforced\": false
-                            },
-                            \"dates\": {
-                                \"start\": {
-                                    \"localDate\": \"2022-11-26\",
-                                    \"localTime\": \"19:00:00\",
-                                    \"dateTime\": \"2022-11-27T02:00:00Z\"
-                                }
-                            },
-                            \"classifications\": [
-                                {
-                                    \"primary\": true,
-                                    \"segment\": {
-                                        \"id\": \"KZFzniwnSyZfZ7v7nE\",
-                                        \"name\": \"Sports\"
-                                    },
-                                    \"genre\": {
-                                        \"id\": \"KnvZfZ7vAdI\",
-                                        \"name\": \"Hockey\"
-                                    },
-                                    \"subGenre\": {
-                                        \"id\": \"KZazBEonSMnZfZ7vFEE\",
-                                        \"name\": \"NHL\"
-                                    },
-                                    \"type\": {
-                                        \"id\": \"KZAyXgnZfZ7v7l1\",
-                                        \"name\": \"Group\"
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-                """;
-            
-
-        List<Event> testEventList = parser.processResponse(jsonStringLegalAgeRequired);
-        
-        event.setCategories("Sports,Hockey,NHL,Group");
         expectedEventList.add(event);
 
         assertEquals(testEventList, expectedEventList);
