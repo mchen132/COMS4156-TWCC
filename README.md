@@ -154,8 +154,10 @@ Please note that the above sample flow is a "Golden Path" of the service. We hav
 
 ## 4. Reports
 ---
->*All recent reports are now automated (through our GitHub Actions workflow) and published in the `service/reports/site` directory with every pull request. Feature branches (`feature/**`) will get these report
-updates and subsequently `main` will after the feature is merged into main.*
+>- *All recent reports documents are now automated (through our GitHub Actions workflow) and published in the `service/reports/site` directory with every pull request merge into a `feature/**` branch.*
+> - *All recent report images published on this README are all up-to-date as a result of our automated GitHub Actions workflow that takes screenshots of reports after they are generated.*
+> - *Feature branches (`feature/**`) will get these report
+updates after a PR merge (which triggers the report publishing job in our Workflow) and subsequently `main` will after the feature is merged into main.*
 
 ### Checkstyle
 - Directions:
