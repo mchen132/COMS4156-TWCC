@@ -452,6 +452,36 @@ public class ResponseParser {
 
         category += "," + subGenre;
 
+        if (categoryMap.get("type") == null) {
+            return category;
+        }
+
+        @SuppressWarnings("unchecked")
+        String type = (
+                            (TextNode)
+                                (
+                                    (HashMap<String, Object>)
+                                        categoryMap.get("type")
+                                ).get("name")
+                        ).toString();
+
+        category += "," + type;
+
+        if (categoryMap.get("subType") == null) {
+            return category;
+        }
+
+        @SuppressWarnings("unchecked")
+        String subType = (
+                            (TextNode)
+                                (
+                                    (HashMap<String, Object>)
+                                        categoryMap.get("subType")
+                                ).get("name")
+                        ).toString();
+
+        category += "," + subType;
+
         return category;
     }
 
