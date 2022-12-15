@@ -144,37 +144,50 @@ import com.TWCC.data.Event;
 <span class="fc bfc" id="L144" title="All 2 branches covered.">                        curEvent.hasNext();</span>
                     ) {
 <span class="fc" id="L146">                        Event event = curEvent.next();</span>
-<span class="fc" id="L147">                        String[] strSplit = event.getCategories().split(&quot;[\\s,]+&quot;);</span>
-<span class="fc" id="L148">                        ArrayList&lt;String&gt; caList = new ArrayList&lt;String&gt;(</span>
-<span class="fc" id="L149">                            Arrays.asList(strSplit)</span>
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">                        String[] strSplit = event.getCategories() != null</span>
+<span class="fc" id="L148">                            ? event.getCategories().split(&quot;[\\s,]+&quot;)</span>
+<span class="pc" id="L149">                            : new String[0];</span>
+
+                        // Remove empty category events and continue
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">                        if (strSplit.length == 0) {</span>
+<span class="nc" id="L153">                            curEvent.remove();</span>
+<span class="nc" id="L154">                            continue;</span>
+                        }
+
+<span class="fc" id="L157">                        ArrayList&lt;String&gt; caList = new ArrayList&lt;String&gt;(</span>
+<span class="fc" id="L158">                            Arrays.asList(strSplit)</span>
                         );
-<span class="fc" id="L151">                        System.out.println(caList);</span>
-<span class="fc bfc" id="L152" title="All 2 branches covered.">                        for (int i = 0; i &lt; caList.size(); i++) {</span>
-<span class="fc" id="L153">                            System.out.println(caList.get(i));</span>
-<span class="fc bfc" id="L154" title="All 4 branches covered.">                            if (value.contains(caList.get(i)) == false &amp;&amp; i != caList.size() - 1) {</span>
-<span class="fc" id="L155">                                continue;</span>
-<span class="pc bpc" id="L156" title="1 of 4 branches missed.">                            } else if (value.contains(caList.get(i)) == false &amp;&amp; i == caList.size() - 1) {</span>
-<span class="fc" id="L157">                                curEvent.remove();</span>
+
+<span class="fc" id="L161">                        String categoryQueryParam = value.toLowerCase();</span>
+
+<span class="fc bfc" id="L163" title="All 2 branches covered.">                        for (int i = 0; i &lt; caList.size(); i++) {</span>
+<span class="fc" id="L164">                            String currentCategory = caList.get(i).toLowerCase();</span>
+<span class="fc bfc" id="L165" title="All 4 branches covered.">                            if (!categoryQueryParam.contains(currentCategory) &amp;&amp; i != caList.size() - 1) {</span>
+<span class="fc" id="L166">                                continue;</span>
+<span class="pc bpc" id="L167" title="1 of 4 branches missed.">                            } else if (!categoryQueryParam.contains(currentCategory) &amp;&amp; i == caList.size() - 1) {</span>
+<span class="fc" id="L168">                                curEvent.remove();</span>
+<span class="pc bpc" id="L169" title="1 of 2 branches missed.">                            } else if (categoryQueryParam.contains(currentCategory)) {</span>
+<span class="fc" id="L170">                                break;</span>
                             }
                         }
-<span class="fc" id="L160">                    }</span>
+<span class="fc" id="L173">                    }</span>
                 }
-<span class="fc bfc" id="L162" title="All 2 branches covered.">                if (key.equals(&quot;host&quot;)) {</span>
-<span class="fc" id="L163">                    int host = Integer.parseInt(value);</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">                if (key.equals(&quot;host&quot;)) {</span>
+<span class="fc" id="L176">                    int host = Integer.parseInt(value);</span>
                     for (
-<span class="fc" id="L165">                        Iterator&lt;Event&gt; curEvent = remainingEvents.iterator();</span>
-<span class="fc bfc" id="L166" title="All 2 branches covered.">                        curEvent.hasNext();</span>
+<span class="fc" id="L178">                        Iterator&lt;Event&gt; curEvent = remainingEvents.iterator();</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">                        curEvent.hasNext();</span>
                     ) {
-<span class="fc" id="L168">                        Event event = curEvent.next();</span>
-<span class="fc bfc" id="L169" title="All 2 branches covered.">                        if (event.getHost() != host) {</span>
-<span class="fc" id="L170">                            curEvent.remove();</span>
+<span class="fc" id="L181">                        Event event = curEvent.next();</span>
+<span class="fc bfc" id="L182" title="All 2 branches covered.">                        if (event.getHost() != host) {</span>
+<span class="fc" id="L183">                            curEvent.remove();</span>
                         }
-<span class="fc" id="L172">                    }</span>
+<span class="fc" id="L185">                    }</span>
                 }
-<span class="fc" id="L174">            }</span>
-<span class="fc" id="L175">            return remainingEvents;</span>
+<span class="fc" id="L187">            }</span>
+<span class="fc" id="L188">            return remainingEvents;</span>
         } else {
-<span class="fc" id="L177">            return new ArrayList&lt;Event&gt;();</span>
+<span class="fc" id="L190">            return new ArrayList&lt;Event&gt;();</span>
         }
     }
 }
