@@ -12,6 +12,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -89,6 +90,7 @@ public class EventControllerIntegrationTest {
         events.add(event2);
         events.add(event3);
 
+        eventRepository.deleteAll();
     }
 
     @AfterEach
