@@ -20,7 +20,7 @@ import com.TWCC.data.Event;
      */
     public Map&lt;String, Integer&gt; getNumberOfEventsByCategory(List&lt;Event&gt; events) {
 <span class="fc" id="L22">        Map&lt;String, Integer&gt; numberOfEventsByCategory = new HashMap&lt;String, Integer&gt;();</span>
-<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (events != null) {</span>
+<span class="fc bfc" id="L23" title="All 4 branches covered.">        if (events != null &amp;&amp; !events.isEmpty()) {</span>
 <span class="fc bfc" id="L24" title="All 2 branches covered.">            for (Event event: events) {</span>
 <span class="fc bfc" id="L25" title="All 2 branches covered.">                if (event.getCategories() != null) {</span>
 <span class="fc" id="L26">                    String[] categories = event.getCategories().split(&quot;,&quot;);</span>
@@ -52,7 +52,7 @@ import com.TWCC.data.Event;
      * @return the average age limit for events
      */
     public int getAverageAgeLimitForEvents(List&lt;Event&gt; events) {
-<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (events != null) {</span>
+<span class="fc bfc" id="L55" title="All 4 branches covered.">        if (events != null &amp;&amp; !events.isEmpty()) {</span>
 <span class="fc" id="L56">            int totalNumberOfEvents = events.size();</span>
 <span class="fc" id="L57">            int ageLimitTotal = 0;</span>
 <span class="fc bfc" id="L58" title="All 2 branches covered.">            for (Event event: events) {</span>
@@ -75,7 +75,7 @@ import com.TWCC.data.Event;
 <span class="fc" id="L75">        Map&lt;String, Integer&gt; averageAgeLimitOfEventsByCategory = new HashMap&lt;String, Integer&gt;();</span>
 <span class="fc" id="L76">        Map&lt;String, Integer&gt; numberOfEventsByCategory = new HashMap&lt;String, Integer&gt;();</span>
 
-<span class="fc bfc" id="L78" title="All 2 branches covered.">        if (events != null) {</span>
+<span class="fc bfc" id="L78" title="All 4 branches covered.">        if (events != null &amp;&amp; !events.isEmpty()) {</span>
 <span class="fc bfc" id="L79" title="All 2 branches covered.">            for (Event event: events) {</span>
 <span class="fc bfc" id="L80" title="All 2 branches covered.">                if (event.getCategories() != null) {</span>
 <span class="fc" id="L81">                    String[] categories = event.getCategories().split(&quot;,&quot;);</span>
@@ -124,7 +124,7 @@ import com.TWCC.data.Event;
      * @return the average cost for events
      */
     public float getAverageCostForEvents(List&lt;Event&gt; events) {
-<span class="fc bfc" id="L127" title="All 2 branches covered.">        if (events != null) {</span>
+<span class="fc bfc" id="L127" title="All 4 branches covered.">        if (events != null &amp;&amp; !events.isEmpty()) {</span>
 <span class="fc" id="L128">            int totalNumberOfEvents = events.size();</span>
 <span class="fc" id="L129">            float costTotal = 0;</span>
 
@@ -148,7 +148,7 @@ import com.TWCC.data.Event;
 <span class="fc" id="L148">        Map&lt;String, Float&gt; averageCostOfEventsByCategory = new HashMap&lt;String, Float&gt;();</span>
 <span class="fc" id="L149">        Map&lt;String, Integer&gt; numberOfEventsByCategory = new HashMap&lt;String, Integer&gt;();</span>
 
-<span class="fc bfc" id="L151" title="All 2 branches covered.">        if (events != null) {</span>
+<span class="fc bfc" id="L151" title="All 4 branches covered.">        if (events != null &amp;&amp; !events.isEmpty()) {</span>
 <span class="fc bfc" id="L152" title="All 2 branches covered.">            for (Event event: events) {</span>
 <span class="fc bfc" id="L153" title="All 2 branches covered.">                if (event.getCategories() != null) {</span>
 <span class="fc" id="L154">                    String[] categories = event.getCategories().split(&quot;,&quot;);</span>
@@ -200,7 +200,7 @@ import com.TWCC.data.Event;
             new HashMap&lt;String, Map&lt;String, Integer&gt;&gt;();
 <span class="fc" id="L201">        Calendar cal = Calendar.getInstance();</span>
 
-<span class="fc bfc" id="L203" title="All 2 branches covered.">        if (events != null) {</span>
+<span class="fc bfc" id="L203" title="All 4 branches covered.">        if (events != null &amp;&amp; !events.isEmpty()) {</span>
 <span class="fc bfc" id="L204" title="All 2 branches covered.">            for (Event event: events) {</span>
 <span class="pc bpc" id="L205" title="1 of 4 branches missed.">                if (event.getStartTimestamp() != null &amp;&amp; event.getCategories() != null) {</span>
 <span class="fc" id="L206">                    Timestamp startTimestamp = event.getStartTimestamp();</span>

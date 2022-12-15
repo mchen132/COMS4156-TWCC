@@ -1,5 +1,6 @@
 package com.TWCC.service;
 
+import java.util.Arrays;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -9,25 +10,20 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.TWCC.data.Event;
-
+@SuppressWarnings({
+    "checkstyle:AvoidInlineConditionals",
+    "checkstyle:SimplifyBooleanExpression",
+    "checkstyle:MethodLength",
+    "checkstyle:LineLength"
+})
 @Service
 public class EventService {
-
-    /**
-     * Gets back a list of filtered events based on the filter params and events passed in.
-     *
-     * @param filterParams Map<String, String> of Event fields as keys and their values to filter on
-     * @param events List of events
-     * @return Filtered list of events
-     */
-    @SuppressWarnings({"checkstyle:AvoidInlineConditionals", "checkstyle:MethodLength"})
     public List<Event> filterEvents(Map<String, String> filterParams, List<Event> events) {
         if (filterParams != null && events != null) {
             List<Event> remainingEvents = new ArrayList<>(events);
             for (Map.Entry<String, String> pair : filterParams.entrySet()) {
                 String key = pair.getKey();
                 String value = pair.getValue();
-
                 if (key.equals("ageLimit")) {
                     int ageLimit = Integer.parseInt(value);
                     for (
@@ -35,13 +31,11 @@ public class EventService {
                         curEvent.hasNext();
                     ) {
                         Event event = curEvent.next();
-
                         if (event.getAgeLimit() > ageLimit) {
                             curEvent.remove();
                         }
                     }
-                }
-
+}
                 if (key.equals("address")) {
                     for (
                         Iterator<Event> curEvent = remainingEvents.iterator();
@@ -58,7 +52,6 @@ public class EventService {
                         }
                     }
                 }
-
                 if (key.equals("name")) {
                     for (
                         Iterator<Event> curEvent = remainingEvents.iterator();
@@ -74,7 +67,6 @@ public class EventService {
                         }
                     }
                 }
-
                 if (key.equals("description")) {
                     for (
                         Iterator<Event> curEvent = remainingEvents.iterator();
@@ -89,7 +81,6 @@ public class EventService {
                         }
                     }
                 }
-
                 if (key.equals("cost")) {
                     int cost = Integer.parseInt(value);
                     for (
@@ -102,7 +93,6 @@ public class EventService {
                         }
                     }
                 }
-
                 if (key.equals("media")) {
                     for (
                         Iterator<Event> curEvent = remainingEvents.iterator();
@@ -117,7 +107,6 @@ public class EventService {
                         }
                     }
                 }
-
                 if (key.equals("startTimestamp")) {
                     Timestamp startTimestamp = Timestamp.valueOf(value);
                     for (
@@ -149,24 +138,53 @@ public class EventService {
                         }
                     }
                 }
-
                 if (key.equals("categories")) {
                     for (
                         Iterator<Event> curEvent = remainingEvents.iterator();
                         curEvent.hasNext();
                     ) {
                         Event event = curEvent.next();
-                        boolean findSub = event.getCategories() != null
-                            ? event.getCategories().toLowerCase().contains(value.toLowerCase())
-                            : false;
-                        if (!findSub) {
+                        String[] strSplit = event.getCategories() != null
+                            ? event.getCategories().split("[\\s,]+")
+                            : new String[0];
+
+                        // Remove empty category events and continue
+                        if (strSplit.length == 0) {
+                            curEvent.remove();
+                            continue;
+                        }
+
+                        ArrayList<String> caList = new ArrayList<String>(
+                            Arrays.asList(strSplit)
+                        );
+
+                        String categoryQueryParam = value.toLowerCase();
+
+                        for (int i = 0; i < caList.size(); i++) {
+                            String currentCategory = caList.get(i).toLowerCase();
+                            if (!categoryQueryParam.contains(currentCategory) && i != caList.size() - 1) {
+                                continue;
+                            } else if (!categoryQueryParam.contains(currentCategory) && i == caList.size() - 1) {
+                                curEvent.remove();
+                            } else if (categoryQueryParam.contains(currentCategory)) {
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (key.equals("host")) {
+                    int host = Integer.parseInt(value);
+                    for (
+                        Iterator<Event> curEvent = remainingEvents.iterator();
+                        curEvent.hasNext();
+                    ) {
+                        Event event = curEvent.next();
+                        if (event.getHost() != host) {
                             curEvent.remove();
                         }
                     }
-
                 }
             }
-
             return remainingEvents;
         } else {
             return new ArrayList<Event>();

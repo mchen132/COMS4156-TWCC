@@ -20,6 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.TWCC.data.Event;
 
+
 @TestMethodOrder(MethodOrderer.Random.class)
 @SpringBootTest
 @ActiveProfiles("test")
@@ -36,7 +37,7 @@ public class EventServiceTest {
                                 "Midterm Study session", 
                                 "This is a midterm study session", 
                                 12.5, 122.34, 50, "www.columbia.edu", 1,
-								"social, study",
+								                "social, architecture",
                                 new Timestamp(new Date().getTime() - 10), 
                                 new Timestamp(new GregorianCalendar(2022, 12, 1).getTimeInMillis()),
                                 new Timestamp(new GregorianCalendar(2022, 12, 2).getTimeInMillis()));
@@ -45,7 +46,7 @@ public class EventServiceTest {
                                 "Midterm Study session at UW", 
                                 "This is a midterm study session at UW", 
                                 12.5, 122.34, 15, "www.uw.edu", 2,
-								"social, study",
+							                	"social",
                                 new Timestamp(new Date().getTime() - 10), 
                                 new Timestamp(new GregorianCalendar(2022, 12, 3).getTimeInMillis()),
                                 new Timestamp(new GregorianCalendar(2022, 12, 4).getTimeInMillis()));
@@ -54,7 +55,7 @@ public class EventServiceTest {
                                 "Midterm Study session at UMD", 
                                 "This is a midterm study session at UMD", 
                                 12.5, 122.34, 10, "www.umd.edu", 3,
-								"social, study",
+								                "social, study",
                                 new Timestamp(new Date().getTime() - 10), 
                                 new Timestamp(new GregorianCalendar(2022, 12, 24).getTimeInMillis()),
                                 new Timestamp(new GregorianCalendar(2022, 12, 25).getTimeInMillis()));
@@ -81,6 +82,46 @@ public class EventServiceTest {
         assertEquals("Columbia", remainingEvents.get(0).getAddress());
         assertEquals("This is a midterm study session at UMD", remainingEvents.get(0).getDescription());
         assertEquals("social, study", remainingEvents.get(0).getCategories());
+    }
+
+
+    @Test
+    void testFilterEventWithHostSuccessfully() {
+        Map<String, String> filterParams = new HashMap<String, String>() {{
+            put("host", "3");
+        }};
+
+        List<Event> remainingEvents = eventService.filterEvents(filterParams, events);
+
+        assertEquals(1, remainingEvents.size());
+        assertEquals(3, remainingEvents.get(0).getHost());
+    }
+
+    @Test
+    void testFilterEventWithOneCategorySuccessfully() {
+        Map<String, String> filterParams = new HashMap<String, String>() {{
+            put("categories", "architecture");
+        }};
+
+        List<Event> remainingEvents = eventService.filterEvents(filterParams, events);
+
+        assertEquals(1, remainingEvents.size());
+        assertEquals("Midterm Study session", remainingEvents.get(0).getName());
+    }
+
+    @Test
+    void testFilterEventWithCategoriesSuccessfully() {
+        Map<String, String> filterParams = new HashMap<String, String>() {{
+            put("categories", "archiTECture,  STudy ,food");
+        }};
+
+        List<Event> remainingEvents = eventService.filterEvents(filterParams, events);
+
+        assertEquals(2, remainingEvents.size());
+        assertEquals(event1.getName(), remainingEvents.get(0).getName());
+        assertEquals(event1.getAddress(), remainingEvents.get(0).getAddress());
+        assertEquals(event3.getName(), remainingEvents.get(1).getName());
+        assertEquals(event3.getAddress(), remainingEvents.get(1).getAddress());
     }
 
     @Test

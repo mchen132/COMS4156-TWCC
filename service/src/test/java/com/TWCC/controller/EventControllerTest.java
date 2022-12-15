@@ -44,7 +44,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @TestMethodOrder(MethodOrderer.Random.class)
 @WebMvcTest(EventController.class)
-@SuppressWarnings({"checkstyle:AvoidInlineConditionals", "checkstyle:LineLengthCheck", "checkstyle:StaticVariableNameCheck", "checkstyle:MagicNumberCheck", "checkstyle:VisibilityModifierCheck", "checkstyle:FileTabCharacterCheck"})
 public class EventControllerTest {
     @Autowired
     MockMvc mockMvc;
@@ -445,6 +444,23 @@ public class EventControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$", notNullValue()))
 				.andExpect(jsonPath("$.totalNumberOfEvents", is(3)));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	@WithMockUser
+	void testGetEventStatisticsWithHostIdSuccessfully() {
+		Mockito
+			.when(eventRepository.findByHost(anyInt()))
+			.thenReturn(new ArrayList<Event>() {{ add(events.get(1)); }});
+
+		try {
+			mockMvc.perform(MockMvcRequestBuilders.get("/events/statistics/2"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", notNullValue()))
+				.andExpect(jsonPath("$.totalNumberOfEvents", is(1)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

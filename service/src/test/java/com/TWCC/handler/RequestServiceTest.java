@@ -14,9 +14,9 @@ import org.junit.jupiter.api.MethodOrderer;
 
 import com.TWCC.api.RequestService;
 
+
 @TestMethodOrder(MethodOrderer.Random.class)
 @ExtendWith(MockitoExtension.class)
-// @RestClientTest
 public class RequestServiceTest {
 
     @Mock
