@@ -249,13 +249,10 @@ public class Event {
         if (getClass() != obj.getClass()) {
             return false;
         }
-
         Event other = (Event) obj;
-
         if (id != other.id) {
             return false;
         }
-
         if (address == null) {
             if (other.address != null) {
                 return false;
@@ -263,11 +260,9 @@ public class Event {
         } else if (!address.equals(other.address)) {
             return false;
         }
-
         if (ageLimit != other.ageLimit) {
             return false;
         }
-
         if (name == null) {
             if (other.name != null) {
                 return false;
@@ -275,7 +270,6 @@ public class Event {
         } else if (!name.equals(other.name)) {
             return false;
         }
-
         if (description == null) {
             if (other.description != null) {
                 return false;
@@ -296,14 +290,9 @@ public class Event {
         ) {
             return false;
         }
-
-        if (
-            Float.floatToIntBits(cost)
-            != Float.floatToIntBits(other.cost)
-        ) {
+        if (Float.floatToIntBits(cost) != Float.floatToIntBits(other.cost)) {
             return false;
         }
-
         if (media == null) {
             if (other.media != null) {
                 return false;
@@ -311,7 +300,16 @@ public class Event {
         } else if (!media.equals(other.media)) {
             return false;
         }
-
+        if (host != other.host) {
+            return false;
+        }
+        if (categories == null) {
+            if (other.categories != null) {
+                return false;
+            }
+        } else if (!categories.equals(other.categories)) {
+            return false;
+        }
         if (creationTimestamp == null) {
             if (other.creationTimestamp != null) {
                 return false;
@@ -333,7 +331,6 @@ public class Event {
         } else if (!endTimestamp.equals(other.endTimestamp)) {
             return false;
         }
-
         return true;
     }
 

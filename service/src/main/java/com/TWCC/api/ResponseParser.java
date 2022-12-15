@@ -420,6 +420,7 @@ public class ResponseParser {
                                 ).get("name")
                         ).toString();
 
+        segment = segment.substring(1, segment.length() - 1);
         category += segment;
 
         if (categoryMap.get("genre") == null) {
@@ -435,6 +436,7 @@ public class ResponseParser {
                                 ).get("name")
                         ).toString();
 
+        genre = genre.substring(1, genre.length() - 1);
         category += "," + genre;
 
         if (categoryMap.get("subGenre") == null) {
@@ -450,6 +452,7 @@ public class ResponseParser {
                                 ).get("name")
                         ).toString();
 
+        subGenre = subGenre.substring(1, subGenre.length() - 1);
         category += "," + subGenre;
 
         return category;
