@@ -289,10 +289,41 @@ public class EventController {
      *
      * @return ResponseEntity containing various TWCC event statistics
      */
-    @GetMapping("/events/statistics")
-    public ResponseEntity<?> getEventStatistics() {
+    @GetMapping(value = {"/events/statistics", "/events/statistics/{hostId}"})
+    public ResponseEntity<?> getEventStatistics(
+        @PathVariable(required = false) String hostId
+    ) {
         EventStatistics eventStats = new EventStatistics();
-        List<Event> events = eventRepository.findAll();
+        List<Event> events;
+
+        if (hostId == null) {
+            events = eventRepository.findAll();
+        } else {
+            try {
+                int parsedHostId = Integer.parseInt(hostId);
+                events = eventRepository.findByHost(parsedHostId);
+
+                if (events.isEmpty()) {
+                    return ResponseEntity.badRequest().body(
+                        new MessageResponse(
+                            String.format(
+                                "There are no event statistics for this host: %s",
+                                hostId
+                            ),
+                            HttpStatus.BAD_REQUEST.value()
+                        )
+                    );
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.badRequest().body(
+                    new MessageResponse(
+                        "hostId needs to be an integer.",
+                        HttpStatus.BAD_REQUEST.value()
+                    )
+                );
+            }
+        }
 
         try {
             eventStats = eventStats
@@ -317,7 +348,7 @@ public class EventController {
 
             return ResponseEntity.ok().body(eventStats);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e);
+            return ResponseEntity.internalServerError().body(e);
         }
     }
 }
