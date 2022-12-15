@@ -33,7 +33,6 @@ import com.TWCC.payload.JwtResponse;
 @TestMethodOrder(MethodOrderer.Random.class)
 @SpringBootTest
 @ActiveProfiles("test")
-@SuppressWarnings({"checkstyle:AvoidInlineConditionals", "checkstyle:LineLengthCheck", "checkstyle:StaticVariableNameCheck", "checkstyle:MagicNumberCheck", "checkstyle:VisibilityModifierCheck", "checkstyle:FileTabCharacterCheck"})
 public class EventControllerIntegrationTest {
     @Autowired
     private EventController eventController;

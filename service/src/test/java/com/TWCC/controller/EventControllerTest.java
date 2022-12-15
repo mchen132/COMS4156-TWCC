@@ -44,7 +44,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @TestMethodOrder(MethodOrderer.Random.class)
 @WebMvcTest(EventController.class)
-@SuppressWarnings({"checkstyle:AvoidInlineConditionals", "checkstyle:LineLengthCheck", "checkstyle:StaticVariableNameCheck", "checkstyle:MagicNumberCheck", "checkstyle:VisibilityModifierCheck", "checkstyle:FileTabCharacterCheck"})
 public class EventControllerTest {
     @Autowired
     MockMvc mockMvc;
