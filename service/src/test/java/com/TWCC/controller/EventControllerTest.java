@@ -44,6 +44,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @TestMethodOrder(MethodOrderer.Random.class)
 @WebMvcTest(EventController.class)
+@SuppressWarnings({"checkstyle:AvoidInlineConditionals", "checkstyle:LineLengthCheck", "checkstyle:StaticVariableNameCheck", "checkstyle:MagicNumberCheck", "checkstyle:VisibilityModifierCheck", "checkstyle:FileTabCharacterCheck"})
 public class EventControllerTest {
     @Autowired
     MockMvc mockMvc;
@@ -54,9 +55,9 @@ public class EventControllerTest {
     @MockBean
     EventRepository eventRepository;
 
-	@MockBean
+    @MockBean
 	EventService eventService;
-	
+
 	@MockBean
 	JwtUtils jwtUtils;
 
@@ -80,33 +81,33 @@ public class EventControllerTest {
 
 	@BeforeEach
     void setUp() {
-        event1 = new Event(1, "Columbia", 18, 
-                                "Midterm Study session", 
-                                "This is a midterm study session", 
+        event1 = new Event(1, "Columbia", 18,
+                                "Midterm Study session",
+                                "This is a midterm study session",
                                 12.5, 122.34, 0, "www.columbia.edu", 1,
 								"social, study",
-                                new Timestamp(new Date().getTime() - 10), 
+                                new Timestamp(new Date().getTime() - 10),
                                 new Timestamp(new Date().getTime() + 5),
                                 new Timestamp(new Date().getTime() + 10));
-        
-        event2 = new Event(2, "UW", 18, 
-                                "Midterm Study session at UW", 
-                                "This is a midterm study session at UW", 
+
+        event2 = new Event(2, "UW", 18,
+                                "Midterm Study session at UW",
+                                "This is a midterm study session at UW",
                                 12.5, 122.34, 0, "www.uw.edu", 2,
 								"social, study",
-                                new Timestamp(new Date().getTime() - 10), 
-                                new Timestamp(new Date().getTime() + 5), 
+                                new Timestamp(new Date().getTime() - 10),
+                                new Timestamp(new Date().getTime() + 5),
                                 new Timestamp(new Date().getTime() + 10));
 
-        event3 = new Event(3, "Columbia", 18, 
-                                "Midterm Study session at UMD", 
-                                "This is a midterm study session at UMD", 
+        event3 = new Event(3, "Columbia", 18,
+                                "Midterm Study session at UMD",
+                                "This is a midterm study session at UMD",
                                 12.5, 122.34, 0, "www.umd.edu", 3,
 								"social, study",
-                                new Timestamp(new Date().getTime() - 10), 
-                                new Timestamp(new Date().getTime() + 5), 
+                                new Timestamp(new Date().getTime() - 10),
+                                new Timestamp(new Date().getTime() + 5),
                                 new Timestamp(new Date().getTime() + 10));
-    
+
         events.add(event1);
         events.add(event2);
         events.add(event3);
@@ -119,9 +120,9 @@ public class EventControllerTest {
 
     @AfterAll
     static void afterClass() {
-        // TODO: cleanup after all tests
+        // to-do: cleanup after all tests
     }
-    
+
 
     @Test
 	@WithMockUser
@@ -145,7 +146,7 @@ public class EventControllerTest {
         Mockito.when(eventRepository.findByAddress("Columbia")).thenReturn(new ArrayList<>(Arrays.asList(event1, event3)));
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/events/byaddress/Columbia");
-        
+
         try {
             mockMvc.perform(request)
                     .andExpect(status().isOk())
@@ -163,7 +164,7 @@ public class EventControllerTest {
         Mockito.when(eventRepository.findById(event1.getId())).thenReturn(java.util.Optional.of(event1));
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/events/1");
-        
+
         try {
             mockMvc.perform(request)
                     .andExpect(status().isOk())
@@ -180,7 +181,7 @@ public class EventControllerTest {
         Mockito.when(eventRepository.findById(event1.getId())).thenReturn(Optional.empty());
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/events/1");
-        
+
         try {
             mockMvc.perform(request)
 				.andExpect(status().isNotFound());
@@ -197,13 +198,13 @@ public class EventControllerTest {
 
 		try {
 			MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/filterEvents?address=Columbia&description=UMD&categories=social");
-						
+
 			mockMvc.perform(mockRequest)
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].address", is("Columbia")))
 				.andExpect(jsonPath("$[0].description", is("This is a midterm study session at UMD")))
 				.andExpect(jsonPath("$[0].categories", is("social, study")));
-		} catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -214,8 +215,8 @@ public class EventControllerTest {
 		Event eventToCreate = new Event(
 			1,
 			"Columbia",
-			18, 
-            "Midterm Study Session", 
+			18,
+            "Midterm Study Session",
             "This is a midterm study session",
             12.5,
             122.34,
@@ -227,12 +228,12 @@ public class EventControllerTest {
             new Timestamp(new Date().getTime() + 5),
             new Timestamp(new Date().getTime() + 10)
         );
-		
+
 		Mockito.when(eventRepository.save(any())).thenReturn(eventToCreate);
 		Mockito.when(userDetailsService.loadUserByUsername(any())).thenReturn(new UserDetailsExt(
 			3, null, null, null, null, null
 		));
-		
+
 		try {
 			CsrfToken csrfToken = (CsrfToken) csrfTokenRepo.generateToken(new MockHttpServletRequest());
 
@@ -243,7 +244,7 @@ public class EventControllerTest {
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON)
 					.content(this.objectMapper.writeValueAsString(eventToCreate));
-			
+
 			mockMvc.perform(mockRequest)
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$", notNullValue()))
@@ -272,7 +273,7 @@ public class EventControllerTest {
 					.sessionAttr(CSRF_TOKEN_NAME, csrfToken) // Need to pass CSRF Token for POST requests
 					.param(csrfToken.getParameterName(), csrfToken.getToken())
 					.header("Authorization", csrfToken.getToken())
-					.content(this.objectMapper.writeValueAsString(new HashMap<String, Object>() {{					
+					.content(this.objectMapper.writeValueAsString(new HashMap<String, Object>() {{
 						put("address", "Columbia");
 						put("ageLimit", 18);
 						put("name", "Midterm Study Session");
@@ -287,9 +288,9 @@ public class EventControllerTest {
 					}}))
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON);
-			
+
 			mockMvc.perform(mockRequest)
-					.andExpect(status().isBadRequest());			
+					.andExpect(status().isBadRequest());
 		} catch (Exception e) {
 			e.getStackTrace();
 		}
@@ -359,7 +360,7 @@ public class EventControllerTest {
 				.sessionAttr(CSRF_TOKEN_NAME, csrfToken)
 				.param(csrfToken.getParameterName(), csrfToken.getToken())
 				.header("Authorization", csrfToken.getToken())
-				.content(this.objectMapper.writeValueAsString(new HashMap<String, String>() {{		
+				.content(this.objectMapper.writeValueAsString(new HashMap<String, String>() {{
 					put("id", "1");
 					put("address", "Mudd");
 					put("ageLimit", "18");
