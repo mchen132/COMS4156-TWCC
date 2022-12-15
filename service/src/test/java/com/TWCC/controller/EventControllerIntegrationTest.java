@@ -5,10 +5,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,18 +20,32 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.TWCC.data.Event;
+import com.TWCC.data.TwccUser;
 import com.TWCC.payload.MessageResponse;
 import com.TWCC.repository.EventRepository;
+import com.TWCC.repository.UserRepository;
+import com.TWCC.service.EventService;
+import com.TWCC.payload.LoginRequest;
+import com.TWCC.payload.JwtResponse;
 
 @SpringBootTest
 @ActiveProfiles("test")
 @SuppressWarnings({"checkstyle:AvoidInlineConditionals", "checkstyle:LineLengthCheck", "checkstyle:StaticVariableNameCheck", "checkstyle:MagicNumberCheck", "checkstyle:VisibilityModifierCheck", "checkstyle:FileTabCharacterCheck"})
 public class EventControllerIntegrationTest {
     @Autowired
-    EventController eventController;
+    private EventController eventController;
 
     @Autowired
-    EventRepository eventRepository;
+    private EventRepository eventRepository;
+
+    @Autowired
+    private EventService eventService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserController userController;
 
     private List<Event> events = new ArrayList<>();
     private Event event1, event2, event3;
@@ -68,6 +85,13 @@ public class EventControllerIntegrationTest {
         events.add(event1);
         events.add(event2);
         events.add(event3);
+
+    }
+
+    @AfterEach
+    void tearDown() {
+        events.clear();
+        eventRepository.deleteAll();
     }
 
     @Test
@@ -89,15 +113,17 @@ public class EventControllerIntegrationTest {
     void testGetEventsByIdSuccessfully() {
         // Given
         eventRepository.saveAll(events);
+        Event event = eventRepository.findAll().get(1);
+        int eventId = event.getId();
 
         // When
-        ResponseEntity<?> response = eventController.getEventsById(event1.getId());
+        ResponseEntity<?> response = eventController.getEventsById(eventId);
 
         try {
             // Then
             assertEquals(HttpStatus.OK, response.getStatusCode());
             Optional<Event> eventResponse = (Optional<Event>) response.getBody();
-            assertEquals(event1.getName(), eventResponse.get().getName());
+            assertEquals(event.getName(), eventResponse.get().getName());
         } catch (Exception e) {
             e.printStackTrace();
             assertTrue(false);
@@ -110,13 +136,171 @@ public class EventControllerIntegrationTest {
         eventRepository.saveAll(events);
 
         // When
-        ResponseEntity<?> response = eventController.getEventsById(5);
+        ResponseEntity<?> response = eventController.getEventsById(500);
 
         try {
             // Then
             assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
             MessageResponse messageResponse = (MessageResponse) response.getBody();
-            assertEquals("Event ID: 5 does not exist", messageResponse.getMessage());
+            assertEquals("Event ID: 500 does not exist", messageResponse.getMessage());
+            assertEquals(HttpStatus.NOT_FOUND.value(), messageResponse.getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    void testGetEventsByAddress() {
+        // Given
+        eventRepository.saveAll(events);
+
+        // When
+        List<Event> events = eventController.getEventsByAddress(event2.getAddress());
+
+        //Then
+        assertEquals(1, events.size());
+        assertEquals(event2.getName(), events.get(0).getName());
+    }
+
+    @Test
+    void testFilterEvent() {
+        // Given
+        eventRepository.saveAll(events);
+
+        // When
+        Map<String, String> allParams = new HashMap<String, String>();
+        allParams.put("address", "Columbia");
+        List<Event> filteredEvents = eventService.filterEvents(allParams, events);
+
+        assertEquals(2, filteredEvents.size());
+        assertEquals(allParams.get("address"), filteredEvents.get(0).getAddress());
+        assertEquals(allParams.get("address"), filteredEvents.get(1).getAddress());
+    }
+
+    @Test
+    void testCreateEventSuccessfully() {
+        // Given
+        Event newEvent = new Event(4, "NYU", 22,
+            "test session for course 4156",
+            "This is the test session for course 4156",
+            12.5, 122.34, 0, "www.google.com", 4,
+            "social, study",
+            new Timestamp(new Date().getTime() - 10),
+            new Timestamp(new Date().getTime() + 5),
+            new Timestamp(new Date().getTime() + 10)
+        );
+
+        TwccUser newUser = new TwccUser(
+            1,
+            "foo",
+            "bar",
+            25,
+            "foobar",
+            "12345",
+            "foobar@baz.com"
+        );
+
+        userController.registerUser(newUser);
+        ResponseEntity<?> loginResponse = userController.loginUser(new LoginRequest(newUser.getUsername(), "12345"));
+        JwtResponse jwtResponse = (JwtResponse) loginResponse.getBody();
+        System.out.println(jwtResponse.getToken());
+
+        // When
+        ResponseEntity<?> response = eventController.createEvent(newEvent, "Bearer " + jwtResponse.getToken());
+
+        try {
+            // Then
+            assertEquals(HttpStatus.OK, response.getStatusCode());
+            Event eventResponse = (Event) response.getBody();
+            assertEquals(newEvent.getName(), eventResponse.getName());
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    void testDeleteEventByIdSuccessfully() {
+        // Given
+        eventRepository.saveAll(events);
+        int eventId = eventRepository.findAll().get(0).getId();
+
+        // When
+        ResponseEntity<?> response = eventController.deleteEventById(eventId);
+
+        try {
+            // Then
+            assertEquals(HttpStatus.OK, response.getStatusCode());
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    void testDeleteEventByIdNotFound() {
+        // Given
+        eventRepository.saveAll(events);
+
+        // When
+        ResponseEntity<?> response = eventController.deleteEventById(6);
+
+        try {
+            // Then
+            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+            MessageResponse messageResponse = (MessageResponse) response.getBody();
+            assertEquals("Event ID: 6 does not exist", messageResponse.getMessage());
+            assertEquals(HttpStatus.NOT_FOUND.value(), messageResponse.getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    void testUpdateEventSuccessfully() {
+        // Given
+        eventRepository.saveAll(events);
+        int eventId = eventRepository.findAll().get(0).getId();
+
+        // When
+        HashMap<String, String> jsonObject = new HashMap<String, String>();
+        jsonObject.put("id", String.valueOf(eventId));
+        jsonObject.put("description", "This is not a midterm study session");
+        ResponseEntity<?> response = eventController.updateEvent(jsonObject);
+
+        try {
+            // Then
+            assertEquals(HttpStatus.OK, response.getStatusCode());
+            Optional<Event> eventResponse = (Optional<Event>) response.getBody();
+            assertEquals(jsonObject.get("description"), eventResponse.get().getDescription());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void testUpdateEventRecordNotFound() {
+        // Given
+        eventRepository.saveAll(events);
+        int eventId = eventRepository.findAll().get(0).getId();
+        eventRepository.deleteById(eventId);
+
+        // When
+        HashMap<String, String> jsonObject = new HashMap<String, String>();
+        jsonObject.put("id", String.valueOf(eventId));
+        jsonObject.put("description", "This is not a midterm study session");
+
+        System.out.println(eventRepository.findAll());
+
+        ResponseEntity<?> response = eventController.updateEvent(jsonObject);
+
+        try {
+            // Then
+            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+            MessageResponse messageResponse = (MessageResponse) response.getBody();
+            assertEquals("Event ID: " + eventId + " does not exist", messageResponse.getMessage());
             assertEquals(HttpStatus.NOT_FOUND.value(), messageResponse.getStatus());
         } catch (Exception e) {
             e.printStackTrace();
