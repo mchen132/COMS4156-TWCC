@@ -17,6 +17,11 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.TWCC.data.Event;
 
+@SuppressWarnings({"checkstyle:AvoidInlineConditionals", "checkstyle:TodoCommentCheck",
+"checkstyle:LineLengthCheck",
+"checkstyle:StaticVariableNameCheck", "checkstyle:MagicNumberCheck",
+"checkstyle:VisibilityModifierCheck", "checkstyle:FileTabCharacterCheck", "checkstyle:SimplifyBooleanExpressionCheck", "checkstyle:MethodLengthCheck", "checkstyle:RegexpSinglelineCheck"})
+
 @SpringBootTest
 @ActiveProfiles("test")
 public class EventStatisticServiceTest {
@@ -341,9 +346,9 @@ public class EventStatisticServiceTest {
 
         // Then
         assertEquals(3, numberOfEventsByCategoryTimeRanges.keySet().size());
-        assert(numberOfEventsByCategoryTimeRanges.containsKey("11-2022-1"));
-        assert(numberOfEventsByCategoryTimeRanges.containsKey("11-2022-2"));
-        assert(numberOfEventsByCategoryTimeRanges.containsKey("11-2022-4"));
+        assert (numberOfEventsByCategoryTimeRanges.containsKey("11-2022-1"));
+        assert (numberOfEventsByCategoryTimeRanges.containsKey("11-2022-2"));
+        assert (numberOfEventsByCategoryTimeRanges.containsKey("11-2022-4"));
         Map<String, Integer> numberOfEventsByCategory1 = numberOfEventsByCategoryTimeRanges.get("11-2022-1");
         Map<String, Integer> numberOfEventsByCategory2 = numberOfEventsByCategoryTimeRanges.get("11-2022-2");
         Map<String, Integer> numberOfEventsByCategory3 = numberOfEventsByCategoryTimeRanges.get("11-2022-4");

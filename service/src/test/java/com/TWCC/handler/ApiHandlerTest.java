@@ -23,6 +23,11 @@ import com.TWCC.api.ApiHandler;
 import com.TWCC.data.Event;
 import com.TWCC.repository.EventRepository;
 
+@SuppressWarnings({"checkstyle:AvoidInlineConditionals", "checkstyle:TodoCommentCheck",
+"checkstyle:LineLengthCheck",
+"checkstyle:StaticVariableNameCheck", "checkstyle:MagicNumberCheck",
+"checkstyle:VisibilityModifierCheck", "checkstyle:FileTabCharacterCheck", "checkstyle:SimplifyBooleanExpressionCheck", "checkstyle:MethodLengthCheck", "checkstyle:RegexpSinglelineCheck"})
+
 @ExtendWith(MockitoExtension.class)
 public class ApiHandlerTest {
     
@@ -83,7 +88,7 @@ public class ApiHandlerTest {
 
         verify(eventRepository, times(3)).save(any(Event.class));
 
-        for (int idx = 0; idx < events.size(); idx ++) {
+        for (int idx = 0; idx < events.size(); idx++) {
 
             assertEquals(events.get(idx), response.get(idx));
 

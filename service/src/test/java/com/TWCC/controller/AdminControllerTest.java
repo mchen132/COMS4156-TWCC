@@ -32,6 +32,11 @@ import com.TWCC.data.Event;
 import com.TWCC.repository.EventRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@SuppressWarnings({"checkstyle:AvoidInlineConditionals", "checkstyle:TodoCommentCheck",
+"checkstyle:LineLengthCheck",
+"checkstyle:StaticVariableNameCheck", "checkstyle:MagicNumberCheck",
+"checkstyle:VisibilityModifierCheck", "checkstyle:FileTabCharacterCheck", "checkstyle:SimplifyBooleanExpressionCheck", "checkstyle:MethodLengthCheck", "checkstyle:RegexpSinglelineCheck"})
+
 @WebMvcTest(AdminController.class)
 @ExtendWith(MockitoExtension.class)
 public class AdminControllerTest {

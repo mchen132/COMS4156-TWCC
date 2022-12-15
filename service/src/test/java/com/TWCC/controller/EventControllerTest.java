@@ -24,10 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
+// import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.util.NestedServletException;
+// import org.springframework.web.util.NestedServletException;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -42,6 +42,11 @@ import com.TWCC.security.UserDetailsExt;
 import com.TWCC.security.UserDetailsServiceExt;
 import com.TWCC.service.EventStatisticService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+@SuppressWarnings({"checkstyle:AvoidInlineConditionals", "checkstyle:TodoCommentCheck",
+"checkstyle:LineLengthCheck",
+"checkstyle:StaticVariableNameCheck", "checkstyle:MagicNumberCheck",
+"checkstyle:VisibilityModifierCheck", "checkstyle:FileTabCharacterCheck", "checkstyle:SimplifyBooleanExpressionCheck", "checkstyle:MethodLengthCheck", "checkstyle:RegexpSinglelineCheck"})
 
 @WebMvcTest(EventController.class)
 public class EventControllerTest {
@@ -203,7 +208,7 @@ public class EventControllerTest {
 				.andExpect(jsonPath("$[0].address", is("Columbia")))
 				.andExpect(jsonPath("$[0].description", is("This is a midterm study session at UMD")))
 				.andExpect(jsonPath("$[0].categories", is("social, study")));
-		} catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

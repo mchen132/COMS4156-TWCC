@@ -7,6 +7,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import com.TWCC.controller.EventController;
 
+@SuppressWarnings({"checkstyle:AvoidInlineConditionals", "checkstyle:TodoCommentCheck",
+"checkstyle:LineLengthCheck",
+"checkstyle:StaticVariableNameCheck", "checkstyle:MagicNumberCheck",
+"checkstyle:VisibilityModifierCheck", "checkstyle:FileTabCharacterCheck", "checkstyle:SimplifyBooleanExpressionCheck", "checkstyle:MethodLengthCheck", "checkstyle:RegexpSinglelineCheck"})
+
 @SpringBootTest
 class NycTodoServiceApplicationTests {
 	

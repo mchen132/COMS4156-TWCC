@@ -11,6 +11,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.TWCC.api.RequestService;
 
+@SuppressWarnings({"checkstyle:AvoidInlineConditionals", "checkstyle:TodoCommentCheck",
+"checkstyle:LineLengthCheck",
+"checkstyle:StaticVariableNameCheck", "checkstyle:MagicNumberCheck",
+"checkstyle:VisibilityModifierCheck", "checkstyle:FileTabCharacterCheck", "checkstyle:SimplifyBooleanExpressionCheck", "checkstyle:MethodLengthCheck", "checkstyle:RegexpSinglelineCheck"})
+
 @ExtendWith(MockitoExtension.class)
 // @RestClientTest
 public class RequestServiceTest {

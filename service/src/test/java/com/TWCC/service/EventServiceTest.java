@@ -17,6 +17,12 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.TWCC.data.Event;
 
+@SuppressWarnings({"checkstyle:AvoidInlineConditionals",
+"checkstyle:LineLengthCheck",
+"checkstyle:StaticVariableNameCheck", "checkstyle:MagicNumberCheck",
+"checkstyle:VisibilityModifierCheck", "checkstyle:FileTabCharacterCheck", "checkstyle:SimplifyBooleanExpressionCheck", "checkstyle:MethodLengthCheck", "checkstyle:RegexpSinglelineCheck"})
+
+
 @SpringBootTest
 @ActiveProfiles("test")
 public class EventServiceTest {
@@ -32,7 +38,7 @@ public class EventServiceTest {
                                 "Midterm Study session", 
                                 "This is a midterm study session", 
                                 12.5, 122.34, 0, "www.columbia.edu", 1,
-								"social, study",
+								"social, architecture",
                                 new Timestamp(new Date().getTime() - 10), 
                                 new Timestamp(new Date().getTime() + 5),
                                 new Timestamp(new Date().getTime() + 10));
@@ -41,7 +47,7 @@ public class EventServiceTest {
                                 "Midterm Study session at UW", 
                                 "This is a midterm study session at UW", 
                                 12.5, 122.34, 0, "www.uw.edu", 2,
-								"social, study",
+								"social",
                                 new Timestamp(new Date().getTime() - 10), 
                                 new Timestamp(new Date().getTime() + 5), 
                                 new Timestamp(new Date().getTime() + 10));
@@ -77,6 +83,44 @@ public class EventServiceTest {
         assertEquals("Columbia", remainingEvents.get(0).getAddress());
         assertEquals("This is a midterm study session at UMD", remainingEvents.get(0).getDescription());
         assertEquals("social, study", remainingEvents.get(0).getCategories());
+    }
+
+
+    @Test
+    void testFilterEventWithHostSuccessfully() {
+        Map<String, String> filterParams = new HashMap<String, String>() {{
+            put("host", "3");
+        }};
+
+        List<Event> remainingEvents = eventService.filterEvents(filterParams, events);
+
+        assertEquals(1, remainingEvents.size());
+        assertEquals(3, remainingEvents.get(0).getHost());
+    }
+
+    @Test
+    void testFilterEventWithOneCategorySuccessfully() {
+        Map<String, String> filterParams = new HashMap<String, String>() {{
+            put("categories", "architecture");
+        }};
+
+        List<Event> remainingEvents = eventService.filterEvents(filterParams, events);
+
+        assertEquals(1, remainingEvents.size());
+        assertEquals("Midterm Study session", remainingEvents.get(0).getName());
+    }
+
+    @Test
+    void testFilterEventWithCategoriesSuccessfully() {
+        Map<String, String> filterParams = new HashMap<String, String>() {{
+            put("categories", "architecture,study");
+        }};
+
+        List<Event> remainingEvents = eventService.filterEvents(filterParams, events);
+
+        assertEquals(2, remainingEvents.size());
+        assertEquals("Columbia", remainingEvents.get(0).getAddress());
+        assertEquals("Columbia", remainingEvents.get(1).getAddress());
     }
 
     @Test
