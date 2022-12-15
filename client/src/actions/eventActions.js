@@ -105,9 +105,9 @@ export const deleteEvent = async (eventId) => {
     }
 };
 
-export const getEventStatistics = async () => {
+export const getEventStatistics = async (hostId) => {
     try {
-        const res = await axios.get("http://localhost:8080/events/statistics");
+        const res = await axios.get(`http://localhost:8080/events/statistics${hostId ? '/' + hostId : ''}`);
 
         if (res.status === 200) {
             return res.data;
