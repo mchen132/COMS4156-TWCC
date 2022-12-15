@@ -56,6 +56,8 @@ public class EventControllerIntegrationTest {
 
 	@BeforeEach
     void setUp() {
+        eventRepository.deleteAll();
+
         event1 = new Event(1, "Columbia", 18,
             "Midterm Study session",
             "This is a midterm study session",
@@ -89,7 +91,7 @@ public class EventControllerIntegrationTest {
         events.add(event1);
         events.add(event2);
         events.add(event3);
-
+        
     }
 
     @AfterEach
