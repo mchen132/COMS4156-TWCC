@@ -20,7 +20,7 @@ public class EventStatisticService {
      */
     public Map<String, Integer> getNumberOfEventsByCategory(List<Event> events) {
         Map<String, Integer> numberOfEventsByCategory = new HashMap<String, Integer>();
-        if (events != null) {
+        if (events != null && !events.isEmpty()) {
             for (Event event: events) {
                 if (event.getCategories() != null) {
                     String[] categories = event.getCategories().split(",");
@@ -52,7 +52,7 @@ public class EventStatisticService {
      * @return the average age limit for events
      */
     public int getAverageAgeLimitForEvents(List<Event> events) {
-        if (events != null) {
+        if (events != null && !events.isEmpty()) {
             int totalNumberOfEvents = events.size();
             int ageLimitTotal = 0;
             for (Event event: events) {
@@ -75,7 +75,7 @@ public class EventStatisticService {
         Map<String, Integer> averageAgeLimitOfEventsByCategory = new HashMap<String, Integer>();
         Map<String, Integer> numberOfEventsByCategory = new HashMap<String, Integer>();
 
-        if (events != null) {
+        if (events != null && !events.isEmpty()) {
             for (Event event: events) {
                 if (event.getCategories() != null) {
                     String[] categories = event.getCategories().split(",");
@@ -124,7 +124,7 @@ public class EventStatisticService {
      * @return the average cost for events
      */
     public float getAverageCostForEvents(List<Event> events) {
-        if (events != null) {
+        if (events != null && !events.isEmpty()) {
             int totalNumberOfEvents = events.size();
             float costTotal = 0;
 
@@ -148,7 +148,7 @@ public class EventStatisticService {
         Map<String, Float> averageCostOfEventsByCategory = new HashMap<String, Float>();
         Map<String, Integer> numberOfEventsByCategory = new HashMap<String, Integer>();
 
-        if (events != null) {
+        if (events != null && !events.isEmpty()) {
             for (Event event: events) {
                 if (event.getCategories() != null) {
                     String[] categories = event.getCategories().split(",");
@@ -200,7 +200,7 @@ public class EventStatisticService {
             new HashMap<String, Map<String, Integer>>();
         Calendar cal = Calendar.getInstance();
 
-        if (events != null) {
+        if (events != null && !events.isEmpty()) {
             for (Event event: events) {
                 if (event.getStartTimestamp() != null && event.getCategories() != null) {
                     Timestamp startTimestamp = event.getStartTimestamp();

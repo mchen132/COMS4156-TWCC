@@ -144,17 +144,30 @@ public class EventService {
                         curEvent.hasNext();
                     ) {
                         Event event = curEvent.next();
-                        String[] strSplit = event.getCategories().split("[\\s,]+");
+                        String[] strSplit = event.getCategories() != null
+                            ? event.getCategories().split("[\\s,]+")
+                            : new String[0];
+
+                        // Remove empty category events and continue
+                        if (strSplit.length == 0) {
+                            curEvent.remove();
+                            continue;
+                        }
+
                         ArrayList<String> caList = new ArrayList<String>(
                             Arrays.asList(strSplit)
                         );
-                        System.out.println(caList);
+
+                        String categoryQueryParam = value.toLowerCase();
+
                         for (int i = 0; i < caList.size(); i++) {
-                            System.out.println(caList.get(i));
-                            if (value.contains(caList.get(i)) == false && i != caList.size() - 1) {
+                            String currentCategory = caList.get(i).toLowerCase();
+                            if (!categoryQueryParam.contains(currentCategory) && i != caList.size() - 1) {
                                 continue;
-                            } else if (value.contains(caList.get(i)) == false && i == caList.size() - 1) {
+                            } else if (!categoryQueryParam.contains(currentCategory) && i == caList.size() - 1) {
                                 curEvent.remove();
+                            } else if (categoryQueryParam.contains(currentCategory)) {
+                                break;
                             }
                         }
                     }
