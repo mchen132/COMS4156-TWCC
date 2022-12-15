@@ -5,16 +5,25 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.TWCC.api.ResponseParser;
 import com.TWCC.data.Event;
 
+@TestMethodOrder(MethodOrderer.Random.class)
 public class ResponseParserTest {
 
     ResponseParser parser = new ResponseParser();
+    Event event;
+    static List<Event> expectedEventList;
+
 
     private String inputJsonString = """
             {
@@ -65,14 +74,32 @@ public class ResponseParserTest {
                                     \"localTime\": \"19:00:00\",
                                     \"dateTime\": \"2022-11-27T02:00:00Z\"
                                 }
-                            }
+                            },
+                            \"classifications\": [
+                                {
+                                    \"primary\": true,
+                                    \"segment\": {
+                                        \"id\": \"KZFzniwnSyZfZ7v7nE\",
+                                        \"name\": \"Sports\"
+                                    },
+                                    \"genre\": {
+                                        \"id\": \"KnvZfZ7vAdI\",
+                                        \"name\": \"Hockey\"
+                                    },
+                                    \"subGenre\": {
+                                        \"id\": \"KZazBEonSMnZfZ7vFEE\",
+                                        \"name\": \"NHL\"
+                                    }
+                                }
+                            ]
                         }
                     ]
                 }
             }
                 """;
     
-    private Event createEvent() {
+    @BeforeEach
+    void createEvent() {
         String eventName = "Phoenix Suns vs. Utah Jazz";
         String description = eventName;
 
@@ -96,15 +123,25 @@ public class ResponseParserTest {
         double longitude = -112.071313;
         double latitude = 33.445899;
 
-        return new Event(-1, address, ageLimit, eventName, description, longitude, latitude, cost, media, -1, "testCategory", creatioTimestamp, startTimestamp, endTimestamp);
+        String categories = "Sports,Hockey,NHL";
+
+        event = new Event(-1, address, ageLimit, eventName, description, longitude, latitude, cost, media, -1, categories, creatioTimestamp, startTimestamp, endTimestamp);
+    }
+
+    @BeforeAll
+    static void setup() {
+        expectedEventList = new ArrayList<>();
+    }
+
+    @AfterEach
+    void cleanup() {
+        expectedEventList.clear();
     }
 
     @Test
     void testGetAllEventsSuccess() {
         
         List<Event> testEventList = parser.processResponse(inputJsonString);
-        Event event = this.createEvent();
-        List<Event> expectedEventList = new ArrayList<>();
 
         expectedEventList.add(event);
 
@@ -145,17 +182,33 @@ public class ResponseParserTest {
                                     \"localTime\": \"19:00:00\",
                                     \"dateTime\": \"2022-11-27T02:00:00Z\"
                                 }
-                            }
+                            },
+                            \"classifications\": [
+                                {
+                                    \"primary\": true,
+                                    \"segment\": {
+                                        \"id\": \"KZFzniwnSyZfZ7v7nE\",
+                                        \"name\": \"Sports\"
+                                    },
+                                    \"genre\": {
+                                        \"id\": \"KnvZfZ7vAdI\",
+                                        \"name\": \"Hockey\"
+                                    },
+                                    \"subGenre\": {
+                                        \"id\": \"KZazBEonSMnZfZ7vFEE\",
+                                        \"name\": \"NHL\"
+                                    }
+                                }
+                            ]
                         }
                     ]
                 }
             }
                 """;
-        
-        Event event = this.createEvent();
+
+        // Event event = this.createEvent();
 
         List<Event> testEventList = parser.processResponse(jsonStringNoAddress);
-        List<Event> expectedEventList = new ArrayList<>();
 
         event.setAddress("online");
         event.setLongitude(0);
@@ -216,17 +269,31 @@ public class ResponseParserTest {
                                     \"localDate\": \"2022-11-26\",
                                     \"localTime\": \"19:00:00\"
                                 }
-                            }
+                            }, 
+                            \"classifications\": [
+                                {
+                                    \"primary\": true,
+                                    \"segment\": {
+                                        \"id\": \"KZFzniwnSyZfZ7v7nE\",
+                                        \"name\": \"Sports\"
+                                    },
+                                    \"genre\": {
+                                        \"id\": \"KnvZfZ7vAdI\",
+                                        \"name\": \"Hockey\"
+                                    },
+                                    \"subGenre\": {
+                                        \"id\": \"KZazBEonSMnZfZ7vFEE\",
+                                        \"name\": \"NHL\"
+                                    }
+                                }
+                            ]
                         }
                     ]
                 }
             }
                 """;
-        
-        Event event = this.createEvent();
 
         List<Event> testEventList = parser.processResponse(jsonStringNoStartDateTime);
-        List<Event> expectedEventList = new ArrayList<>();
 
         event.setCreationTimestamp(Timestamp.valueOf("2022-11-26 00:00:00"));
         event.setStartTimestamp(Timestamp.valueOf("2022-11-26 00:00:00"));
@@ -280,18 +347,31 @@ public class ResponseParserTest {
                                     \"localTime\": \"19:00:00\",
                                     \"dateTime\": \"2022-11-27T02:00:00Z\"
                                 }
-                            }
+                            }, 
+                            \"classifications\": [
+                                {
+                                    \"primary\": true,
+                                    \"segment\": {
+                                        \"id\": \"KZFzniwnSyZfZ7v7nE\",
+                                        \"name\": \"Sports\"
+                                    },
+                                    \"genre\": {
+                                        \"id\": \"KnvZfZ7vAdI\",
+                                        \"name\": \"Hockey\"
+                                    },
+                                    \"subGenre\": {
+                                        \"id\": \"KZazBEonSMnZfZ7vFEE\",
+                                        \"name\": \"NHL\"
+                                    }
+                                }
+                            ]
                         }
                     ]
                 }
             }
                 """;
-                
-                
-        Event event = this.createEvent();
 
         List<Event> testEventList = parser.processResponse(jsonStringNoPriceRange);
-        List<Event> expectedEventList = new ArrayList<>();
         
         event.setCost(0f);
         expectedEventList.add(event);
@@ -345,17 +425,31 @@ public class ResponseParserTest {
                                     \"localTime\": \"19:00:00\",
                                     \"dateTime\": \"2022-11-27T02:00:00Z\"
                                 }
-                            }
+                            }, 
+                            \"classifications\": [
+                                {
+                                    \"primary\": true,
+                                    \"segment\": {
+                                        \"id\": \"KZFzniwnSyZfZ7v7nE\",
+                                        \"name\": \"Sports\"
+                                    },
+                                    \"genre\": {
+                                        \"id\": \"KnvZfZ7vAdI\",
+                                        \"name\": \"Hockey\"
+                                    },
+                                    \"subGenre\": {
+                                        \"id\": \"KZazBEonSMnZfZ7vFEE\",
+                                        \"name\": \"NHL\"
+                                    }
+                                }
+                            ]
                         }
                     ]
                 }
             }
                 """;
-        
-        Event event = this.createEvent();
 
         List<Event> testEventList = parser.processResponse(jsonStringNoPriceRangeListContent);
-        List<Event> expectedEventList = new ArrayList<>();
         
         event.setCost(0f);
         expectedEventList.add(event);
@@ -413,17 +507,31 @@ public class ResponseParserTest {
                                     \"localTime\": \"19:00:00\",
                                     \"dateTime\": \"2022-11-27T02:00:00Z\"
                                 }
-                            }
+                            }, 
+                            \"classifications\": [
+                                {
+                                    \"primary\": true,
+                                    \"segment\": {
+                                        \"id\": \"KZFzniwnSyZfZ7v7nE\",
+                                        \"name\": \"Sports\"
+                                    },
+                                    \"genre\": {
+                                        \"id\": \"KnvZfZ7vAdI\",
+                                        \"name\": \"Hockey\"
+                                    },
+                                    \"subGenre\": {
+                                        \"id\": \"KZazBEonSMnZfZ7vFEE\",
+                                        \"name\": \"NHL\"
+                                    }
+                                }
+                            ]
                         }
                     ]
                 }
             }
                 """;
-        
-        Event event = this.createEvent();
 
         List<Event> testEventList = parser.processResponse(jsonStringNoMinCost);
-        List<Event> expectedEventList = new ArrayList<>();
         
         event.setCost(0f);
         expectedEventList.add(event);
@@ -479,17 +587,31 @@ public class ResponseParserTest {
                                     \"localTime\": \"19:00:00\",
                                     \"dateTime\": \"2022-11-27T02:00:00Z\"
                                 }
-                            }
+                            }, 
+                            \"classifications\": [
+                                {
+                                    \"primary\": true,
+                                    \"segment\": {
+                                        \"id\": \"KZFzniwnSyZfZ7v7nE\",
+                                        \"name\": \"Sports\"
+                                    },
+                                    \"genre\": {
+                                        \"id\": \"KnvZfZ7vAdI\",
+                                        \"name\": \"Hockey\"
+                                    },
+                                    \"subGenre\": {
+                                        \"id\": \"KZazBEonSMnZfZ7vFEE\",
+                                        \"name\": \"NHL\"
+                                    }
+                                }
+                            ]
                         }
                     ]
                 }
             }
                 """;
-        
-        Event event = this.createEvent();
 
         List<Event> testEventList = parser.processResponse(jsonStringNoAgeRestriction);
-        List<Event> expectedEventList = new ArrayList<>();
         
         event.setAgeLimit(0);
         expectedEventList.add(event);
@@ -547,17 +669,31 @@ public class ResponseParserTest {
                                     \"localTime\": \"19:00:00\",
                                     \"dateTime\": \"2022-11-27T02:00:00Z\"
                                 }
-                            }
+                            }, 
+                            \"classifications\": [
+                                {
+                                    \"primary\": true,
+                                    \"segment\": {
+                                        \"id\": \"KZFzniwnSyZfZ7v7nE\",
+                                        \"name\": \"Sports\"
+                                    },
+                                    \"genre\": {
+                                        \"id\": \"KnvZfZ7vAdI\",
+                                        \"name\": \"Hockey\"
+                                    },
+                                    \"subGenre\": {
+                                        \"id\": \"KZazBEonSMnZfZ7vFEE\",
+                                        \"name\": \"NHL\"
+                                    }
+                                }
+                            ]
                         }
                     ]
                 }
             }
                 """;
-        
-        Event event = this.createEvent();
 
         List<Event> testEventList = parser.processResponse(jsonStringNoLegalAgeEnforced);
-        List<Event> expectedEventList = new ArrayList<>();
         
         event.setAgeLimit(0);
         expectedEventList.add(event);
@@ -616,19 +752,396 @@ public class ResponseParserTest {
                                     \"localTime\": \"19:00:00\",
                                     \"dateTime\": \"2022-11-27T02:00:00Z\"
                                 }
+                            }, 
+                            \"classifications\": [
+                                {
+                                    \"primary\": true,
+                                    \"segment\": {
+                                        \"id\": \"KZFzniwnSyZfZ7v7nE\",
+                                        \"name\": \"Sports\"
+                                    },
+                                    \"genre\": {
+                                        \"id\": \"KnvZfZ7vAdI\",
+                                        \"name\": \"Hockey\"
+                                    },
+                                    \"subGenre\": {
+                                        \"id\": \"KZazBEonSMnZfZ7vFEE\",
+                                        \"name\": \"NHL\"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+                """;
+
+        List<Event> testEventList = parser.processResponse(jsonStringLegalAgeRequired);
+        
+        event.setAgeLimit(18);
+        expectedEventList.add(event);
+
+        assertEquals(testEventList, expectedEventList);
+    }
+
+    @Test
+    void testGetAllEventsNoClassifications() {
+        String jsonStringLegalAgeRequired = """
+            {
+                \"_embedded\": {
+                    \"events\": [
+                        {
+                            \"name\": \"Phoenix Suns vs. Utah Jazz\", 
+                            \"url\": \"https://www.ticketmaster.com/phoenix-suns-vs-utah-jazz-phoenix-arizona-11-26-2022/event/19005D0B8FA91548\",
+                            \"_embedded\": {
+                                \"venues\": [
+                                    {
+                                        \"name\": \"Footprint Center\",
+                                        \"city\": {
+                                            \"name\": \"Phoenix\"
+                                        }, 
+                                        \"state\": {
+                                            \"name\": \"Arizona\", 
+                                            \"stateCode\": \"AZ\"
+                                        },
+                                        \"country\": {
+                                            \"name\": \"United States of America\", 
+                                            \"countryCode\": \"US\"
+                                        }, 
+                                        \"address\": {
+                                            \"line1\": \"201 East Jefferson Street\"
+                                        }, 
+                                        \"location\": {
+                                            \"longitude\": \"-112.071313\", 
+                                            \"latitude\": \"33.445899\"
+                                        }
+                                    }
+                                ]
+                            }, 
+                            \"priceRanges\": [
+                                {
+                                    \"type\": \"standard\", 
+                                    \"currency\": \"USD\", 
+                                    \"min\": 46.0, 
+                                    \"max\": 574.0
+                                }
+                            ], 
+                            \"ageRestrictions\": {
+                                \"legalAgeEnforced\": false
+                            },
+                            \"dates\": {
+                                \"start\": {
+                                    \"localDate\": \"2022-11-26\",
+                                    \"localTime\": \"19:00:00\",
+                                    \"dateTime\": \"2022-11-27T02:00:00Z\"
+                                }
                             }
                         }
                     ]
                 }
             }
                 """;
-        
-        Event event = this.createEvent();
+            
 
         List<Event> testEventList = parser.processResponse(jsonStringLegalAgeRequired);
-        List<Event> expectedEventList = new ArrayList<>();
         
-        event.setAgeLimit(18);
+        event.setCategories(null);
+        expectedEventList.add(event);
+
+        assertEquals(testEventList, expectedEventList);
+    }
+
+    @Test
+    void testGetAllEventsEmptyClassifications() {
+        String jsonStringLegalAgeRequired = """
+            {
+                \"_embedded\": {
+                    \"events\": [
+                        {
+                            \"name\": \"Phoenix Suns vs. Utah Jazz\", 
+                            \"url\": \"https://www.ticketmaster.com/phoenix-suns-vs-utah-jazz-phoenix-arizona-11-26-2022/event/19005D0B8FA91548\",
+                            \"_embedded\": {
+                                \"venues\": [
+                                    {
+                                        \"name\": \"Footprint Center\",
+                                        \"city\": {
+                                            \"name\": \"Phoenix\"
+                                        }, 
+                                        \"state\": {
+                                            \"name\": \"Arizona\", 
+                                            \"stateCode\": \"AZ\"
+                                        },
+                                        \"country\": {
+                                            \"name\": \"United States of America\", 
+                                            \"countryCode\": \"US\"
+                                        }, 
+                                        \"address\": {
+                                            \"line1\": \"201 East Jefferson Street\"
+                                        }, 
+                                        \"location\": {
+                                            \"longitude\": \"-112.071313\", 
+                                            \"latitude\": \"33.445899\"
+                                        }
+                                    }
+                                ]
+                            }, 
+                            \"priceRanges\": [
+                                {
+                                    \"type\": \"standard\", 
+                                    \"currency\": \"USD\", 
+                                    \"min\": 46.0, 
+                                    \"max\": 574.0
+                                }
+                            ], 
+                            \"ageRestrictions\": {
+                                \"legalAgeEnforced\": false
+                            },
+                            \"dates\": {
+                                \"start\": {
+                                    \"localDate\": \"2022-11-26\",
+                                    \"localTime\": \"19:00:00\",
+                                    \"dateTime\": \"2022-11-27T02:00:00Z\"
+                                }
+                            },
+                            \"classifications\": [
+                            ]
+                        }
+                    ]
+                }
+            }
+                """;
+            
+
+        List<Event> testEventList = parser.processResponse(jsonStringLegalAgeRequired);
+        
+        event.setCategories(null);
+        expectedEventList.add(event);
+
+        assertEquals(testEventList, expectedEventList);
+    }
+
+    @Test
+    void testGetAllEventsNoSegment() {
+        String jsonStringLegalAgeRequired = """
+            {
+                \"_embedded\": {
+                    \"events\": [
+                        {
+                            \"name\": \"Phoenix Suns vs. Utah Jazz\", 
+                            \"url\": \"https://www.ticketmaster.com/phoenix-suns-vs-utah-jazz-phoenix-arizona-11-26-2022/event/19005D0B8FA91548\",
+                            \"_embedded\": {
+                                \"venues\": [
+                                    {
+                                        \"name\": \"Footprint Center\",
+                                        \"city\": {
+                                            \"name\": \"Phoenix\"
+                                        }, 
+                                        \"state\": {
+                                            \"name\": \"Arizona\", 
+                                            \"stateCode\": \"AZ\"
+                                        },
+                                        \"country\": {
+                                            \"name\": \"United States of America\", 
+                                            \"countryCode\": \"US\"
+                                        }, 
+                                        \"address\": {
+                                            \"line1\": \"201 East Jefferson Street\"
+                                        }, 
+                                        \"location\": {
+                                            \"longitude\": \"-112.071313\", 
+                                            \"latitude\": \"33.445899\"
+                                        }
+                                    }
+                                ]
+                            }, 
+                            \"priceRanges\": [
+                                {
+                                    \"type\": \"standard\", 
+                                    \"currency\": \"USD\", 
+                                    \"min\": 46.0, 
+                                    \"max\": 574.0
+                                }
+                            ], 
+                            \"ageRestrictions\": {
+                                \"legalAgeEnforced\": false
+                            },
+                            \"dates\": {
+                                \"start\": {
+                                    \"localDate\": \"2022-11-26\",
+                                    \"localTime\": \"19:00:00\",
+                                    \"dateTime\": \"2022-11-27T02:00:00Z\"
+                                }
+                            },
+                            \"classifications\": [
+                                {
+                                    \"primary\": true
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+                """;
+            
+
+        List<Event> testEventList = parser.processResponse(jsonStringLegalAgeRequired);
+        
+        event.setCategories(null);
+        expectedEventList.add(event);
+
+        assertEquals(testEventList, expectedEventList);
+    }
+
+    @Test
+    void testGetAllEventsNoGenre() {
+        String jsonStringLegalAgeRequired = """
+            {
+                \"_embedded\": {
+                    \"events\": [
+                        {
+                            \"name\": \"Phoenix Suns vs. Utah Jazz\", 
+                            \"url\": \"https://www.ticketmaster.com/phoenix-suns-vs-utah-jazz-phoenix-arizona-11-26-2022/event/19005D0B8FA91548\",
+                            \"_embedded\": {
+                                \"venues\": [
+                                    {
+                                        \"name\": \"Footprint Center\",
+                                        \"city\": {
+                                            \"name\": \"Phoenix\"
+                                        }, 
+                                        \"state\": {
+                                            \"name\": \"Arizona\", 
+                                            \"stateCode\": \"AZ\"
+                                        },
+                                        \"country\": {
+                                            \"name\": \"United States of America\", 
+                                            \"countryCode\": \"US\"
+                                        }, 
+                                        \"address\": {
+                                            \"line1\": \"201 East Jefferson Street\"
+                                        }, 
+                                        \"location\": {
+                                            \"longitude\": \"-112.071313\", 
+                                            \"latitude\": \"33.445899\"
+                                        }
+                                    }
+                                ]
+                            }, 
+                            \"priceRanges\": [
+                                {
+                                    \"type\": \"standard\", 
+                                    \"currency\": \"USD\", 
+                                    \"min\": 46.0, 
+                                    \"max\": 574.0
+                                }
+                            ], 
+                            \"ageRestrictions\": {
+                                \"legalAgeEnforced\": false
+                            },
+                            \"dates\": {
+                                \"start\": {
+                                    \"localDate\": \"2022-11-26\",
+                                    \"localTime\": \"19:00:00\",
+                                    \"dateTime\": \"2022-11-27T02:00:00Z\"
+                                }
+                            },
+                            \"classifications\": [
+                                {
+                                    \"primary\": true,
+                                    \"segment\": {
+                                        \"id\": \"KZFzniwnSyZfZ7v7nE\",
+                                        \"name\": \"Sports\"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+                """;
+            
+
+        List<Event> testEventList = parser.processResponse(jsonStringLegalAgeRequired);
+        
+        event.setCategories("Sports");
+        expectedEventList.add(event);
+
+        assertEquals(testEventList, expectedEventList);
+    }
+
+    @Test
+    void testGetAllEventsNosubGenre() {
+        String jsonStringLegalAgeRequired = """
+            {
+                \"_embedded\": {
+                    \"events\": [
+                        {
+                            \"name\": \"Phoenix Suns vs. Utah Jazz\", 
+                            \"url\": \"https://www.ticketmaster.com/phoenix-suns-vs-utah-jazz-phoenix-arizona-11-26-2022/event/19005D0B8FA91548\",
+                            \"_embedded\": {
+                                \"venues\": [
+                                    {
+                                        \"name\": \"Footprint Center\",
+                                        \"city\": {
+                                            \"name\": \"Phoenix\"
+                                        }, 
+                                        \"state\": {
+                                            \"name\": \"Arizona\", 
+                                            \"stateCode\": \"AZ\"
+                                        },
+                                        \"country\": {
+                                            \"name\": \"United States of America\", 
+                                            \"countryCode\": \"US\"
+                                        }, 
+                                        \"address\": {
+                                            \"line1\": \"201 East Jefferson Street\"
+                                        }, 
+                                        \"location\": {
+                                            \"longitude\": \"-112.071313\", 
+                                            \"latitude\": \"33.445899\"
+                                        }
+                                    }
+                                ]
+                            }, 
+                            \"priceRanges\": [
+                                {
+                                    \"type\": \"standard\", 
+                                    \"currency\": \"USD\", 
+                                    \"min\": 46.0, 
+                                    \"max\": 574.0
+                                }
+                            ], 
+                            \"ageRestrictions\": {
+                                \"legalAgeEnforced\": false
+                            },
+                            \"dates\": {
+                                \"start\": {
+                                    \"localDate\": \"2022-11-26\",
+                                    \"localTime\": \"19:00:00\",
+                                    \"dateTime\": \"2022-11-27T02:00:00Z\"
+                                }
+                            },
+                            \"classifications\": [
+                                {
+                                    \"primary\": true,
+                                    \"segment\": {
+                                        \"id\": \"KZFzniwnSyZfZ7v7nE\",
+                                        \"name\": \"Sports\"
+                                    },
+                                    \"genre\": {
+                                        \"id\": \"KnvZfZ7vAdI\",
+                                        \"name\": \"Hockey\"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+                """;
+
+        List<Event> testEventList = parser.processResponse(jsonStringLegalAgeRequired);
+
+        event.setCategories("Sports,Hockey");
         expectedEventList.add(event);
 
         assertEquals(testEventList, expectedEventList);
