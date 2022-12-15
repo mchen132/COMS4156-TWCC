@@ -171,17 +171,17 @@ import com.TWCC.service.EventStatisticService;
 
 <span class="fc" id="L172">        Event existingEvent = optionalEvent.get();</span>
 
-<span class="pc bpc" id="L174" title="1 of 2 branches missed.">        if (jsonObject.containsKey(&quot;address&quot;)) {</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">        if (jsonObject.containsKey(&quot;address&quot;)) {</span>
 <span class="fc" id="L175">            existingEvent.setAddress(jsonObject.get(&quot;address&quot;));</span>
         }
 
-<span class="pc bpc" id="L178" title="1 of 2 branches missed.">        if (jsonObject.containsKey(&quot;ageLimit&quot;)) {</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">        if (jsonObject.containsKey(&quot;ageLimit&quot;)) {</span>
 <span class="fc" id="L179">            existingEvent.setAgeLimit(</span>
 <span class="fc" id="L180">                Integer.parseInt(jsonObject.get(&quot;ageLimit&quot;))</span>
             );
         }
 
-<span class="pc bpc" id="L184" title="1 of 2 branches missed.">        if (jsonObject.containsKey(&quot;name&quot;)) {</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">        if (jsonObject.containsKey(&quot;name&quot;)) {</span>
 <span class="fc" id="L185">            existingEvent.setName(jsonObject.get(&quot;name&quot;));</span>
         }
 
@@ -189,31 +189,31 @@ import com.TWCC.service.EventStatisticService;
 <span class="fc" id="L189">            existingEvent.setDescription(jsonObject.get(&quot;description&quot;));</span>
         }
 
-<span class="pc bpc" id="L192" title="1 of 2 branches missed.">        if (jsonObject.containsKey(&quot;longitude&quot;)) {</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">        if (jsonObject.containsKey(&quot;longitude&quot;)) {</span>
 <span class="fc" id="L193">            existingEvent.setLongitude(</span>
 <span class="fc" id="L194">                Double.parseDouble(jsonObject.get(&quot;longitude&quot;))</span>
             );
         }
 
-<span class="pc bpc" id="L198" title="1 of 2 branches missed.">        if (jsonObject.containsKey(&quot;latitude&quot;)) {</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">        if (jsonObject.containsKey(&quot;latitude&quot;)) {</span>
 <span class="fc" id="L199">            existingEvent.setLatitude(</span>
 <span class="fc" id="L200">                Double.parseDouble(jsonObject.get(&quot;latitude&quot;))</span>
             );
         }
 
-<span class="pc bpc" id="L204" title="1 of 2 branches missed.">        if (jsonObject.containsKey(&quot;cost&quot;)) {</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">        if (jsonObject.containsKey(&quot;cost&quot;)) {</span>
 <span class="fc" id="L205">            existingEvent.setCost(Float.parseFloat(jsonObject.get(&quot;cost&quot;)));</span>
         }
 
-<span class="pc bpc" id="L208" title="1 of 2 branches missed.">        if (jsonObject.containsKey(&quot;media&quot;)) {</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">        if (jsonObject.containsKey(&quot;media&quot;)) {</span>
 <span class="fc" id="L209">            existingEvent.setMedia(jsonObject.get(&quot;media&quot;));</span>
         }
 
-<span class="pc bpc" id="L212" title="1 of 2 branches missed.">        if (jsonObject.containsKey(&quot;categories&quot;)) {</span>
+<span class="fc bfc" id="L212" title="All 2 branches covered.">        if (jsonObject.containsKey(&quot;categories&quot;)) {</span>
 <span class="fc" id="L213">            existingEvent.setCategories(jsonObject.get(&quot;categories&quot;));</span>
         }
 
-<span class="pc bpc" id="L216" title="1 of 2 branches missed.">        if (jsonObject.containsKey(&quot;startTimestamp&quot;)) {</span>
+<span class="fc bfc" id="L216" title="All 2 branches covered.">        if (jsonObject.containsKey(&quot;startTimestamp&quot;)) {</span>
 <span class="fc" id="L217">            String startTimestamp = jsonObject.get(&quot;startTimestamp&quot;);</span>
 <span class="fc" id="L218">            existingEvent.setStartTimestamp(</span>
 <span class="pc bpc" id="L219" title="1 of 2 branches missed.">                startTimestamp != null</span>
@@ -222,7 +222,7 @@ import com.TWCC.service.EventStatisticService;
                 );
         }
 
-<span class="pc bpc" id="L225" title="1 of 2 branches missed.">        if (jsonObject.containsKey(&quot;endTimestamp&quot;)) {</span>
+<span class="fc bfc" id="L225" title="All 2 branches covered.">        if (jsonObject.containsKey(&quot;endTimestamp&quot;)) {</span>
 <span class="fc" id="L226">            String endTimestamp = jsonObject.get(&quot;endTimestamp&quot;);</span>
 <span class="fc" id="L227">            existingEvent.setEndTimestamp(</span>
 <span class="pc bpc" id="L228" title="1 of 2 branches missed.">                endTimestamp != null</span>
@@ -234,8 +234,8 @@ import com.TWCC.service.EventStatisticService;
         try {
 <span class="fc" id="L235">            Event updatedEvent = eventRepository.save(existingEvent);</span>
 <span class="fc" id="L236">            return ResponseEntity.ok().body(</span>
-<span class="pc bpc" id="L237" title="1 of 2 branches missed.">                updatedEvent != null</span>
-<span class="nc" id="L238">                    ? updatedEvent</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">                updatedEvent != null</span>
+<span class="fc" id="L238">                    ? updatedEvent</span>
 <span class="fc" id="L239">                    : existingEvent</span>
                 );
 <span class="nc" id="L241">        } catch (Exception e) {</span>

@@ -420,39 +420,42 @@ import org.springframework.stereotype.Component;
 <span class="fc" id="L420">                                ).get(&quot;name&quot;)</span>
 <span class="fc" id="L421">                        ).toString();</span>
 
-<span class="fc" id="L423">        category += segment;</span>
+<span class="fc" id="L423">        segment = segment.substring(1, segment.length() - 1);</span>
+<span class="fc" id="L424">        category += segment;</span>
 
-<span class="fc bfc" id="L425" title="All 2 branches covered.">        if (categoryMap.get(&quot;genre&quot;) == null) {</span>
-<span class="fc" id="L426">            return category;</span>
+<span class="fc bfc" id="L426" title="All 2 branches covered.">        if (categoryMap.get(&quot;genre&quot;) == null) {</span>
+<span class="fc" id="L427">            return category;</span>
         }
 
         @SuppressWarnings(&quot;unchecked&quot;)
-<span class="fc" id="L430">        String genre = (</span>
+<span class="fc" id="L431">        String genre = (</span>
                             (TextNode)
                                 (
                                     (HashMap&lt;String, Object&gt;)
-<span class="fc" id="L434">                                        categoryMap.get(&quot;genre&quot;)</span>
-<span class="fc" id="L435">                                ).get(&quot;name&quot;)</span>
-<span class="fc" id="L436">                        ).toString();</span>
+<span class="fc" id="L435">                                        categoryMap.get(&quot;genre&quot;)</span>
+<span class="fc" id="L436">                                ).get(&quot;name&quot;)</span>
+<span class="fc" id="L437">                        ).toString();</span>
 
-<span class="fc" id="L438">        category += &quot;,&quot; + genre;</span>
+<span class="fc" id="L439">        genre = genre.substring(1, genre.length() - 1);</span>
+<span class="fc" id="L440">        category += &quot;,&quot; + genre;</span>
 
-<span class="fc bfc" id="L440" title="All 2 branches covered.">        if (categoryMap.get(&quot;subGenre&quot;) == null) {</span>
-<span class="fc" id="L441">            return category;</span>
+<span class="fc bfc" id="L442" title="All 2 branches covered.">        if (categoryMap.get(&quot;subGenre&quot;) == null) {</span>
+<span class="fc" id="L443">            return category;</span>
         }
 
         @SuppressWarnings(&quot;unchecked&quot;)
-<span class="fc" id="L445">        String subGenre = (</span>
+<span class="fc" id="L447">        String subGenre = (</span>
                             (TextNode)
                                 (
                                     (HashMap&lt;String, Object&gt;)
-<span class="fc" id="L449">                                        categoryMap.get(&quot;subGenre&quot;)</span>
-<span class="fc" id="L450">                                ).get(&quot;name&quot;)</span>
-<span class="fc" id="L451">                        ).toString();</span>
+<span class="fc" id="L451">                                        categoryMap.get(&quot;subGenre&quot;)</span>
+<span class="fc" id="L452">                                ).get(&quot;name&quot;)</span>
+<span class="fc" id="L453">                        ).toString();</span>
 
-<span class="fc" id="L453">        category += &quot;,&quot; + subGenre;</span>
+<span class="fc" id="L455">        subGenre = subGenre.substring(1, subGenre.length() - 1);</span>
+<span class="fc" id="L456">        category += &quot;,&quot; + subGenre;</span>
 
-<span class="fc" id="L455">        return category;</span>
+<span class="fc" id="L458">        return category;</span>
     }
 
     // NOTE: stringToMap(), toMap(), and toList() are inspired by the following
@@ -466,21 +469,21 @@ import org.springframework.stereotype.Component;
      * all values are cast to Object
      */
     private Map&lt;String, Object&gt; jsonStringToMap(String jsonString) {
-<span class="fc" id="L469">        Map&lt;String, Object&gt; retMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L472">        Map&lt;String, Object&gt; retMap = new HashMap&lt;&gt;();</span>
 
         try {
-<span class="fc" id="L472">            JsonNode node = this.mapper.readTree(jsonString);</span>
+<span class="fc" id="L475">            JsonNode node = this.mapper.readTree(jsonString);</span>
 
-<span class="pc bpc" id="L474" title="1 of 2 branches missed.">            if (node != null) {</span>
-<span class="fc" id="L475">                retMap = this.toMap(node);</span>
+<span class="pc bpc" id="L477" title="1 of 2 branches missed.">            if (node != null) {</span>
+<span class="fc" id="L478">                retMap = this.toMap(node);</span>
             }
 
-<span class="fc" id="L478">            return retMap;</span>
-<span class="nc" id="L479">        } catch (JsonProcessingException e) {</span>
-<span class="nc" id="L480">            e.printStackTrace();</span>
+<span class="fc" id="L481">            return retMap;</span>
+<span class="nc" id="L482">        } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L483">            e.printStackTrace();</span>
         }
 
-<span class="nc" id="L483">        return retMap;</span>
+<span class="nc" id="L486">        return retMap;</span>
     }
 
     /**
@@ -493,25 +496,25 @@ import org.springframework.stereotype.Component;
      *         of the JsonNode
      */
     private Map&lt;String, Object&gt; toMap(JsonNode rootNode) {
-<span class="fc" id="L496">        Map&lt;String, Object&gt; retMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L499">        Map&lt;String, Object&gt; retMap = new HashMap&lt;&gt;();</span>
 
-<span class="fc" id="L498">        Iterator&lt;Entry&lt;String, JsonNode&gt;&gt; iter = rootNode.fields();</span>
+<span class="fc" id="L501">        Iterator&lt;Entry&lt;String, JsonNode&gt;&gt; iter = rootNode.fields();</span>
 
-<span class="fc" id="L500">        iter.forEachRemaining(field -&gt; {</span>
-<span class="fc" id="L501">            String key = field.getKey();</span>
-<span class="fc" id="L502">            JsonNode currNode = field.getValue();</span>
-<span class="fc" id="L503">            Object value = currNode;</span>
+<span class="fc" id="L503">        iter.forEachRemaining(field -&gt; {</span>
+<span class="fc" id="L504">            String key = field.getKey();</span>
+<span class="fc" id="L505">            JsonNode currNode = field.getValue();</span>
+<span class="fc" id="L506">            Object value = currNode;</span>
 
-<span class="fc bfc" id="L505" title="All 2 branches covered.">            if (currNode.isArray()) {</span>
-<span class="fc" id="L506">                value = this.toList(currNode);</span>
-<span class="fc bfc" id="L507" title="All 2 branches covered.">            } else if (currNode.isObject()) {</span>
-<span class="fc" id="L508">                value = this.toMap(currNode);</span>
+<span class="fc bfc" id="L508" title="All 2 branches covered.">            if (currNode.isArray()) {</span>
+<span class="fc" id="L509">                value = this.toList(currNode);</span>
+<span class="fc bfc" id="L510" title="All 2 branches covered.">            } else if (currNode.isObject()) {</span>
+<span class="fc" id="L511">                value = this.toMap(currNode);</span>
             }
 
-<span class="fc" id="L511">            retMap.put(key, value);</span>
-<span class="fc" id="L512">        });</span>
+<span class="fc" id="L514">            retMap.put(key, value);</span>
+<span class="fc" id="L515">        });</span>
 
-<span class="fc" id="L514">        return retMap;</span>
+<span class="fc" id="L517">        return retMap;</span>
     }
 
     /**
@@ -522,23 +525,23 @@ import org.springframework.stereotype.Component;
      *         of an Array JsonNode
      */
     private List&lt;Object&gt; toList(JsonNode rootNode) {
-<span class="fc" id="L525">        List&lt;Object&gt; retList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L528">        List&lt;Object&gt; retList = new ArrayList&lt;&gt;();</span>
 
-<span class="fc" id="L527">        Iterator&lt;JsonNode&gt; iter = rootNode.elements();</span>
+<span class="fc" id="L530">        Iterator&lt;JsonNode&gt; iter = rootNode.elements();</span>
 
-<span class="fc" id="L529">        iter.forEachRemaining(currNode -&gt; {</span>
-<span class="fc" id="L530">            Object value = currNode;</span>
+<span class="fc" id="L532">        iter.forEachRemaining(currNode -&gt; {</span>
+<span class="fc" id="L533">            Object value = currNode;</span>
 
-<span class="pc bpc" id="L532" title="1 of 2 branches missed.">            if (currNode.isObject()) {</span>
-<span class="fc" id="L533">                value = this.toMap(currNode);</span>
-<span class="nc bnc" id="L534" title="All 2 branches missed.">            } else if (currNode.isArray()) {</span>
-<span class="nc" id="L535">                value = this.toList(currNode);</span>
+<span class="pc bpc" id="L535" title="1 of 2 branches missed.">            if (currNode.isObject()) {</span>
+<span class="fc" id="L536">                value = this.toMap(currNode);</span>
+<span class="nc bnc" id="L537" title="All 2 branches missed.">            } else if (currNode.isArray()) {</span>
+<span class="nc" id="L538">                value = this.toList(currNode);</span>
             }
 
-<span class="fc" id="L538">            retList.add(value);</span>
-<span class="fc" id="L539">        });</span>
+<span class="fc" id="L541">            retList.add(value);</span>
+<span class="fc" id="L542">        });</span>
 
-<span class="fc" id="L541">        return retList;</span>
+<span class="fc" id="L544">        return retList;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
