@@ -112,14 +112,16 @@ public class EventServiceTest {
     @Test
     void testFilterEventWithCategoriesSuccessfully() {
         Map<String, String> filterParams = new HashMap<String, String>() {{
-            put("categories", "architecture,study");
+            put("categories", "archiTECture,  STudy ,food");
         }};
 
         List<Event> remainingEvents = eventService.filterEvents(filterParams, events);
 
         assertEquals(2, remainingEvents.size());
-        assertEquals("Columbia", remainingEvents.get(0).getAddress());
-        assertEquals("Columbia", remainingEvents.get(1).getAddress());
+        assertEquals(event1.getName(), remainingEvents.get(0).getName());
+        assertEquals(event1.getAddress(), remainingEvents.get(0).getAddress());
+        assertEquals(event3.getName(), remainingEvents.get(1).getName());
+        assertEquals(event3.getAddress(), remainingEvents.get(1).getAddress());
     }
 
     @Test
