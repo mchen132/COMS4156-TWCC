@@ -448,4 +448,21 @@ public class EventControllerTest {
 			e.printStackTrace();
 		}
 	}
+
+	@Test
+	@WithMockUser
+	void testGetEventStatisticsWithHostIdSuccessfully() {
+		Mockito
+			.when(eventRepository.findByHost(anyInt()))
+			.thenReturn(new ArrayList<Event>() {{ add(events.get(1)); }});
+
+		try {
+			mockMvc.perform(MockMvcRequestBuilders.get("/events/statistics/2"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", notNullValue()))
+				.andExpect(jsonPath("$.totalNumberOfEvents", is(1)));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

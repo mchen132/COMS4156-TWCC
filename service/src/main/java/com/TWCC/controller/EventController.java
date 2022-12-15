@@ -285,7 +285,10 @@ public class EventController {
      * average age limit for events, average age limit of events
      * by category, average cost for events, average cost of
      * events by category, and number of events by category in
-     * multiple time ranges
+     * multiple time ranges.
+     *
+     * Optionally specify a hostId to get back event statistics
+     * only relevant to the host created events.
      *
      * @return ResponseEntity containing various TWCC event statistics
      */

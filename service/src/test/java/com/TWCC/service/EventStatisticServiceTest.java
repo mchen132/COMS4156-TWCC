@@ -155,6 +155,18 @@ public class EventStatisticServiceTest {
     }
 
     @Test
+    void testGetNumberOfEventsByCategoryWithEmptyEvents() {
+        // When
+        Map<String, Integer> numberOfEventsByCategory = eventStatisticService
+            .getNumberOfEventsByCategory(
+                new ArrayList<Event>()
+            );
+
+        // Then
+        assertEquals(0, numberOfEventsByCategory.keySet().size());
+    }
+
+    @Test
     void testGetNumberOfEventsByCategoryWithNoCategories() {
         // When
         Map<String, Integer> numberOfEventsByCategory = eventStatisticService.getNumberOfEventsByCategory(eventsWithNoCategories);
@@ -176,6 +188,17 @@ public class EventStatisticServiceTest {
     void testGetAverageAgeLimitForEventsWithNullEvents() {
         // When
         int averageAgeLimitForEvents = eventStatisticService.getAverageAgeLimitForEvents(null);
+
+        // Then
+        assertEquals(0, averageAgeLimitForEvents);
+    }
+
+    @Test
+    void testGetAverageAgeLimitForEventsWithEmptyEvents() {
+        // When
+        int averageAgeLimitForEvents = eventStatisticService.getAverageAgeLimitForEvents(
+            new ArrayList<Event>()
+        );
 
         // Then
         assertEquals(0, averageAgeLimitForEvents);
@@ -215,10 +238,21 @@ public class EventStatisticServiceTest {
     }
 
     @Test
-    void testGetAverageAgeLimitOfEventsByCategoryWithNullEvents() {        
+    void testGetAverageAgeLimitOfEventsByCategoryWithNullEvents() {
         // When
-        Map<String, Integer> averageAgeLimitOfEventsByCategory = eventStatisticService.getAverageAgeLimitOfEventsByCategory(null);
-        
+        Map<String, Integer> averageAgeLimitOfEventsByCategory = eventStatisticService
+            .getAverageAgeLimitOfEventsByCategory(null);
+
+        // Then
+        assertEquals(0, averageAgeLimitOfEventsByCategory.keySet().size());
+    }
+
+    @Test
+    void testGetAverageAgeLimitOfEventsByCategoryWithEmptyEvents() {
+        // When
+        Map<String, Integer> averageAgeLimitOfEventsByCategory = eventStatisticService
+            .getAverageAgeLimitOfEventsByCategory(new ArrayList<Event>());
+
         // Then
         assertEquals(0, averageAgeLimitOfEventsByCategory.keySet().size());
     }
@@ -226,7 +260,8 @@ public class EventStatisticServiceTest {
     @Test
     void testGetAverageAgeLimitOfEventsByCategoryWithNoCategories() {
         // When
-        Map<String, Integer> averageAgeLimitOfEventsByCategory = eventStatisticService.getAverageAgeLimitOfEventsByCategory(eventsWithNoCategories);
+        Map<String, Integer> averageAgeLimitOfEventsByCategory = eventStatisticService
+            .getAverageAgeLimitOfEventsByCategory(eventsWithNoCategories);
 
         // Then
         assertEquals(0, averageAgeLimitOfEventsByCategory.keySet().size());
@@ -238,16 +273,16 @@ public class EventStatisticServiceTest {
         events.add(new Event(
             4,
             "Union Square",
-            10, 
-            "Table Tennis Competition", 
-            "Come compete in a local NYC table tennis competition", 
+            10,
+            "Table Tennis Competition",
+            "Come compete in a local NYC table tennis competition",
             12.5,
             122.34,
             10,
             "www.union-square-competitions.com",
             1,
             "social, sports",
-            new Timestamp(new Date().getTime() - 10), 
+            new Timestamp(new Date().getTime() - 10),
             new Timestamp(new Date().getTime() + 5),
             new Timestamp(new Date().getTime() + 10)
         ));
@@ -269,27 +304,38 @@ public class EventStatisticServiceTest {
     }
 
     @Test
+    void testGetAverageCostForEventsWithEmptyEvents() {
+        // When
+        float averageCostForEvents = eventStatisticService
+            .getAverageCostForEvents(new ArrayList<Event>());
+
+        // Then
+        assertEquals(0, averageCostForEvents);
+    }
+
+    @Test
     void testGetAverageCostOfEventsByCategorySuccessfully() {
         // Given
         events.add(new Event(
             4,
             "Union Square",
-            10, 
-            "Table Tennis Competition", 
-            "Come compete in a local NYC table tennis competition", 
+            10,
+            "Table Tennis Competition",
+            "Come compete in a local NYC table tennis competition",
             12.5,
             122.34,
             10,
             "www.union-square-competitions.com",
             1,
             "social, sports",
-            new Timestamp(new Date().getTime() - 10), 
+            new Timestamp(new Date().getTime() - 10),
             new Timestamp(new Date().getTime() + 5),
             new Timestamp(new Date().getTime() + 10)
         ));
-        
+
         // When
-        Map<String, Float> averageCostOfEventsByCategory = eventStatisticService.getAverageCostOfEventsByCategory(events);
+        Map<String, Float> averageCostOfEventsByCategory = eventStatisticService
+            .getAverageCostOfEventsByCategory(events);
 
         // Then
         assertEquals(6, averageCostOfEventsByCategory.keySet().size());
@@ -304,7 +350,18 @@ public class EventStatisticServiceTest {
     @Test
     void testGetAverageCostOfEventsByCategoryWithNullEvents() {
         // When
-        Map<String, Float> averageCostOfEventsByCategory = eventStatisticService.getAverageCostOfEventsByCategory(null);
+        Map<String, Float> averageCostOfEventsByCategory = eventStatisticService
+            .getAverageCostOfEventsByCategory(null);
+
+        // Then
+        assertEquals(0, averageCostOfEventsByCategory.keySet().size());
+    }
+
+    @Test
+    void testGetAverageCostOfEventsByCategoryWithEmptyEvents() {
+        // When
+        Map<String, Float> averageCostOfEventsByCategory = eventStatisticService
+            .getAverageCostOfEventsByCategory(new ArrayList<Event>());
 
         // Then
         assertEquals(0, averageCostOfEventsByCategory.keySet().size());
@@ -313,7 +370,8 @@ public class EventStatisticServiceTest {
     @Test
     void testGetAverageCostOfEventsByCategoryWithNoCategories() {
         // When
-        Map<String, Float> averageCostOfEventsByCategory = eventStatisticService.getAverageCostOfEventsByCategory(eventsWithNoCategories);
+        Map<String, Float> averageCostOfEventsByCategory = eventStatisticService
+            .getAverageCostOfEventsByCategory(eventsWithNoCategories);
 
         // Then
         assertEquals(0, averageCostOfEventsByCategory.keySet().size());
@@ -325,31 +383,38 @@ public class EventStatisticServiceTest {
         events.add(new Event(
             4,
             "Union Square",
-            10, 
-            "Table Tennis Competition", 
-            "Come compete in a local NYC table tennis competition", 
+            10,
+            "Table Tennis Competition",
+            "Come compete in a local NYC table tennis competition",
             12.5,
             122.34,
             10,
             "www.union-square-competitions.com",
             1,
             "social, sports",
-            new Timestamp(new Date().getTime() - 10), 
+            new Timestamp(new Date().getTime() - 10),
             new Timestamp(new GregorianCalendar(2022, 11, 19).getTimeInMillis()),
             new Timestamp(new GregorianCalendar(2022, 11, 20).getTimeInMillis())
         ));
-        
+
         // When
-        Map<String, Map<String, Integer>> numberOfEventsByCategoryTimeRanges = eventStatisticService.getNumberOfEventsByCategoryTimeRanges(events);
+        Map<String, Map<String, Integer>> numberOfEventsByCategoryTimeRanges = eventStatisticService
+            .getNumberOfEventsByCategoryTimeRanges(events);
 
         // Then
         assertEquals(3, numberOfEventsByCategoryTimeRanges.keySet().size());
         assert(numberOfEventsByCategoryTimeRanges.containsKey("11-2022-1"));
         assert(numberOfEventsByCategoryTimeRanges.containsKey("11-2022-2"));
         assert(numberOfEventsByCategoryTimeRanges.containsKey("11-2022-4"));
-        Map<String, Integer> numberOfEventsByCategory1 = numberOfEventsByCategoryTimeRanges.get("11-2022-1");
-        Map<String, Integer> numberOfEventsByCategory2 = numberOfEventsByCategoryTimeRanges.get("11-2022-2");
-        Map<String, Integer> numberOfEventsByCategory3 = numberOfEventsByCategoryTimeRanges.get("11-2022-4");
+        Map<String, Integer> numberOfEventsByCategory1 =
+            numberOfEventsByCategoryTimeRanges
+                .get("11-2022-1");
+        Map<String, Integer> numberOfEventsByCategory2 =
+            numberOfEventsByCategoryTimeRanges
+                .get("11-2022-2");
+        Map<String, Integer> numberOfEventsByCategory3 =
+            numberOfEventsByCategoryTimeRanges
+                .get("11-2022-4");
         assertEquals(1, numberOfEventsByCategory1.get("social"));
         assertEquals(1, numberOfEventsByCategory1.get("networking"));
         assertEquals(1, numberOfEventsByCategory1.get("food"));
@@ -363,7 +428,18 @@ public class EventStatisticServiceTest {
     @Test
     void testGetNumberOfEventsByCategoryTimeRangesWithNullEvents() {
         // When
-        Map<String, Map<String, Integer>> numberOfEventsByCategoryTimeRanges = eventStatisticService.getNumberOfEventsByCategoryTimeRanges(null);
+        Map<String, Map<String, Integer>> numberOfEventsByCategoryTimeRanges = eventStatisticService
+            .getNumberOfEventsByCategoryTimeRanges(null);
+
+        // Then
+        assertEquals(0, numberOfEventsByCategoryTimeRanges.keySet().size());
+    }
+
+    @Test
+    void testGetNumberOfEventsByCategoryTimeRangesWithEmptyEvents() {
+        // When
+        Map<String, Map<String, Integer>> numberOfEventsByCategoryTimeRanges = eventStatisticService
+            .getNumberOfEventsByCategoryTimeRanges(new ArrayList<Event>());
 
         // Then
         assertEquals(0, numberOfEventsByCategoryTimeRanges.keySet().size());
@@ -372,7 +448,8 @@ public class EventStatisticServiceTest {
     @Test
     void testGetNumberOfEventsByCategoryTimeRangesWithNoCategories() {
         // When
-        Map<String, Map<String, Integer>> numberOfEventsByCategoryTimeRanges = eventStatisticService.getNumberOfEventsByCategoryTimeRanges(eventsWithNoCategories);
+        Map<String, Map<String, Integer>> numberOfEventsByCategoryTimeRanges = eventStatisticService
+            .getNumberOfEventsByCategoryTimeRanges(eventsWithNoCategories);
 
         // Then
         assertEquals(0, numberOfEventsByCategoryTimeRanges.keySet().size());
