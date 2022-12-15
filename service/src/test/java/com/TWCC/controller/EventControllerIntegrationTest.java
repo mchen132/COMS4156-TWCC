@@ -245,15 +245,16 @@ public class EventControllerIntegrationTest {
     void testDeleteEventByIdNotFound() {
         // Given
         eventRepository.saveAll(events);
+        int nonExistentEventId = eventRepository.findAll().get(2).getId() + 100;
 
         // When
-        ResponseEntity<?> eventResponse = eventController.deleteEventById(6);
+        ResponseEntity<?> eventResponse = eventController.deleteEventById(nonExistentEventId);
 
         try {
             // Then
             assertEquals(HttpStatus.NOT_FOUND, eventResponse.getStatusCode());
             MessageResponse messageResponse = (MessageResponse) eventResponse.getBody();
-            assertEquals("Event ID: 6 does not exist", messageResponse.getMessage());
+            assertEquals("Event ID: " + nonExistentEventId + " does not exist", messageResponse.getMessage());
             assertEquals(HttpStatus.NOT_FOUND.value(), messageResponse.getStatus());
         } catch (Exception e) {
             e.printStackTrace();
