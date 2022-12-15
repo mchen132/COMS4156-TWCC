@@ -11,17 +11,16 @@ import java.util.Map;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.TWCC.data.Event;
 
-@SuppressWarnings({"checkstyle:AvoidInlineConditionals", "checkstyle:TodoCommentCheck",
-"checkstyle:LineLengthCheck",
-"checkstyle:StaticVariableNameCheck", "checkstyle:MagicNumberCheck",
-"checkstyle:VisibilityModifierCheck", "checkstyle:FileTabCharacterCheck", "checkstyle:SimplifyBooleanExpressionCheck", "checkstyle:MethodLengthCheck", "checkstyle:RegexpSinglelineCheck"})
 
+@TestMethodOrder(MethodOrderer.Random.class)
 @SpringBootTest
 @ActiveProfiles("test")
 public class EventStatisticServiceTest {

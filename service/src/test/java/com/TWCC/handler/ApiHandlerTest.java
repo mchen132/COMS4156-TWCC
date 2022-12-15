@@ -12,7 +12,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -23,11 +25,8 @@ import com.TWCC.api.ApiHandler;
 import com.TWCC.data.Event;
 import com.TWCC.repository.EventRepository;
 
-@SuppressWarnings({"checkstyle:AvoidInlineConditionals", "checkstyle:TodoCommentCheck",
-"checkstyle:LineLengthCheck",
-"checkstyle:StaticVariableNameCheck", "checkstyle:MagicNumberCheck",
-"checkstyle:VisibilityModifierCheck", "checkstyle:FileTabCharacterCheck", "checkstyle:SimplifyBooleanExpressionCheck", "checkstyle:MethodLengthCheck", "checkstyle:RegexpSinglelineCheck"})
 
+@TestMethodOrder(MethodOrderer.Random.class)
 @ExtendWith(MockitoExtension.class)
 public class ApiHandlerTest {
     

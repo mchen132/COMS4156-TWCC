@@ -98,6 +98,11 @@ public class ResponseParser {
         Timestamp creationTimestamp = startTimestamp;
         Timestamp endTimestamp = startTimestamp;
 
+        @SuppressWarnings("checkstyle:AvoidInlineConditionals")
+        String categories = this.extractCategory(eventMap).compareTo("") != 0
+                                ? this.extractCategory(eventMap)
+                                : null;
+
         return new Event(
             id,
             address,
@@ -109,7 +114,7 @@ public class ResponseParser {
             cost,
             media,
             -1,
-            "testCategory",
+            categories,
             creationTimestamp,
             startTimestamp,
             endTimestamp
@@ -373,6 +378,84 @@ public class ResponseParser {
         ageLimit = ageRestriction ? LEGAL_AGE : 0;
 
         return ageLimit;
+    }
+
+    /**
+     *
+     * @param jsonString
+     * @return
+     */
+    private String extractCategory(Map<String, Object> eventMap) {
+
+        String category = "";
+
+        if (eventMap.get("classifications") == null) {
+            return category;
+        }
+
+        @SuppressWarnings("unchecked")
+        ArrayList<Object> classificationList = (ArrayList<Object>) eventMap.get(
+            "classifications"
+        );
+
+        if (classificationList.size() == 0) {
+            return category;
+        }
+
+        @SuppressWarnings("unchecked")
+        Map<String, Object> categoryMap = (HashMap<String, Object>) classificationList.get(
+            0
+        );
+
+        if (categoryMap.get("segment") == null) {
+            return category;
+        }
+
+        @SuppressWarnings("unchecked")
+        String segment = (
+                            (TextNode)
+                                (
+                                    (HashMap<String, Object>)
+                                        categoryMap.get("segment")
+                                ).get("name")
+                        ).toString();
+
+        segment = segment.substring(1, segment.length() - 1);
+        category += segment;
+
+        if (categoryMap.get("genre") == null) {
+            return category;
+        }
+
+        @SuppressWarnings("unchecked")
+        String genre = (
+                            (TextNode)
+                                (
+                                    (HashMap<String, Object>)
+                                        categoryMap.get("genre")
+                                ).get("name")
+                        ).toString();
+
+        genre = genre.substring(1, genre.length() - 1);
+        category += "," + genre;
+
+        if (categoryMap.get("subGenre") == null) {
+            return category;
+        }
+
+        @SuppressWarnings("unchecked")
+        String subGenre = (
+                            (TextNode)
+                                (
+                                    (HashMap<String, Object>)
+                                        categoryMap.get("subGenre")
+                                ).get("name")
+                        ).toString();
+
+        subGenre = subGenre.substring(1, subGenre.length() - 1);
+        category += "," + subGenre;
+
+        return category;
     }
 
     // NOTE: stringToMap(), toMap(), and toList() are inspired by the following

@@ -133,7 +133,7 @@ public class EventService {
                         int compareTime = event.getEndTimestamp() != null
                             ? event.getEndTimestamp().compareTo(endTimestamp)
                             : 0;
-                        if (compareTime < 0) {
+                        if (compareTime > 0) {
                             curEvent.remove();
                         }
                     }
