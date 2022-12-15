@@ -120,13 +120,13 @@ public class EventControllerIntegrationTest {
         int eventId = event.getId();
 
         // When
-        ResponseEntity<?> response = eventController.getEventsById(eventId);
+        ResponseEntity<?> eventResponse = eventController.getEventsById(eventId);
 
         try {
             // Then
-            assertEquals(HttpStatus.OK, response.getStatusCode());
-            Optional<Event> eventResponse = (Optional<Event>) response.getBody();
-            assertEquals(event.getName(), eventResponse.get().getName());
+            assertEquals(HttpStatus.OK, eventResponse.getStatusCode());
+            Optional<Event> optionalEventResponse = (Optional<Event>) eventResponse.getBody();
+            assertEquals(event.getName(), optionalEventResponse.get().getName());
         } catch (Exception e) {
             e.printStackTrace();
             assertTrue(false);
@@ -139,12 +139,12 @@ public class EventControllerIntegrationTest {
         eventRepository.saveAll(events);
 
         // When
-        ResponseEntity<?> response = eventController.getEventsById(500);
+        ResponseEntity<?> eventResponse = eventController.getEventsById(500);
 
         try {
             // Then
-            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-            MessageResponse messageResponse = (MessageResponse) response.getBody();
+            assertEquals(HttpStatus.NOT_FOUND, eventResponse.getStatusCode());
+            MessageResponse messageResponse = (MessageResponse) eventResponse.getBody();
             assertEquals("Event ID: 500 does not exist", messageResponse.getMessage());
             assertEquals(HttpStatus.NOT_FOUND.value(), messageResponse.getStatus());
         } catch (Exception e) {
@@ -210,13 +210,13 @@ public class EventControllerIntegrationTest {
         System.out.println(jwtResponse.getToken());
 
         // When
-        ResponseEntity<?> response = eventController.createEvent(newEvent, "Bearer " + jwtResponse.getToken());
+        ResponseEntity<?> eventResponse = eventController.createEvent(newEvent, "Bearer " + jwtResponse.getToken());
 
         try {
             // Then
-            assertEquals(HttpStatus.OK, response.getStatusCode());
-            Event eventResponse = (Event) response.getBody();
-            assertEquals(newEvent.getName(), eventResponse.getName());
+            assertEquals(HttpStatus.OK, eventResponse.getStatusCode());
+            Event createdEvent = (Event) eventResponse.getBody();
+            assertEquals(newEvent.getName(), createdEvent.getName());
         } catch (Exception e) {
             e.printStackTrace();
             assertTrue(false);
@@ -230,11 +230,11 @@ public class EventControllerIntegrationTest {
         int eventId = eventRepository.findAll().get(0).getId();
 
         // When
-        ResponseEntity<?> response = eventController.deleteEventById(eventId);
+        ResponseEntity<?> eventResponse = eventController.deleteEventById(eventId);
 
         try {
             // Then
-            assertEquals(HttpStatus.OK, response.getStatusCode());
+            assertEquals(HttpStatus.OK, eventResponse.getStatusCode());
         } catch (Exception e) {
             e.printStackTrace();
             assertTrue(false);
@@ -247,12 +247,12 @@ public class EventControllerIntegrationTest {
         eventRepository.saveAll(events);
 
         // When
-        ResponseEntity<?> response = eventController.deleteEventById(6);
+        ResponseEntity<?> eventResponse = eventController.deleteEventById(6);
 
         try {
             // Then
-            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-            MessageResponse messageResponse = (MessageResponse) response.getBody();
+            assertEquals(HttpStatus.NOT_FOUND, eventResponse.getStatusCode());
+            MessageResponse messageResponse = (MessageResponse) eventResponse.getBody();
             assertEquals("Event ID: 6 does not exist", messageResponse.getMessage());
             assertEquals(HttpStatus.NOT_FOUND.value(), messageResponse.getStatus());
         } catch (Exception e) {
@@ -271,13 +271,13 @@ public class EventControllerIntegrationTest {
         HashMap<String, String> jsonObject = new HashMap<String, String>();
         jsonObject.put("id", String.valueOf(eventId));
         jsonObject.put("description", "This is not a midterm study session");
-        ResponseEntity<?> response = eventController.updateEvent(jsonObject);
+        ResponseEntity<?> eventResponse = eventController.updateEvent(jsonObject);
 
         try {
             // Then
-            assertEquals(HttpStatus.OK, response.getStatusCode());
-            Optional<Event> eventResponse = (Optional<Event>) response.getBody();
-            assertEquals(jsonObject.get("description"), eventResponse.get().getDescription());
+            assertEquals(HttpStatus.OK, eventResponse.getStatusCode());
+            Optional<Event> optionalEventResponse = (Optional<Event>) eventResponse.getBody();
+            assertEquals(jsonObject.get("description"), optionalEventResponse.get().getDescription());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -295,14 +295,12 @@ public class EventControllerIntegrationTest {
         jsonObject.put("id", String.valueOf(eventId));
         jsonObject.put("description", "This is not a midterm study session");
 
-        System.out.println(eventRepository.findAll());
-
-        ResponseEntity<?> response = eventController.updateEvent(jsonObject);
+        ResponseEntity<?> eventResponse = eventController.updateEvent(jsonObject);
 
         try {
             // Then
-            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-            MessageResponse messageResponse = (MessageResponse) response.getBody();
+            assertEquals(HttpStatus.NOT_FOUND, eventResponse.getStatusCode());
+            MessageResponse messageResponse = (MessageResponse) eventResponse.getBody();
             assertEquals("Event ID: " + eventId + " does not exist", messageResponse.getMessage());
             assertEquals(HttpStatus.NOT_FOUND.value(), messageResponse.getStatus());
         } catch (Exception e) {
