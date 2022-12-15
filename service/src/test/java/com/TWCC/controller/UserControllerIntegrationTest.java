@@ -42,9 +42,10 @@ public class UserControllerIntegrationTest {
             "foobar@baz.com"
         );
     }
-    
+
     @AfterEach
     void tearDown() {
+        testUser = null;
         userRepository.deleteAll();
     }
 
@@ -129,14 +130,22 @@ public class UserControllerIntegrationTest {
     @Test
     void testLoginUserSuccessfully() {
         // Given
-        ResponseEntity<?> registerUserResponse = userController.registerUser(testUser);
+        TwccUser newUser = new TwccUser(
+            "Naruto",
+            "Uzumaki",
+            13,
+            "Naruto.Uzumaki",
+            "ILoveNinetails",
+            "Naruto.Uzumaki@kyuubi.com"
+        );
+        ResponseEntity<?> registerUserResponse = userController.registerUser(newUser);
         TwccUser actualUser = (TwccUser) registerUserResponse.getBody();
 
         // When
         ResponseEntity<?> loginUserResponse = userController.loginUser(
             new LoginRequest(
-                testUser.getUsername(),
-                "12345"
+                newUser.getUsername(),
+                "ILoveNinetails"
             )
         );
 
