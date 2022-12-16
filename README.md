@@ -97,7 +97,11 @@
 
 ## 3. Integration/E2E Tests Strategy
 ---
-Due to the technical difficulty we have faced to implement automated integration tests, we decided to do integration tests and E2E tests manually for iteration-2.
+Our current Integration/E2E test strategy is automated and done manually. 
+
+Automated integration tests (in our `**/*Integration*.java` test files) are done collectively along with unit tests every time our GitHub Actions workflow is run. Our test reports are automatically generated and highlight those results ([view reports section for more detail](#4-reports)).
+
+Manual Integration/E2E tests are also done to simulate another layer of the testing environment with a separate test database and an opportunity for a human/engineer test oracle to verify correct output. The testing flow documentation is discussed in detail below.
 
 We have also pre-populated some data in the database before the tests. Such as the following:
 
