@@ -33,6 +33,8 @@ public class UserControllerIntegrationTest {
 
     @BeforeEach
     void setup() {
+        userRepository.deleteAll();
+
         testUser = new TwccUser(
             "Foo",
             "Bar",

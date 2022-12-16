@@ -1,6 +1,24 @@
-# Getting Started with Create React App
+# TWCC Events Client Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Introduction
+
+This is a sample React client application that utilizes all of the features provided by our TWCC Events service (located in this monorepo: `service/`).
+
+*This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).*
+
+## Features
+
+This client application utilizes all TWCC Events service features:
+- `User Authentication`
+    - Registering Users
+    - Login for Users
+- `Event Services`
+    - Getting Events
+    - Filtering Events
+    - Creating Events
+    - Updating Events
+    - Deleting Events
+    - Getting Event Statistics (individual & all event stats)
 
 ## Available Scripts
 
