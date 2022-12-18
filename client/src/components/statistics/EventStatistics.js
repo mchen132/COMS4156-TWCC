@@ -58,7 +58,9 @@ const EventStatistics = () => {
         averageAgeLimitOfEventsByCategory: null,
         numberOfEventsByCategoryTimeRanges: null
     });
-    const [eventStatisticsToggleValue, setEventStatisticsToggleValue] = useState(EventStatisticsToggle.ALL); 
+    const [eventStatisticsToggleValue, setEventStatisticsToggleValue] = useState(EventStatisticsToggle.ALL);
+    const [allEventStatsErrorMessage, setAllEventStatsErrorMessage] = useState("");
+    const [individualEventStatsErrorMessage, setIndividualEventStatsErrorMessage] = useState("");
 
     const setChartOptions = (title) => ({
         responsive: true,
@@ -157,7 +159,23 @@ const EventStatistics = () => {
 
                 console.log(eventStatistics);
                 formatAndSetEventStatistics(eventStatistics, hostId ? true : false);
+                if (hostId) {
+                    setIndividualEventStatsErrorMessage("");
+
+                } else {
+                    setAllEventStatsErrorMessage("");
+                }
             } catch (err) {
+                if (err.response && err.response.data) {
+                    let errResponseData = err.response.data;                
+
+                    if (errResponseData.message && hostId) {
+                        setIndividualEventStatsErrorMessage(errResponseData.message);
+                    } else if (errResponseData.message && !hostId) {
+                        setAllEventStatsErrorMessage(errResponseData.message);
+                    }
+                }
+
                 console.error(err);
             }
         };
@@ -201,6 +219,8 @@ const EventStatistics = () => {
             : localIndividualEventStatistics
     );
 
+    const extraErrorMessage = "Consider adding events to view event statistics.";
+
     return (
         <>
             <div className='events-statistics-header'>
@@ -232,8 +252,25 @@ const EventStatistics = () => {
                                     </ToggleButton>                                                               
                                 </ToggleButtonGroup>
                                 {
-                                    getCurrentEventStatisticsToDisplay() && getCurrentEventStatisticsToDisplay().totalNumberOfEvents &&
-                                    <h5>{`Total Number of Events: ${getCurrentEventStatisticsToDisplay()?.totalNumberOfEvents}`}</h5>
+                                    !allEventStatsErrorMessage && !individualEventStatsErrorMessage &&
+                                        getCurrentEventStatisticsToDisplay() && getCurrentEventStatisticsToDisplay().totalNumberOfEvents &&
+                                            <h5>{`Total Number of Events: ${getCurrentEventStatisticsToDisplay()?.totalNumberOfEvents}`}</h5>
+                                }
+                                {
+                                    // All Event Statistics Error Messaging
+                                    eventStatisticsToggleValue === EventStatisticsToggle.ALL && allEventStatsErrorMessage &&
+                                        <>
+                                            <h2>{allEventStatsErrorMessage}</h2>
+                                            <h4>{extraErrorMessage}</h4>
+                                        </>
+                                }
+                                {
+                                    // Individual Event Statistics Error Messaging
+                                    eventStatisticsToggleValue === EventStatisticsToggle.INDIVIDUAL && individualEventStatsErrorMessage &&
+                                        <>
+                                            <h2>{individualEventStatsErrorMessage}</h2>
+                                            <h4>{extraErrorMessage}</h4>
+                                        </>
                                 }
                             </>
                             : <>                        
@@ -248,26 +285,29 @@ const EventStatistics = () => {
                         <div className='event-statistics-chart'>
                             {
                                 getCurrentEventStatisticsToDisplay() && getCurrentEventStatisticsToDisplay().averages &&
-                                <Bar
-                                    options={setChartOptions('Averages')}
-                                    data={getCurrentEventStatisticsToDisplay()?.averages}
-                                />
+                                    <Bar
+                                        options={setChartOptions('Averages')}
+                                        data={getCurrentEventStatisticsToDisplay()?.averages}
+                                    />
                             }
                         </div>
                         <div className='event-statistics-chart'>
-                            <Doughnut
-                                options={setChartOptions('Number of Events By Category')} 
-                                data={{
-                                    labels: getCurrentEventStatisticsToDisplay()?.numberOfEventsByCategory?.labels,
-                                    datasets: [{
-                                        label: 'Number of Events By Category',
-                                        data: getCurrentEventStatisticsToDisplay()?.numberOfEventsByCategory?.data,
-                                        backgroundColor: getCurrentEventStatisticsToDisplay()?.numberOfEventsByCategory?.bgColor,
-                                        borderColor: getCurrentEventStatisticsToDisplay()?.numberOfEventsByCategory?.borderColor,
-                                        borderWidth: 1,
-                                    }]
-                                }}
-                            />
+                            {
+                                getCurrentEventStatisticsToDisplay() && getCurrentEventStatisticsToDisplay().numberOfEventsByCategory &&
+                                    <Doughnut
+                                        options={setChartOptions('Number of Events By Category')} 
+                                        data={{
+                                            labels: getCurrentEventStatisticsToDisplay()?.numberOfEventsByCategory?.labels,
+                                            datasets: [{
+                                                label: 'Number of Events By Category',
+                                                data: getCurrentEventStatisticsToDisplay()?.numberOfEventsByCategory?.data,
+                                                backgroundColor: getCurrentEventStatisticsToDisplay()?.numberOfEventsByCategory?.bgColor,
+                                                borderColor: getCurrentEventStatisticsToDisplay()?.numberOfEventsByCategory?.borderColor,
+                                                borderWidth: 1,
+                                            }]
+                                        }}
+                                    />
+                            }
                         </div>
                         <div className='event-statistics-chart'>
                             {
