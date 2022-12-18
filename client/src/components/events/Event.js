@@ -29,8 +29,8 @@ const Event = ({ event, onDeleteEventCallback }) => {
     const [showUpdateEventModal, setShowUpdateEventModal] = useState(false);
     const [updateEventData, setUpdateEventData] = useState({
         ...event,
-        startTimestamp: moment(event.startTimestamp).toDate(),
-        endTimestamp: moment(event.endTimestamp).toDate()
+        startTimestamp: event.startTimestamp ? moment(event.startTimestamp).toDate() : null,
+        endTimestamp: event.endTimestamp ? moment(event.endTimestamp).toDate() : null
     });
 
     const userId = getAuthInformation('userId');
@@ -41,8 +41,8 @@ const Event = ({ event, onDeleteEventCallback }) => {
             // Format datetimes
             const eventToUpdate = {
                 ...updateEventData,
-                startTimestamp: updateEventData.startTimestamp && moment(updateEventData.startTimestamp).utc().format("yyyy-MM-DD HH:mm:ss.SS"),
-                endTimestamp: updateEventData.endTimestamp && moment(updateEventData.endTimestamp).utc().format("yyyy-MM-DD HH:mm:ss.SS")
+                startTimestamp: updateEventData.startTimestamp ? moment(updateEventData.startTimestamp).utc().format("yyyy-MM-DD HH:mm:ss.SS") : null,
+                endTimestamp: updateEventData.endTimestamp ? moment(updateEventData.endTimestamp).utc().format("yyyy-MM-DD HH:mm:ss.SS") : null
             };
             console.log(eventToUpdate);
             const updatedEvent = await updateEvent(eventToUpdate);
@@ -205,7 +205,7 @@ const Event = ({ event, onDeleteEventCallback }) => {
                 <Card.Subtitle className="mb-2 text-muted">Starts: {startTimestamp && moment(startTimestamp).format("yyyy-MM-DD h:mm:ss A")}</Card.Subtitle>
                 <Card.Subtitle className="mb-2 text-muted">Ends: {endTimestamp && moment(endTimestamp).format("yyyy-MM-DD h:mm:ss A")}</Card.Subtitle>
                 <Card.Text>About: {description}</Card.Text>
-                <Card.Link target={"_blank"} href={(media && media.includes("http://")) ? media : `http://${media}`}>Learn more</Card.Link>
+                <Card.Link target={"_blank"} href={(media && media.match(/http[s]?:\/\//gi)) ? media : `http://${media}`}>Learn more</Card.Link>
             </Card.Body>
             {
                 host && parseInt(userId) === parseInt(host) && 

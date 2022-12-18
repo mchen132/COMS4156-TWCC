@@ -319,7 +319,7 @@ const EventsContainer = () => {
                             </Row>
                             <Row className="filter-events-row">
                                 <Form.Group as={Col}>
-                                    <Form.Label>Start Date Time</Form.Label>
+                                    <Form.Label className="filter-datetime-label">Start Date Time</Form.Label>
                                     <DateTimePicker
                                         format="yyyy-MM-dd HH:mm:ss"
                                         onChange={dateTime => setFilterEventsData(
@@ -329,7 +329,7 @@ const EventsContainer = () => {
                                     />
                                 </Form.Group>
                                 <Form.Group as={Col}>
-                                    <Form.Label>End Date Time</Form.Label>
+                                    <Form.Label className="filter-datetime-label">End Date Time</Form.Label>
                                     <DateTimePicker
                                         format="yyyy-MM-dd HH:mm:ss"
                                         onChange={dateTime => setFilterEventsData(
