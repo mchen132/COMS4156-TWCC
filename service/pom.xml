@@ -90,6 +90,11 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.4</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -115,13 +120,36 @@
                 		<include>ResponseParserTest.java</include>
 						<include>EventServiceTest.java</include>
 						<include>UserControllerTest.java</include>
+						<include>UserControllerIntegrationTest.java</include>
 						<include>EventStatisticServiceTest.java</include>
 						<include>ApiHandlerTest.java</include>
 						<include>AdminControllerTest.java</include>
+						<include>AdminControllerTestIntegrationTest.java</include>
 						<include>UserDetailsServiceExtTest.java</include>
             		</includes>
        	 		</configuration>
     		</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.2.0</version>
+				<configuration>
+					<configLocation>checkstyle-checker.xml</configLocation>
+					<encoding>UTF-8</encoding>
+					<consoleOutput>true</consoleOutput>
+					<failsOnError>true</failsOnError>
+					<linkXRef>false</linkXRef>
+				</configuration>
+				<executions>
+					<execution>
+						<id>validate</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -159,7 +187,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.2.0</version>
                 <configuration>
                     <configLocation>checkstyle-checker.xml</configLocation>
                 </configuration>

@@ -1,22 +1,27 @@
 package com.TWCC.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.TWCC.data.Event;
 
+
+@TestMethodOrder(MethodOrderer.Random.class)
 @SpringBootTest
 @ActiveProfiles("test")
 public class EventServiceTest {
@@ -28,32 +33,32 @@ public class EventServiceTest {
 
     @BeforeEach
     void setup() {
-        event1 = new Event(1, "Columbia", 18, 
+        event1 = new Event(1, "Columbia", 22, 
                                 "Midterm Study session", 
                                 "This is a midterm study session", 
-                                12.5, 122.34, 0, "www.columbia.edu", 1,
-								"social, study",
+                                12.5, 122.34, 50, "www.columbia.edu", 1,
+								                "social, architecture",
                                 new Timestamp(new Date().getTime() - 10), 
-                                new Timestamp(new Date().getTime() + 5),
-                                new Timestamp(new Date().getTime() + 10));
+                                new Timestamp(new GregorianCalendar(2022, 12, 1).getTimeInMillis()),
+                                new Timestamp(new GregorianCalendar(2022, 12, 2).getTimeInMillis()));
         
         event2 = new Event(2, "UW", 18, 
                                 "Midterm Study session at UW", 
                                 "This is a midterm study session at UW", 
-                                12.5, 122.34, 0, "www.uw.edu", 2,
-								"social, study",
+                                12.5, 122.34, 15, "www.uw.edu", 2,
+							                	"social",
                                 new Timestamp(new Date().getTime() - 10), 
-                                new Timestamp(new Date().getTime() + 5), 
-                                new Timestamp(new Date().getTime() + 10));
+                                new Timestamp(new GregorianCalendar(2022, 12, 3).getTimeInMillis()),
+                                new Timestamp(new GregorianCalendar(2022, 12, 4).getTimeInMillis()));
 
         event3 = new Event(3, "Columbia", 18, 
                                 "Midterm Study session at UMD", 
                                 "This is a midterm study session at UMD", 
-                                12.5, 122.34, 0, "www.umd.edu", 3,
-								"social, study",
+                                12.5, 122.34, 10, "www.umd.edu", 3,
+								                "social, study",
                                 new Timestamp(new Date().getTime() - 10), 
-                                new Timestamp(new Date().getTime() + 5), 
-                                new Timestamp(new Date().getTime() + 10));
+                                new Timestamp(new GregorianCalendar(2022, 12, 24).getTimeInMillis()),
+                                new Timestamp(new GregorianCalendar(2022, 12, 25).getTimeInMillis()));
     
         events.add(event1);
         events.add(event2);
@@ -77,6 +82,140 @@ public class EventServiceTest {
         assertEquals("Columbia", remainingEvents.get(0).getAddress());
         assertEquals("This is a midterm study session at UMD", remainingEvents.get(0).getDescription());
         assertEquals("social, study", remainingEvents.get(0).getCategories());
+    }
+
+
+    @Test
+    void testFilterEventWithHostSuccessfully() {
+        Map<String, String> filterParams = new HashMap<String, String>() {{
+            put("host", "3");
+        }};
+
+        List<Event> remainingEvents = eventService.filterEvents(filterParams, events);
+
+        assertEquals(1, remainingEvents.size());
+        assertEquals(3, remainingEvents.get(0).getHost());
+    }
+
+    @Test
+    void testFilterEventWithOneCategorySuccessfully() {
+        Map<String, String> filterParams = new HashMap<String, String>() {{
+            put("categories", "architecture");
+        }};
+
+        List<Event> remainingEvents = eventService.filterEvents(filterParams, events);
+
+        assertEquals(1, remainingEvents.size());
+        assertEquals("Midterm Study session", remainingEvents.get(0).getName());
+    }
+
+    @Test
+    void testFilterEventWithCategoriesSuccessfully() {
+        Map<String, String> filterParams = new HashMap<String, String>() {{
+            put("categories", "archiTECture,  STudy ,food");
+        }};
+
+        List<Event> remainingEvents = eventService.filterEvents(filterParams, events);
+
+        assertEquals(2, remainingEvents.size());
+        assertEquals(event1.getName(), remainingEvents.get(0).getName());
+        assertEquals(event1.getAddress(), remainingEvents.get(0).getAddress());
+        assertEquals(event3.getName(), remainingEvents.get(1).getName());
+        assertEquals(event3.getAddress(), remainingEvents.get(1).getAddress());
+    }
+
+    @Test
+    void testFilterEventsByAgeLimitSuccessfully() {
+        // Given
+        Map<String, String> filterParams = new HashMap<String, String>() {{
+            put("ageLimit", "21");
+        }};
+
+        // When
+        List<Event> remainingEvents = eventService.filterEvents(filterParams, events);
+
+        // Then
+        assertEquals(2, remainingEvents.size());
+        
+        for (Event event: remainingEvents) {
+            if (event.getId() == 2) {
+                assertEquals(event2.getName(), event.getName());
+                assertEquals(event2.getAddress(), event.getAddress());
+                assertEquals(event2.getDescription(), event.getDescription());
+                assertEquals(event2.getCategories(), event.getCategories());
+            } else if (event.getId() == 3) {
+                assertEquals(event3.getName(), event.getName());
+                assertEquals(event3.getAddress(), event.getAddress());
+                assertEquals(event3.getDescription(), event.getDescription());
+                assertEquals(event3.getCategories(), event.getCategories());
+            } else {
+                assertTrue(false);
+            }
+        }
+    }
+
+    @Test
+    void testFilterEventsByCostSuccessfully() {
+        // Given
+        Map<String, String> filterParams = new HashMap<String, String>() {{
+            put("cost", "12");
+        }};
+
+        // When
+        List<Event> remainingEvents = eventService.filterEvents(filterParams, events);
+
+        // Then
+        assertEquals(1, remainingEvents.size());
+        assertEquals(event3.getName(), remainingEvents.get(0).getName());
+        assertEquals(event3.getAddress(), remainingEvents.get(0).getAddress());
+        assertEquals(event3.getDescription(), remainingEvents.get(0).getDescription());
+        assertEquals(event3.getCategories(), remainingEvents.get(0).getCategories());
+    }
+
+    @Test
+    void testFilterEventsByStartTimestampSuccessfully() {
+        // Given
+        Map<String, String> filterParams = new HashMap<String, String>() {{
+            put(
+                "startTimestamp",
+                new Timestamp(new GregorianCalendar(2022, 12, 20)
+                    .getTimeInMillis()
+                ).toString()
+            );
+        }};
+
+        // When
+        List<Event> remainingEvents = eventService.filterEvents(filterParams, events);
+
+        // Then
+        assertEquals(1, remainingEvents.size());
+        assertEquals(event3.getName(), remainingEvents.get(0).getName());
+        assertEquals(event3.getAddress(), remainingEvents.get(0).getAddress());
+        assertEquals(event3.getDescription(), remainingEvents.get(0).getDescription());
+        assertEquals(event3.getCategories(), remainingEvents.get(0).getCategories());
+    }
+
+    @Test
+    void testFilterEventsByEndTimestampSuccessfully() {
+        // Given
+        Map<String, String> filterParams = new HashMap<String, String>() {{
+            put(
+                "endTimestamp",
+                new Timestamp(new GregorianCalendar(2022, 12, 3)
+                    .getTimeInMillis()
+                ).toString()
+            );
+        }};
+
+        // When
+        List<Event> remainingEvents = eventService.filterEvents(filterParams, events);
+
+        // Then
+        assertEquals(1, remainingEvents.size());
+        assertEquals(event1.getName(), remainingEvents.get(0).getName());
+        assertEquals(event1.getAddress(), remainingEvents.get(0).getAddress());
+        assertEquals(event1.getDescription(), remainingEvents.get(0).getDescription());
+        assertEquals(event1.getCategories(), remainingEvents.get(0).getCategories());
     }
 
     @Test

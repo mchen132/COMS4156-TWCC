@@ -1,0 +1,6 @@
+{
+    "java.configuration.updateBuildConfiguration": "interactive",
+    // Install VS Code extension: Checkstyle for Java to enable interactive Checkstyle linting rules
+    "java.checkstyle.configuration": "${workspaceFolder}/service/checkstyle-checker.xml",
+    "java.checkstyle.version": "10.5.0"
+}

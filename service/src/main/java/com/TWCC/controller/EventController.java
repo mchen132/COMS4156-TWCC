@@ -48,7 +48,7 @@ public class EventController {
 
     /**
      * Gets a list of all events
-     * 
+     *
      * @return a list of events
      */
     @GetMapping("/events")
@@ -59,7 +59,7 @@ public class EventController {
 
     /**
      * Gets a single event matching the specified event Id
-     * 
+     *
      * @param id event Id
      * @return ResponseEntity containing event or failure
      */
@@ -81,7 +81,7 @@ public class EventController {
 
     /**
      * Gets events that match a specified address
-     * 
+     *
      * @param address full address of the event
      * @return a list of events matching an address
      */
@@ -92,33 +92,45 @@ public class EventController {
 
     /**
      * Gets a list of filtered events from the filter query parameters.
-     * 
+     *
      * @param allParams Query parameters based on event fields
      * @return list of filtered events
      */
     @GetMapping("/filterEvents")
-    public List<Event> filterEvent(@RequestParam HashMap<String, String> allParams){
+    public List<Event> filterEvent(
+        @RequestParam HashMap<String, String> allParams
+    ) {
         List<Event> events = eventRepository.findAll();
 
-        List<Event> remainingEvents = eventService.filterEvents(allParams, events);
-        
+        List<Event> remainingEvents = eventService
+            .filterEvents(allParams, events);
+
         return remainingEvents;
     }
 
     /**
      * Creates an event with the host of the event being the authorized user
-     * 
+     *
      * @param newEvent event object with event fields
      * @param jwt the user JWT token
      * @return ResponseEntity of the saved event or failure
      */
     @PostMapping("/events")
-    public ResponseEntity<?> createEvent(@RequestBody final Event newEvent, @RequestHeader (name="Authorization") String jwt) {
+    public ResponseEntity<?> createEvent(
+        @RequestBody final Event newEvent,
+        @RequestHeader (name = "Authorization") String jwt
+    ) {
         // Get user details from JWT and set host Id to new event
-        String username = jwtUtils.getUserNameFromJwtToken(jwt.substring("Bearer ".length()));
-        UserDetailsExt userDetails = (UserDetailsExt) userDetailsService.loadUserByUsername(username);
+        String username = jwtUtils
+            .getUserNameFromJwtToken(
+                jwt.substring("Bearer ".length())
+            );
+        UserDetailsExt userDetails = (UserDetailsExt) userDetailsService
+            .loadUserByUsername(username);
         newEvent.setHost(userDetails.getId());
+
         System.out.println("new event: " + newEvent.toString());
+
         try {
             Event savedEvent = eventRepository.save(newEvent);
             return ResponseEntity.ok().body(savedEvent);
@@ -134,13 +146,20 @@ public class EventController {
 
     /**
      * Updates the existing event with the provided event fields
-     * 
+     *
      * @param jsonObject Event object
      * @return ResponseEntity of the updated event or failure
      */
     @PutMapping("/events")
-    public ResponseEntity<?> updateEvent(@RequestBody HashMap<String, String> jsonObject) {
-        Optional<Event> optionalEvent = eventRepository.findById(Integer.parseInt(jsonObject.get("id")));
+    @SuppressWarnings("checkstyle:AvoidInlineConditionals")
+    public ResponseEntity<?> updateEvent(
+        @RequestBody HashMap<String, String> jsonObject
+    ) {
+        Optional<Event> optionalEvent = eventRepository
+            .findById(
+                Integer.parseInt(jsonObject.get("id"))
+            );
+
         if (optionalEvent.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 new MessageResponse(
@@ -155,9 +174,11 @@ public class EventController {
         if (jsonObject.containsKey("address")) {
             existingEvent.setAddress(jsonObject.get("address"));
         }
-        
+
         if (jsonObject.containsKey("ageLimit")) {
-            existingEvent.setAgeLimit(Integer.parseInt(jsonObject.get("ageLimit")));
+            existingEvent.setAgeLimit(
+                Integer.parseInt(jsonObject.get("ageLimit"))
+            );
         }
 
         if (jsonObject.containsKey("name")) {
@@ -169,11 +190,15 @@ public class EventController {
         }
 
         if (jsonObject.containsKey("longitude")) {
-            existingEvent.setLongitude(Double.parseDouble(jsonObject.get("longitude")));
+            existingEvent.setLongitude(
+                Double.parseDouble(jsonObject.get("longitude"))
+            );
         }
 
         if (jsonObject.containsKey("latitude")) {
-            existingEvent.setLatitude(Double.parseDouble(jsonObject.get("latitude")));
+            existingEvent.setLatitude(
+                Double.parseDouble(jsonObject.get("latitude"))
+            );
         }
 
         if (jsonObject.containsKey("cost")) {
@@ -190,17 +215,29 @@ public class EventController {
 
         if (jsonObject.containsKey("startTimestamp")) {
             String startTimestamp = jsonObject.get("startTimestamp");
-            existingEvent.setStartTimestamp(startTimestamp != null ? Timestamp.valueOf(startTimestamp) : null);
+            existingEvent.setStartTimestamp(
+                startTimestamp != null
+                    ? Timestamp.valueOf(startTimestamp)
+                    : null
+                );
         }
 
         if (jsonObject.containsKey("endTimestamp")) {
             String endTimestamp = jsonObject.get("endTimestamp");
-            existingEvent.setEndTimestamp(endTimestamp != null ? Timestamp.valueOf(endTimestamp) : null);
+            existingEvent.setEndTimestamp(
+                endTimestamp != null
+                    ? Timestamp.valueOf(endTimestamp)
+                    : null
+                );
         }
 
         try {
             Event updatedEvent = eventRepository.save(existingEvent);
-            return ResponseEntity.ok().body(updatedEvent != null ? updatedEvent : existingEvent);
+            return ResponseEntity.ok().body(
+                updatedEvent != null
+                    ? updatedEvent
+                    : existingEvent
+                );
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(
                 new MessageResponse(
@@ -213,11 +250,13 @@ public class EventController {
 
     /**
      * Deletes the event matching the given Id
-     * 
+     *
      * @param eventId the event Id
      */
     @DeleteMapping("/events/{eventId}")
-    public ResponseEntity<?> deleteEventById(@PathVariable(value = "eventId") Integer eventId) {
+    public ResponseEntity<?> deleteEventById(
+        @PathVariable(value = "eventId") Integer eventId
+    ) {
         if (eventRepository.findById(eventId).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 new MessageResponse(
@@ -246,15 +285,49 @@ public class EventController {
      * average age limit for events, average age limit of events
      * by category, average cost for events, average cost of
      * events by category, and number of events by category in
-     * multiple time ranges
-     * 
+     * multiple time ranges.
+     *
+     * Optionally specify a hostId to get back event statistics
+     * only relevant to the host created events.
+     *
      * @return ResponseEntity containing various TWCC event statistics
      */
-    @GetMapping("/events/statistics")
-    public ResponseEntity<?> getEventStatistics() {
+    @GetMapping(value = {"/events/statistics", "/events/statistics/{hostId}"})
+    public ResponseEntity<?> getEventStatistics(
+        @PathVariable(required = false) String hostId
+    ) {
         EventStatistics eventStats = new EventStatistics();
-        List<Event> events = eventRepository.findAll();
-        
+        List<Event> events;
+
+        if (hostId == null) {
+            events = eventRepository.findAll();
+        } else {
+            try {
+                int parsedHostId = Integer.parseInt(hostId);
+                events = eventRepository.findByHost(parsedHostId);
+
+                if (events.isEmpty()) {
+                    return ResponseEntity.badRequest().body(
+                        new MessageResponse(
+                            String.format(
+                                "There are no event statistics for this host: %s",
+                                hostId
+                            ),
+                            HttpStatus.BAD_REQUEST.value()
+                        )
+                    );
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.badRequest().body(
+                    new MessageResponse(
+                        "hostId needs to be an integer.",
+                        HttpStatus.BAD_REQUEST.value()
+                    )
+                );
+            }
+        }
+
         try {
             eventStats = eventStats
                 .setTotalNumberOfEvents(
@@ -264,18 +337,21 @@ public class EventController {
                 ).setAverageAgeLimitForEvents(
                     eventStatisticService.getAverageAgeLimitForEvents(events)
                 ).setAverageAgeLimitOfEventsByCategory(
-                    eventStatisticService.getAverageAgeLimitOfEventsByCategory(events)
+                    eventStatisticService
+                        .getAverageAgeLimitOfEventsByCategory(events)
                 ).setAverageCostForEvents(
                     eventStatisticService.getAverageCostForEvents(events)
                 ).setAverageCostOfEventsByCategory(
-                    eventStatisticService.getAverageCostOfEventsByCategory(events)
+                    eventStatisticService
+                        .getAverageCostOfEventsByCategory(events)
                 ).setNumberOfEventsByCategoryTimeRanges(
-                    eventStatisticService.getNumberOfEventsByCategoryTimeRanges(events)
+                    eventStatisticService
+                        .getNumberOfEventsByCategoryTimeRanges(events)
                 );
-    
+
             return ResponseEntity.ok().body(eventStats);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e);
+            return ResponseEntity.internalServerError().body(e);
         }
     }
 }

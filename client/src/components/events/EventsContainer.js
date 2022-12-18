@@ -2,11 +2,16 @@ import React, { useEffect, useState } from 'react';
 import Events from './Events';
 import { getAuthInformation } from '../../utils/authUtil';
 import { Link } from 'react-router-dom';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
+import Accordion from 'react-bootstrap/Accordion';
+import Select from 'react-select';
 import DateTimePicker from 'react-datetime-picker';
 import '../../styles/events.css';
-import { getEvents, createEvent } from '../../actions/eventActions';
+import { getEvents, createEvent, filterEvents } from '../../actions/eventActions';
 import moment from 'moment';
 
 const EventsContainer = () => {
@@ -37,6 +42,9 @@ const EventsContainer = () => {
     } = createEventData;
 
     const [localEvents, setLocalEvents] = useState([]);
+    const [filterEventsData, setFilterEventsData] = useState({});
+    const [categories, setCategories] = useState([]);
+    const [isAccordionOpen, setIsAccordionOpen] = useState(false);
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -44,6 +52,26 @@ const EventsContainer = () => {
                 const currEvents = await getEvents();
                 console.log(currEvents);
                 setLocalEvents(currEvents);
+
+                // Set Categories in filterEventsData
+                let allCategories = [];
+                currEvents.forEach(event => {
+                    if (event.categories) {
+                        event.categories.split(',').forEach(category => {
+                            let trimmedCategory = category.trim();
+                            let categoryOption = {
+                                value: trimmedCategory,
+                                label: trimmedCategory.charAt(0).toUpperCase() + trimmedCategory.slice(1)
+                            };
+
+                            if (!allCategories.some(currCategoryOption => currCategoryOption.value === categoryOption.value)) {
+                                allCategories.push(categoryOption);
+                            }
+                        });
+                    }
+                });
+
+                setCategories(allCategories);
             } catch (err) {
                 console.error(err);
             }
@@ -188,6 +216,159 @@ const EventsContainer = () => {
         );
     };
 
+    const onFilterEventsDataChange = e => {
+        console.log(e);
+        setFilterEventsData({
+            ...filterEventsData,
+            [e.target.name]: e.target.value
+        })
+    };
+
+    const onFilterEvents = async e => {
+        e.preventDefault();
+
+        try {
+            const filterEventsQueryParams = {};
+            for (const queryParam in filterEventsData) {
+                const queryValue = filterEventsData[queryParam];
+
+                if (queryValue && queryValue.length > 0) {
+                    filterEventsQueryParams[queryParam] = queryValue;
+                } else if (queryValue && queryValue instanceof Date) {
+                    // startTimestamp and endTimestamp
+                    filterEventsQueryParams[queryParam] = moment(queryValue)
+                        .utc()
+                        .format("yyyy-MM-DD HH:mm:ss.SS");
+                }
+            }
+
+            const filteredEvents = await filterEvents(filterEventsQueryParams);
+            
+            setLocalEvents(filteredEvents);
+            setIsAccordionOpen(false);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const renderFilterEventsSection = () => (
+        <div className="filter-events-section">
+            <Accordion
+                activeKey={isAccordionOpen ? 'filter-events-opened' : 'filter-events-closed'}
+                onSelect={() => isAccordionOpen ? setIsAccordionOpen(false) : setIsAccordionOpen(true)}
+            >
+                <Accordion.Item eventKey="filter-events-opened">
+                    <Accordion.Header>Filter Events</Accordion.Header>
+                    <Accordion.Body>
+                        <Form onSubmit={onFilterEvents}>
+                            <Row className="filter-events-row">
+                                <Form.Group as={Col}>
+                                    <Form.Label>Name</Form.Label>
+                                    <Form.Control
+                                        name="name"
+                                        placeholder="Name"                                                        
+                                        onChange={onFilterEventsDataChange}
+                                    />
+                                </Form.Group>
+                                <Form.Group as={Col}>
+                                    <Form.Label>Description</Form.Label>
+                                    <Form.Control 
+                                        name="description"
+                                        placeholder="Description"
+                                        onChange={onFilterEventsDataChange}
+                                    />                                                
+                                </Form.Group>
+                            </Row>
+                            <Row className="filter-events-row">
+                                <Form.Group as={Col}>
+                                    <Form.Label>Address</Form.Label>
+                                    <Form.Control
+                                        name="address"
+                                        placeholder="Address"
+                                        onChange={onFilterEventsDataChange}
+                                    />                                                    
+                                </Form.Group>
+                                <Form.Group as={Col}>
+                                    <Form.Label>Age Limit</Form.Label>
+                                    <Form.Control
+                                        name="ageLimit"
+                                        placeholder="Age Limit"
+                                        type="number"
+                                        onChange={onFilterEventsDataChange}
+                                    />                                                    
+                                </Form.Group>
+                            </Row>
+                            <Row className="filter-events-row">
+                                <Form.Group as={Col}>
+                                    <Form.Label>Cost</Form.Label>
+                                    <Form.Control
+                                        name="cost"
+                                        placeholder="Cost"
+                                        type="number"
+                                        onChange={onFilterEventsDataChange}
+                                    />                                                    
+                                </Form.Group>
+                                <Form.Group as={Col}>
+                                    <Form.Label>Media</Form.Label>
+                                    <Form.Control
+                                        name="media"
+                                        placeholder="Media"
+                                        onChange={onFilterEventsDataChange}
+                                    />                                                    
+                                </Form.Group>
+                            </Row>
+                            <Row className="filter-events-row">
+                                <Form.Group as={Col}>
+                                    <Form.Label className="filter-datetime-label">Start Date Time</Form.Label>
+                                    <DateTimePicker
+                                        format="yyyy-MM-dd HH:mm:ss"
+                                        onChange={dateTime => setFilterEventsData(
+                                            { ...filterEventsData, startTimestamp: dateTime }
+                                        )}
+                                        value={filterEventsData.startTimestamp}
+                                    />
+                                </Form.Group>
+                                <Form.Group as={Col}>
+                                    <Form.Label className="filter-datetime-label">End Date Time</Form.Label>
+                                    <DateTimePicker
+                                        format="yyyy-MM-dd HH:mm:ss"
+                                        onChange={dateTime => setFilterEventsData(
+                                            { ...filterEventsData, endTimestamp: dateTime }
+                                        )}
+                                        value={filterEventsData.endTimestamp}
+                                    />
+                                </Form.Group>
+                            </Row>
+                            <Row className="filter-events-row">
+                                <Form.Group as={Col}>
+                                    <Form.Label>Host</Form.Label>
+                                    <Form.Control
+                                        name="host"
+                                        placeholder="Host"
+                                        type="number"
+                                        onChange={onFilterEventsDataChange}
+                                    />                                                    
+                                </Form.Group>                                                
+                                <Form.Group as={Col}>
+                                    <Form.Label>Categories</Form.Label>
+                                    <Select
+                                        isMulti
+                                        options={categories}
+                                        onChange={categories => setFilterEventsData({ 
+                                            ...filterEventsData,
+                                            categories: categories.map(category => category.value)
+                                        })}
+                                    />
+                                </Form.Group>
+                            </Row>
+                            <Button type="submit" variant="primary">Filter Events</Button>
+                        </Form>
+                    </Accordion.Body>
+                </Accordion.Item>
+            </Accordion>
+        </div>
+    );
+
     return (
         <>
             <div className='events-container-header'>
@@ -200,6 +381,8 @@ const EventsContainer = () => {
                                     Create Event
                                 </Button>
                                 {renderCreateEventModal()}
+                                {/* Filter Events */}
+                                {renderFilterEventsSection()}
                             </>
                             : <>                        
                                 <h2>Login to view events</h2>

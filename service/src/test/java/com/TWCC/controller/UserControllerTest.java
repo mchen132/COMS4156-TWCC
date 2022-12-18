@@ -11,10 +11,11 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -28,9 +29,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
-import org.springframework.test.context.ActiveProfiles;
+
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -43,6 +43,8 @@ import com.TWCC.security.JwtUtils;
 import com.TWCC.security.UserDetailsExt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+
+@TestMethodOrder(MethodOrderer.Random.class)
 @WebMvcTest(UserController.class)
 public class UserControllerTest {
     @Autowired
@@ -214,7 +216,7 @@ public class UserControllerTest {
             mockMvc.perform(mockRequest)
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$.message", is("Username or password is empty")));
+                .andExpect(jsonPath("$.message", is("Username or password is empty.")));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -242,7 +244,7 @@ public class UserControllerTest {
             mockMvc.perform(mockRequest)
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$.message", is("Username or password is empty")));
+                .andExpect(jsonPath("$.message", is("Username or password is empty.")));
         } catch (Exception e) {
             e.printStackTrace();
         }

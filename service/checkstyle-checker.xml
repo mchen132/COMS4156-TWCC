@@ -102,7 +102,7 @@
 
         <!-- Checks for imports                              -->
         <!-- See http://checkstyle.sf.net/config_import.html -->
-        <module name="AvoidStarImport"/>
+        <!-- <module name="AvoidStarImport"/> -->
         <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
         <module name="RedundantImport"/>
         <module name="UnusedImports">
@@ -111,7 +111,7 @@
 
         <!-- Checks for Size Violations.                    -->
         <!-- See http://checkstyle.sf.net/config_sizes.html -->
-        <module name="LineLength"/>
+        <!-- <module name="LineLength"/> --> <!-- Moved outside of TreeWalker because of error being a child of TreeWalker -->
         <module name="MethodLength"/>
         <!-- <module name="ParameterNumber"> -->
 
@@ -174,6 +174,9 @@
           <property name="id" value="checkstyle:suppresswarnings"/>
         </module> -->
         <module name="SuppressWarningsHolder" />
+    </module>
+    <module name="LineLength">
+      <property name="max" value="100"/>
     </module>
 
 </module>

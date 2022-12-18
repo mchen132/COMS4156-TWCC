@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Colors
+GREEN='\033[0;32m'
+RED='\033[1;31m'
+NC='\033[0m'
+
+cd service
+mvn checkstyle:checkstyle
+
+# $? to get last executed Checkstyle command return value:
+# 0 if success and any other number indicating Checkstyle failure
+if [ $? -ne 0 ]; then
+    echo "\n[${RED}Git pre-commit${NC}]: Aborting commit due to Checkstyle errors..."
+    exit 1
+else
+    echo "[${GREEN}Git pre-commit${NC}]: No Checkstyle Errors"
+    exit 0
+fi

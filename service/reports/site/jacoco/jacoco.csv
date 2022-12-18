@@ -1,0 +1,18 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+nyc-todo-service,com.TWCC.payload,JwtResponse,16,27,0,0,8,10,4,5,4,5
+nyc-todo-service,com.TWCC.payload,MessageResponse,8,15,0,0,4,6,2,3,2,3
+nyc-todo-service,com.TWCC.payload,LoginRequest,8,15,0,0,4,6,2,3,2,3
+nyc-todo-service,com.TWCC.api,ApiHandler,8,38,0,2,3,9,0,4,0,3
+nyc-todo-service,com.TWCC.api,RequestService,0,25,0,0,0,3,0,2,0,2
+nyc-todo-service,com.TWCC.api,ResponseParser,9,668,2,40,4,178,2,35,0,16
+nyc-todo-service,com.TWCC.exception,InvalidRequestException,4,0,0,0,2,0,1,0,1,0
+nyc-todo-service,com.TWCC,NycTodoServiceApplication,5,17,0,0,2,4,1,4,1,4
+nyc-todo-service,com.TWCC,NycTodoServiceApplication.new WebMvcConfigurer() {...},0,37,0,0,0,6,0,2,0,2
+nyc-todo-service,com.TWCC.controller,AdminController,0,12,0,0,0,3,0,2,0,2
+nyc-todo-service,com.TWCC.controller,UserController,0,101,0,8,0,25,0,7,0,3
+nyc-todo-service,com.TWCC.controller,EventController,40,369,3,35,16,101,3,25,0,9
+nyc-todo-service,com.TWCC.security,UserDetailsServiceExt,0,21,0,0,0,5,0,3,0,3
+nyc-todo-service,com.TWCC.data,EventStatistics,0,59,0,0,0,22,0,15,0,15
+nyc-todo-service,com.TWCC.data,TwccUser,16,97,0,0,1,39,1,17,1,17
+nyc-todo-service,com.TWCC.service,EventStatisticService,0,544,1,75,0,114,1,44,0,7
+nyc-todo-service,com.TWCC.service,EventService,15,371,12,80,5,112,12,36,0,2

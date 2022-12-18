@@ -25,20 +25,20 @@ import com.TWCC.security.UserDetailsExt;
 @RequestMapping("/user")
 public class UserController {
     @Autowired
-    AuthenticationManager authenticationManager;
-    
-    @Autowired
-    UserRepository userRepository;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    PasswordEncoder encoder;
+    private UserRepository userRepository;
 
     @Autowired
-    JwtUtils jwtUtils;
+    private PasswordEncoder encoder;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     /**
      * Registers the user
-     * 
+     *
      * @param newUser
      * @return ResponseEntity containing register user information
      */
@@ -72,23 +72,29 @@ public class UserController {
 
     /**
      * Login as user and gets new JWT on successful login
-     * 
+     *
      * @param loginRequest
      * @return ResponseEntity containing login user response information
      */
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
-        if (loginRequest.getUsername() == null || loginRequest.getPassword() == null) {        
+        if (
+            loginRequest.getUsername() == null
+            || loginRequest.getPassword() == null
+        ) {
             return ResponseEntity.badRequest().body(
                 new MessageResponse(
-                    "Username or password is empty",
+                    "Username or password is empty.",
                     HttpStatus.BAD_REQUEST.value()
                 )
             );
         }
 
         Authentication auth = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+            new UsernamePasswordAuthenticationToken(
+                loginRequest.getUsername(),
+                loginRequest.getPassword()
+            )
         );
 
         SecurityContextHolder.getContext().setAuthentication(auth);

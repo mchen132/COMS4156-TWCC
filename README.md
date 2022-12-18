@@ -1,6 +1,7 @@
 # COMS4156-TWCC
 
 ## 1. Build, Run, and Test Server
+---
 *Ensure that Maven is installed before these commands can be run*
 > Docker setup (without having to setup Maven on your host machine):
 > 1. Install Docker
@@ -17,7 +18,8 @@
     - `src/main/resources/application.properties` database properties are required to run the app successfully connecting to the database. Make sure to replace placeholder values.
 - Run Tests: After building the app, run `mvn test` to execute all tests in the package
 
-## 2. Documentation
+## 2. Service API Documentation
+---
 ### **Events**
 - All calls need to include a valid JWT (Bearer Token), which can be obtained from `/user/login` route, in the authorization headers
 - `GET /events`: Gets a list of events
@@ -94,8 +96,12 @@
     - This is an entrypoint only available to service admin. Therefore, users will not be exposed to this entrypoint.
 
 ## 3. Integration/E2E Tests Strategy
+---
+Our current Integration/E2E test strategy is automated and done manually. 
 
-Due to the technical difficulty we have faced to implement automated integration tests, we decided to do integration tests and E2E tests manually for iteration-2.
+Automated integration tests (in our `**/*Integration*.java` test files) are done collectively along with unit tests every time our GitHub Actions workflow is run. Our test reports are automatically generated and highlight those results ([view reports section for more detail](#4-reports)).
+
+Manual Integration/E2E tests are also done to simulate another layer of the testing environment with a separate test database and an opportunity for a human/engineer test oracle to verify correct output. The testing flow documentation is discussed in detail below.
 
 We have also pre-populated some data in the database before the tests. Such as the following:
 
@@ -151,31 +157,38 @@ We send `DELETE /events/{id}`, along with `<JWT>` in the authorization header. T
 Please note that the above sample flow is a "Golden Path" of the service. We have also tested with ill-formatted request bodies, missing JWT, non-existant events, filters that filter out all events, etc. 
 
 ## 4. Reports
+---
+>- *All recent reports documents are now automated (through our GitHub Actions workflow) and published in the `service/reports/site` directory with every pull request merge into a `feature/**` branch.*
+> - *All recent report images published on this README are all up-to-date as a result of our automated GitHub Actions workflow that takes screenshots of reports after they are generated.*
+> - *Feature branches (`feature/**`) will get these report
+updates after a PR merge (which triggers the report publishing job in our Workflow) and subsequently `main` will after the feature is merged into main.*
+
 ### Checkstyle
 - Directions:
     1. In app root directory: `mvn site`
     2. Locate Checkstyle report in `target/site/checkstyle.html`
-- Most recent Checkstyle run: `0 warnings, 338 errors`
-    ![Checkstyle report](./service/reports/t5-checkstyle-report.png)
+- Most recent Checkstyle run:
+    ![Checkstyle report](./service/reports/checkstyle-report.png)
 
 ### Test Coverage
 - Directions:
     1. In app root directory: `mvn clean test`
     2. Locate Checkstyle report in `target/site/jacoco/index.html`
-- Most recent Jacoco coverage run: `Instruction Coverage: 89%, Branch Coverage: 75%`
-    ![Coverage report](./service/reports/t5-test-coverage-report.png)
+- Most recent Jacoco coverage run:
+    ![Coverage report](./service/reports/test-coverage-report.png)
 
 ### Static Analysis Bug Finder Tool
 - Directions:
     1. In `service/` directory: `mvn site`
     2. Locate SpotBugs report in `target/site/spotbugs.html`
-- Most recent SpotBugs coverage run: `Classes 26, Bugs: 24, Errors: 0, Missing Classes: 0`
-    ![Coverage report](./service/reports/t5-static-analysis-bug-finder-report.png)
+- Most recent SpotBugs coverage run:
+    ![Coverage report](./service/reports/static-analysis-bug-finder-report.png)
 
 ### CI/CD Workflow Reports
 - Any push and pull request triggers a Github Actions workflow run where each log can be located [here](https://github.com/mchen132/COMS4156-TWCC/actions/workflows/ci_cd_workflow.yml)
 
 ## 5. Client
+---
 - Directions to run client:
     1. (Option 1) Start server locally (includes having local MySql Database setup with all tables and application.properties setup)
     1. (Option 2) Updating API calls in client (residing in `client/src/actions`) to point to production domain URL (EC2 instance)
@@ -184,7 +197,8 @@ Please note that the above sample flow is a "Golden Path" of the service. We hav
 - Directions to build client:
     1. In `client/` directory, run `npm build`
 
-## 5. 3rd Party Integrations (3PI)
+## 6. 3rd Party Integrations (3PI)
+---
 ### User Authentication:
 - For user authentication we implemented authorization using JWT (JSON Web Token) tokens. The JWT architecture in our service application is built off of Spring Security following the guide: https://www.bezkoder.com/spring-boot-jwt-authentication/.
 - A lot of the classes are extensions of the framework which make it either difficult to test or already tested by the 3PI. For this reason, some of the `security/**` files are excluded from Jacoco test coverage.

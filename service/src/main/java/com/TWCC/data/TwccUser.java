@@ -34,9 +34,16 @@ public class TwccUser {
     @Column(name = "email")
     private String email;
 
-    public TwccUser() {}
+    public TwccUser() { }
 
-    public TwccUser(String firstName, String lastName, int age, String username, String password, String email) {
+    public TwccUser(
+        String firstName,
+        String lastName,
+        int age,
+        String username,
+        String password,
+        String email
+    ) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
@@ -45,7 +52,15 @@ public class TwccUser {
         this.email = email;
     }
 
-    public TwccUser(int id, String firstName, String lastName, int age, String username, String password, String email) {
+    public TwccUser(
+        int id,
+        String firstName,
+        String lastName,
+        int age,
+        String username,
+        String password,
+        String email
+    ) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -102,7 +117,7 @@ public class TwccUser {
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
     public String getEmail() {
         return email;
     }

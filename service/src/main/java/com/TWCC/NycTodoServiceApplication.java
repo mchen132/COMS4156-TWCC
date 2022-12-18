@@ -16,16 +16,19 @@ public class NycTodoServiceApplication {
     }
 
     @Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("http://localhost:3002").allowedMethods("GET", "POST","PUT", "DELETE");
-			}
-		};
-	}
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry
+                    .addMapping("/**")
+                    .allowedOrigins("http://localhost:3002")
+                    .allowedMethods("GET", "POST", "PUT", "DELETE");
+            }
+        };
+    }
 
-	@Bean
+    @Bean
     public RestTemplateBuilder restTemplateBuilder() {
         return new RestTemplateBuilder();
     }

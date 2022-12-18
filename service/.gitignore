@@ -35,3 +35,7 @@ build/
 .DS_Store
 
 bin/
+
+### Custom Workflow Reports ###
+/reports/site/jacoco/jacoco-sessions.html
+/reports/site/jacoco/jacoco.xml

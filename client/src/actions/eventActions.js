@@ -18,6 +18,42 @@ export const getEvents = async () => {
     }
 };
 
+/**
+ * Gets a list of filtered events based on the specified
+ * query parameters.
+ * 
+ * @param {Object} filterEventsQueryParams 
+ * @returns events | error
+ */
+export const filterEvents = async filterEventsQueryParams => {
+    try {
+        let filterEventsQueryString = Object.keys(filterEventsQueryParams).length > 0
+            ? '?'
+            : '';
+        for (const queryParam in filterEventsQueryParams) {
+            const queryValue = filterEventsQueryParams[queryParam];
+            if (filterEventsQueryString.includes('=')) {
+                filterEventsQueryString += `&${queryParam}=${queryValue}`
+            } else {
+                filterEventsQueryString += `${queryParam}=${queryValue}`
+            }
+        }
+
+        const res = await axios.get(`http://localhost:8080/filterEvents${filterEventsQueryString}`);
+
+        if (res.status === 200) {
+            return res.data;
+        }
+    } catch (err) {
+        if (err.response && err.response.status === 401) {
+            clearAuthLocalStorageInfo();
+        }
+
+        console.error(err);
+        throw err;
+    }
+};
+
 export const createEvent = async (newEvent) => {
     try {
         const res = await axios.post("http://localhost:8080/events", newEvent);
@@ -69,9 +105,9 @@ export const deleteEvent = async (eventId) => {
     }
 };
 
-export const getEventStatistics = async () => {
+export const getEventStatistics = async (hostId) => {
     try {
-        const res = await axios.get("http://localhost:8080/events/statistics");
+        const res = await axios.get(`http://localhost:8080/events/statistics${hostId ? '/' + hostId : ''}`);
 
         if (res.status === 200) {
             return res.data;
