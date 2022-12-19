@@ -107,10 +107,10 @@ public class EventStatisticService {
             }
 
             // Calculate average
-            for (String category: averageAgeLimitOfEventsByCategory.keySet()) {
-                int averageAgeLimit = averageAgeLimitOfEventsByCategory.get(category)
-                    / numberOfEventsByCategory.get(category);
-                averageAgeLimitOfEventsByCategory.put(category, averageAgeLimit);
+            for (Map.Entry<String, Integer> entry: averageAgeLimitOfEventsByCategory.entrySet()) {
+                int averageAgeLimit = entry.getValue()
+                    / numberOfEventsByCategory.get(entry.getKey());
+                averageAgeLimitOfEventsByCategory.put(entry.getKey(), averageAgeLimit);
             }
         }
 
@@ -176,10 +176,10 @@ public class EventStatisticService {
             }
 
             // Calculate average
-            for (String category: averageCostOfEventsByCategory.keySet()) {
-                Float averageCost = averageCostOfEventsByCategory.get(category)
-                    / numberOfEventsByCategory.get(category);
-                averageCostOfEventsByCategory.put(category, averageCost);
+            for (Map.Entry<String, Float> entry: averageCostOfEventsByCategory.entrySet()) {
+                Float averageCost = entry.getValue()
+                    / numberOfEventsByCategory.get(entry.getKey());
+                averageCostOfEventsByCategory.put(entry.getKey(), averageCost);
             }
         }
 

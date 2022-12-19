@@ -107,10 +107,10 @@ import com.TWCC.data.Event;
 <span class="fc" id="L107">            }</span>
 
             // Calculate average
-<span class="fc bfc" id="L110" title="All 2 branches covered.">            for (String category: averageAgeLimitOfEventsByCategory.keySet()) {</span>
-<span class="fc" id="L111">                int averageAgeLimit = averageAgeLimitOfEventsByCategory.get(category)</span>
-<span class="fc" id="L112">                    / numberOfEventsByCategory.get(category);</span>
-<span class="fc" id="L113">                averageAgeLimitOfEventsByCategory.put(category, averageAgeLimit);</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">            for (Map.Entry&lt;String, Integer&gt; entry: averageAgeLimitOfEventsByCategory.entrySet()) {</span>
+<span class="fc" id="L111">                int averageAgeLimit = entry.getValue()</span>
+<span class="fc" id="L112">                    / numberOfEventsByCategory.get(entry.getKey());</span>
+<span class="fc" id="L113">                averageAgeLimitOfEventsByCategory.put(entry.getKey(), averageAgeLimit);</span>
 <span class="fc" id="L114">            }</span>
         }
 
@@ -176,10 +176,10 @@ import com.TWCC.data.Event;
 <span class="fc" id="L176">            }</span>
 
             // Calculate average
-<span class="fc bfc" id="L179" title="All 2 branches covered.">            for (String category: averageCostOfEventsByCategory.keySet()) {</span>
-<span class="fc" id="L180">                Float averageCost = averageCostOfEventsByCategory.get(category)</span>
-<span class="fc" id="L181">                    / numberOfEventsByCategory.get(category);</span>
-<span class="fc" id="L182">                averageCostOfEventsByCategory.put(category, averageCost);</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">            for (Map.Entry&lt;String, Float&gt; entry: averageCostOfEventsByCategory.entrySet()) {</span>
+<span class="fc" id="L180">                Float averageCost = entry.getValue()</span>
+<span class="fc" id="L181">                    / numberOfEventsByCategory.get(entry.getKey());</span>
+<span class="fc" id="L182">                averageCostOfEventsByCategory.put(entry.getKey(), averageCost);</span>
 <span class="fc" id="L183">            }</span>
         }
 
