@@ -218,42 +218,43 @@ import org.springframework.stereotype.Component;
 
 <span class="fc" id="L219">        String streetAddr = &quot;&quot;;</span>
 
-<span class="fc bfc" id="L221" title="All 2 branches covered.">        for (String key : streetAddrMap.keySet()) {</span>
-<span class="fc" id="L222">            String addr = String.valueOf(streetAddrMap.get(key));</span>
+<span class="fc bfc" id="L221" title="All 2 branches covered.">        for (Map.Entry&lt;String, Object&gt; entry: streetAddrMap.entrySet()) {</span>
+            // String addr = String.valueOf(streetAddrMap.get(key));
+<span class="fc" id="L223">            String addr = String.valueOf(entry.getValue());</span>
 
             // removing double quotes from the original string value
-<span class="fc" id="L225">            addr = &quot; &quot; + addr.substring(1, addr.length() - 1);</span>
+<span class="fc" id="L226">            addr = &quot; &quot; + addr.substring(1, addr.length() - 1);</span>
 
-<span class="fc" id="L227">            streetAddr += addr;</span>
-<span class="fc" id="L228">        }</span>
+<span class="fc" id="L228">            streetAddr += addr;</span>
+<span class="fc" id="L229">        }</span>
 
         @SuppressWarnings(&quot;unchecked&quot;)
-<span class="fc" id="L231">        String city = String.valueOf(</span>
-<span class="fc" id="L232">            ((HashMap&lt;String, Object&gt;) venueMap.get(&quot;city&quot;)).get(&quot;name&quot;)</span>
+<span class="fc" id="L232">        String city = String.valueOf(</span>
+<span class="fc" id="L233">            ((HashMap&lt;String, Object&gt;) venueMap.get(&quot;city&quot;)).get(&quot;name&quot;)</span>
         );
 
         // removing double quotes from the original string value
-<span class="fc" id="L236">        city = city.substring(1, city.length() - 1);</span>
+<span class="fc" id="L237">        city = city.substring(1, city.length() - 1);</span>
 
         @SuppressWarnings(&quot;unchecked&quot;)
-<span class="fc" id="L239">        String state = String.valueOf(</span>
-<span class="fc" id="L240">            ((HashMap&lt;String, Object&gt;) venueMap.get(&quot;state&quot;)).get(&quot;stateCode&quot;)</span>
+<span class="fc" id="L240">        String state = String.valueOf(</span>
+<span class="fc" id="L241">            ((HashMap&lt;String, Object&gt;) venueMap.get(&quot;state&quot;)).get(&quot;stateCode&quot;)</span>
         );
 
         // removing double quotes from the original string value
-<span class="fc" id="L244">        state = state.substring(1, state.length() - 1);</span>
+<span class="fc" id="L245">        state = state.substring(1, state.length() - 1);</span>
 
         @SuppressWarnings(&quot;unchecked&quot;)
-<span class="fc" id="L247">        String country = String.valueOf(</span>
-<span class="fc" id="L248">            ((HashMap&lt;String, Object&gt;) venueMap.get(&quot;country&quot;)).get(</span>
+<span class="fc" id="L248">        String country = String.valueOf(</span>
+<span class="fc" id="L249">            ((HashMap&lt;String, Object&gt;) venueMap.get(&quot;country&quot;)).get(</span>
                     &quot;countryCode&quot;
                 )
         );
 
         // removing double quotes from the original string value
-<span class="fc" id="L254">        country = country.substring(1, country.length() - 1);</span>
+<span class="fc" id="L255">        country = country.substring(1, country.length() - 1);</span>
 
-<span class="fc" id="L256">        return String.format(</span>
+<span class="fc" id="L257">        return String.format(</span>
             &quot;%s,%s, %s, %s, %s&quot;,
             name,
             streetAddr,
@@ -274,39 +275,39 @@ import org.springframework.stereotype.Component;
      */
     private Timestamp extractStartTimestamp(Map&lt;String, Object&gt; eventMap) {
         @SuppressWarnings(&quot;unchecked&quot;)
-<span class="fc" id="L277">        Map&lt;String, Object&gt; startTimeMap = (HashMap&lt;String, Object&gt;) (</span>
-<span class="fc" id="L278">            (HashMap&lt;String, Object&gt;) eventMap.get(&quot;dates&quot;)</span>
-<span class="fc" id="L279">        ).get(&quot;start&quot;);</span>
+<span class="fc" id="L278">        Map&lt;String, Object&gt; startTimeMap = (HashMap&lt;String, Object&gt;) (</span>
+<span class="fc" id="L279">            (HashMap&lt;String, Object&gt;) eventMap.get(&quot;dates&quot;)</span>
+<span class="fc" id="L280">        ).get(&quot;start&quot;);</span>
 
         // start time's DateTime is missing from the response body
-<span class="fc bfc" id="L282" title="All 2 branches covered.">        if (!startTimeMap.containsKey(&quot;dateTime&quot;)) {</span>
-<span class="fc" id="L283">            String localDateString = String.valueOf(</span>
-<span class="fc" id="L284">                startTimeMap.get(&quot;localDate&quot;)</span>
+<span class="fc bfc" id="L283" title="All 2 branches covered.">        if (!startTimeMap.containsKey(&quot;dateTime&quot;)) {</span>
+<span class="fc" id="L284">            String localDateString = String.valueOf(</span>
+<span class="fc" id="L285">                startTimeMap.get(&quot;localDate&quot;)</span>
             );
 
-<span class="fc" id="L287">            localDateString =</span>
-<span class="fc" id="L288">                localDateString.substring(1, localDateString.length() - 1);</span>
+<span class="fc" id="L288">            localDateString =</span>
+<span class="fc" id="L289">                localDateString.substring(1, localDateString.length() - 1);</span>
 
-<span class="fc" id="L290">            localDateString += &quot; 00:00:00&quot;;</span>
+<span class="fc" id="L291">            localDateString += &quot; 00:00:00&quot;;</span>
 
-<span class="fc" id="L292">            System.out.println(localDateString);</span>
+<span class="fc" id="L293">            System.out.println(localDateString);</span>
 
-<span class="fc" id="L294">            return Timestamp.valueOf(localDateString);</span>
+<span class="fc" id="L295">            return Timestamp.valueOf(localDateString);</span>
         }
 
-<span class="fc" id="L297">        String startTimestampString = String.valueOf(</span>
-<span class="fc" id="L298">            startTimeMap.get(&quot;dateTime&quot;)</span>
+<span class="fc" id="L298">        String startTimestampString = String.valueOf(</span>
+<span class="fc" id="L299">            startTimeMap.get(&quot;dateTime&quot;)</span>
         );
 
-<span class="fc" id="L301">        startTimestampString =</span>
-<span class="fc" id="L302">            startTimestampString.substring(</span>
+<span class="fc" id="L302">        startTimestampString =</span>
+<span class="fc" id="L303">            startTimestampString.substring(</span>
                 1,
-<span class="fc" id="L304">                startTimestampString.length() - 1</span>
+<span class="fc" id="L305">                startTimestampString.length() - 1</span>
             );
 
-<span class="fc" id="L307">        Instant dateTime = Instant.parse(startTimestampString);</span>
+<span class="fc" id="L308">        Instant dateTime = Instant.parse(startTimestampString);</span>
 
-<span class="fc" id="L309">        return Timestamp.from(dateTime);</span>
+<span class="fc" id="L310">        return Timestamp.from(dateTime);</span>
     }
 
     /**
@@ -318,31 +319,31 @@ import org.springframework.stereotype.Component;
      *         returns 0 if &quot;priceRanges&quot; or &quot;min&quot; attribute is missing
      */
     private float extractCost(Map&lt;String, Object&gt; eventMap) {
-<span class="fc" id="L321">        float res = 0;</span>
+<span class="fc" id="L322">        float res = 0;</span>
 
-<span class="fc bfc" id="L323" title="All 2 branches covered.">        if (eventMap.get(&quot;priceRanges&quot;) == null) {</span>
-<span class="fc" id="L324">            return res;</span>
+<span class="fc bfc" id="L324" title="All 2 branches covered.">        if (eventMap.get(&quot;priceRanges&quot;) == null) {</span>
+<span class="fc" id="L325">            return res;</span>
         }
 
         @SuppressWarnings(&quot;unchecked&quot;)
-<span class="fc" id="L328">        ArrayList&lt;Object&gt; rangeList = (ArrayList&lt;Object&gt;) eventMap.get(</span>
+<span class="fc" id="L329">        ArrayList&lt;Object&gt; rangeList = (ArrayList&lt;Object&gt;) eventMap.get(</span>
             &quot;priceRanges&quot;
         );
 
-<span class="fc bfc" id="L332" title="All 2 branches covered.">        if (rangeList.size() == 0) {</span>
-<span class="fc" id="L333">            return res;</span>
+<span class="fc bfc" id="L333" title="All 2 branches covered.">        if (rangeList.size() == 0) {</span>
+<span class="fc" id="L334">            return res;</span>
         }
 
         @SuppressWarnings(&quot;unchecked&quot;)
-<span class="fc" id="L337">        Map&lt;String, Object&gt; priceMap = (HashMap&lt;String, Object&gt;) rangeList.get(</span>
+<span class="fc" id="L338">        Map&lt;String, Object&gt; priceMap = (HashMap&lt;String, Object&gt;) rangeList.get(</span>
             0
         );
 
-<span class="fc bfc" id="L341" title="All 2 branches covered.">        if (priceMap.get(&quot;min&quot;) == null) {</span>
-<span class="fc" id="L342">            return res;</span>
+<span class="fc bfc" id="L342" title="All 2 branches covered.">        if (priceMap.get(&quot;min&quot;) == null) {</span>
+<span class="fc" id="L343">            return res;</span>
         }
 
-<span class="fc" id="L345">        return (float) ((DoubleNode) priceMap.get(&quot;min&quot;)).asDouble();</span>
+<span class="fc" id="L346">        return (float) ((DoubleNode) priceMap.get(&quot;min&quot;)).asDouble();</span>
     }
 
     /**
@@ -356,28 +357,28 @@ import org.springframework.stereotype.Component;
      */
     @SuppressWarnings(&quot;checkstyle:AvoidInlineConditionals&quot;)
     private int extractAgeLimit(Map&lt;String, Object&gt; eventMap) {
-<span class="fc" id="L359">        int ageLimit = 0;</span>
+<span class="fc" id="L360">        int ageLimit = 0;</span>
 
-<span class="fc bfc" id="L361" title="All 2 branches covered.">        if (!eventMap.containsKey(&quot;ageRestrictions&quot;)) {</span>
-<span class="fc" id="L362">            return ageLimit;</span>
+<span class="fc bfc" id="L362" title="All 2 branches covered.">        if (!eventMap.containsKey(&quot;ageRestrictions&quot;)) {</span>
+<span class="fc" id="L363">            return ageLimit;</span>
         }
 
         @SuppressWarnings(&quot;unchecked&quot;)
-<span class="fc" id="L366">        Map&lt;String, Object&gt; restrictionMap =</span>
-<span class="fc" id="L367">            (HashMap&lt;String, Object&gt;) eventMap.get(&quot;ageRestrictions&quot;);</span>
+<span class="fc" id="L367">        Map&lt;String, Object&gt; restrictionMap =</span>
+<span class="fc" id="L368">            (HashMap&lt;String, Object&gt;) eventMap.get(&quot;ageRestrictions&quot;);</span>
 
-<span class="fc bfc" id="L369" title="All 2 branches covered.">        if (!restrictionMap.containsKey(&quot;legalAgeEnforced&quot;)) {</span>
-<span class="fc" id="L370">            return ageLimit;</span>
+<span class="fc bfc" id="L370" title="All 2 branches covered.">        if (!restrictionMap.containsKey(&quot;legalAgeEnforced&quot;)) {</span>
+<span class="fc" id="L371">            return ageLimit;</span>
         }
 
-<span class="fc" id="L373">        boolean ageRestriction =</span>
+<span class="fc" id="L374">        boolean ageRestriction =</span>
             (
-<span class="fc" id="L375">                (BooleanNode) restrictionMap.get(&quot;legalAgeEnforced&quot;)</span>
-<span class="fc" id="L376">            ).booleanValue();</span>
+<span class="fc" id="L376">                (BooleanNode) restrictionMap.get(&quot;legalAgeEnforced&quot;)</span>
+<span class="fc" id="L377">            ).booleanValue();</span>
 
-<span class="fc bfc" id="L378" title="All 2 branches covered.">        ageLimit = ageRestriction ? LEGAL_AGE : 0;</span>
+<span class="fc bfc" id="L379" title="All 2 branches covered.">        ageLimit = ageRestriction ? LEGAL_AGE : 0;</span>
 
-<span class="fc" id="L380">        return ageLimit;</span>
+<span class="fc" id="L381">        return ageLimit;</span>
     }
 
     /**
@@ -387,75 +388,75 @@ import org.springframework.stereotype.Component;
      */
     private String extractCategory(Map&lt;String, Object&gt; eventMap) {
 
-<span class="fc" id="L390">        String category = &quot;&quot;;</span>
+<span class="fc" id="L391">        String category = &quot;&quot;;</span>
 
-<span class="fc bfc" id="L392" title="All 2 branches covered.">        if (eventMap.get(&quot;classifications&quot;) == null) {</span>
-<span class="fc" id="L393">            return category;</span>
+<span class="fc bfc" id="L393" title="All 2 branches covered.">        if (eventMap.get(&quot;classifications&quot;) == null) {</span>
+<span class="fc" id="L394">            return category;</span>
         }
 
         @SuppressWarnings(&quot;unchecked&quot;)
-<span class="fc" id="L397">        ArrayList&lt;Object&gt; classificationList = (ArrayList&lt;Object&gt;) eventMap.get(</span>
+<span class="fc" id="L398">        ArrayList&lt;Object&gt; classificationList = (ArrayList&lt;Object&gt;) eventMap.get(</span>
             &quot;classifications&quot;
         );
 
-<span class="fc bfc" id="L401" title="All 2 branches covered.">        if (classificationList.size() == 0) {</span>
-<span class="fc" id="L402">            return category;</span>
+<span class="fc bfc" id="L402" title="All 2 branches covered.">        if (classificationList.size() == 0) {</span>
+<span class="fc" id="L403">            return category;</span>
         }
 
         @SuppressWarnings(&quot;unchecked&quot;)
-<span class="fc" id="L406">        Map&lt;String, Object&gt; categoryMap = (HashMap&lt;String, Object&gt;) classificationList.get(</span>
+<span class="fc" id="L407">        Map&lt;String, Object&gt; categoryMap = (HashMap&lt;String, Object&gt;) classificationList.get(</span>
             0
         );
 
-<span class="fc bfc" id="L410" title="All 2 branches covered.">        if (categoryMap.get(&quot;segment&quot;) == null) {</span>
-<span class="fc" id="L411">            return category;</span>
+<span class="fc bfc" id="L411" title="All 2 branches covered.">        if (categoryMap.get(&quot;segment&quot;) == null) {</span>
+<span class="fc" id="L412">            return category;</span>
         }
 
         @SuppressWarnings(&quot;unchecked&quot;)
-<span class="fc" id="L415">        String segment = (</span>
+<span class="fc" id="L416">        String segment = (</span>
                             (TextNode)
                                 (
                                     (HashMap&lt;String, Object&gt;)
-<span class="fc" id="L419">                                        categoryMap.get(&quot;segment&quot;)</span>
-<span class="fc" id="L420">                                ).get(&quot;name&quot;)</span>
-<span class="fc" id="L421">                        ).toString();</span>
+<span class="fc" id="L420">                                        categoryMap.get(&quot;segment&quot;)</span>
+<span class="fc" id="L421">                                ).get(&quot;name&quot;)</span>
+<span class="fc" id="L422">                        ).toString();</span>
 
-<span class="fc" id="L423">        segment = segment.substring(1, segment.length() - 1);</span>
-<span class="fc" id="L424">        category += segment;</span>
+<span class="fc" id="L424">        segment = segment.substring(1, segment.length() - 1);</span>
+<span class="fc" id="L425">        category += segment;</span>
 
-<span class="fc bfc" id="L426" title="All 2 branches covered.">        if (categoryMap.get(&quot;genre&quot;) == null) {</span>
-<span class="fc" id="L427">            return category;</span>
+<span class="fc bfc" id="L427" title="All 2 branches covered.">        if (categoryMap.get(&quot;genre&quot;) == null) {</span>
+<span class="fc" id="L428">            return category;</span>
         }
 
         @SuppressWarnings(&quot;unchecked&quot;)
-<span class="fc" id="L431">        String genre = (</span>
+<span class="fc" id="L432">        String genre = (</span>
                             (TextNode)
                                 (
                                     (HashMap&lt;String, Object&gt;)
-<span class="fc" id="L435">                                        categoryMap.get(&quot;genre&quot;)</span>
-<span class="fc" id="L436">                                ).get(&quot;name&quot;)</span>
-<span class="fc" id="L437">                        ).toString();</span>
+<span class="fc" id="L436">                                        categoryMap.get(&quot;genre&quot;)</span>
+<span class="fc" id="L437">                                ).get(&quot;name&quot;)</span>
+<span class="fc" id="L438">                        ).toString();</span>
 
-<span class="fc" id="L439">        genre = genre.substring(1, genre.length() - 1);</span>
-<span class="fc" id="L440">        category += &quot;,&quot; + genre;</span>
+<span class="fc" id="L440">        genre = genre.substring(1, genre.length() - 1);</span>
+<span class="fc" id="L441">        category += &quot;,&quot; + genre;</span>
 
-<span class="fc bfc" id="L442" title="All 2 branches covered.">        if (categoryMap.get(&quot;subGenre&quot;) == null) {</span>
-<span class="fc" id="L443">            return category;</span>
+<span class="fc bfc" id="L443" title="All 2 branches covered.">        if (categoryMap.get(&quot;subGenre&quot;) == null) {</span>
+<span class="fc" id="L444">            return category;</span>
         }
 
         @SuppressWarnings(&quot;unchecked&quot;)
-<span class="fc" id="L447">        String subGenre = (</span>
+<span class="fc" id="L448">        String subGenre = (</span>
                             (TextNode)
                                 (
                                     (HashMap&lt;String, Object&gt;)
-<span class="fc" id="L451">                                        categoryMap.get(&quot;subGenre&quot;)</span>
-<span class="fc" id="L452">                                ).get(&quot;name&quot;)</span>
-<span class="fc" id="L453">                        ).toString();</span>
+<span class="fc" id="L452">                                        categoryMap.get(&quot;subGenre&quot;)</span>
+<span class="fc" id="L453">                                ).get(&quot;name&quot;)</span>
+<span class="fc" id="L454">                        ).toString();</span>
 
-<span class="fc" id="L455">        subGenre = subGenre.substring(1, subGenre.length() - 1);</span>
-<span class="fc" id="L456">        category += &quot;,&quot; + subGenre;</span>
+<span class="fc" id="L456">        subGenre = subGenre.substring(1, subGenre.length() - 1);</span>
+<span class="fc" id="L457">        category += &quot;,&quot; + subGenre;</span>
 
-<span class="fc" id="L458">        return category;</span>
+<span class="fc" id="L459">        return category;</span>
     }
 
     // NOTE: stringToMap(), toMap(), and toList() are inspired by the following
@@ -469,21 +470,21 @@ import org.springframework.stereotype.Component;
      * all values are cast to Object
      */
     private Map&lt;String, Object&gt; jsonStringToMap(String jsonString) {
-<span class="fc" id="L472">        Map&lt;String, Object&gt; retMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L473">        Map&lt;String, Object&gt; retMap = new HashMap&lt;&gt;();</span>
 
         try {
-<span class="fc" id="L475">            JsonNode node = this.mapper.readTree(jsonString);</span>
+<span class="fc" id="L476">            JsonNode node = this.mapper.readTree(jsonString);</span>
 
-<span class="pc bpc" id="L477" title="1 of 2 branches missed.">            if (node != null) {</span>
-<span class="fc" id="L478">                retMap = this.toMap(node);</span>
+<span class="pc bpc" id="L478" title="1 of 2 branches missed.">            if (node != null) {</span>
+<span class="fc" id="L479">                retMap = this.toMap(node);</span>
             }
 
-<span class="fc" id="L481">            return retMap;</span>
-<span class="nc" id="L482">        } catch (JsonProcessingException e) {</span>
-<span class="nc" id="L483">            e.printStackTrace();</span>
+<span class="fc" id="L482">            return retMap;</span>
+<span class="nc" id="L483">        } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L484">            e.printStackTrace();</span>
         }
 
-<span class="nc" id="L486">        return retMap;</span>
+<span class="nc" id="L487">        return retMap;</span>
     }
 
     /**
@@ -496,25 +497,25 @@ import org.springframework.stereotype.Component;
      *         of the JsonNode
      */
     private Map&lt;String, Object&gt; toMap(JsonNode rootNode) {
-<span class="fc" id="L499">        Map&lt;String, Object&gt; retMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L500">        Map&lt;String, Object&gt; retMap = new HashMap&lt;&gt;();</span>
 
-<span class="fc" id="L501">        Iterator&lt;Entry&lt;String, JsonNode&gt;&gt; iter = rootNode.fields();</span>
+<span class="fc" id="L502">        Iterator&lt;Entry&lt;String, JsonNode&gt;&gt; iter = rootNode.fields();</span>
 
-<span class="fc" id="L503">        iter.forEachRemaining(field -&gt; {</span>
-<span class="fc" id="L504">            String key = field.getKey();</span>
-<span class="fc" id="L505">            JsonNode currNode = field.getValue();</span>
-<span class="fc" id="L506">            Object value = currNode;</span>
+<span class="fc" id="L504">        iter.forEachRemaining(field -&gt; {</span>
+<span class="fc" id="L505">            String key = field.getKey();</span>
+<span class="fc" id="L506">            JsonNode currNode = field.getValue();</span>
+<span class="fc" id="L507">            Object value = currNode;</span>
 
-<span class="fc bfc" id="L508" title="All 2 branches covered.">            if (currNode.isArray()) {</span>
-<span class="fc" id="L509">                value = this.toList(currNode);</span>
-<span class="fc bfc" id="L510" title="All 2 branches covered.">            } else if (currNode.isObject()) {</span>
-<span class="fc" id="L511">                value = this.toMap(currNode);</span>
+<span class="fc bfc" id="L509" title="All 2 branches covered.">            if (currNode.isArray()) {</span>
+<span class="fc" id="L510">                value = this.toList(currNode);</span>
+<span class="fc bfc" id="L511" title="All 2 branches covered.">            } else if (currNode.isObject()) {</span>
+<span class="fc" id="L512">                value = this.toMap(currNode);</span>
             }
 
-<span class="fc" id="L514">            retMap.put(key, value);</span>
-<span class="fc" id="L515">        });</span>
+<span class="fc" id="L515">            retMap.put(key, value);</span>
+<span class="fc" id="L516">        });</span>
 
-<span class="fc" id="L517">        return retMap;</span>
+<span class="fc" id="L518">        return retMap;</span>
     }
 
     /**
@@ -525,23 +526,23 @@ import org.springframework.stereotype.Component;
      *         of an Array JsonNode
      */
     private List&lt;Object&gt; toList(JsonNode rootNode) {
-<span class="fc" id="L528">        List&lt;Object&gt; retList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L529">        List&lt;Object&gt; retList = new ArrayList&lt;&gt;();</span>
 
-<span class="fc" id="L530">        Iterator&lt;JsonNode&gt; iter = rootNode.elements();</span>
+<span class="fc" id="L531">        Iterator&lt;JsonNode&gt; iter = rootNode.elements();</span>
 
-<span class="fc" id="L532">        iter.forEachRemaining(currNode -&gt; {</span>
-<span class="fc" id="L533">            Object value = currNode;</span>
+<span class="fc" id="L533">        iter.forEachRemaining(currNode -&gt; {</span>
+<span class="fc" id="L534">            Object value = currNode;</span>
 
-<span class="fc bfc" id="L535" title="All 2 branches covered.">            if (currNode.isObject()) {</span>
-<span class="fc" id="L536">                value = this.toMap(currNode);</span>
-<span class="pc bpc" id="L537" title="1 of 2 branches missed.">            } else if (currNode.isArray()) {</span>
-<span class="nc" id="L538">                value = this.toList(currNode);</span>
+<span class="fc bfc" id="L536" title="All 2 branches covered.">            if (currNode.isObject()) {</span>
+<span class="fc" id="L537">                value = this.toMap(currNode);</span>
+<span class="pc bpc" id="L538" title="1 of 2 branches missed.">            } else if (currNode.isArray()) {</span>
+<span class="nc" id="L539">                value = this.toList(currNode);</span>
             }
 
-<span class="fc" id="L541">            retList.add(value);</span>
-<span class="fc" id="L542">        });</span>
+<span class="fc" id="L542">            retList.add(value);</span>
+<span class="fc" id="L543">        });</span>
 
-<span class="fc" id="L544">        return retList;</span>
+<span class="fc" id="L545">        return retList;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
