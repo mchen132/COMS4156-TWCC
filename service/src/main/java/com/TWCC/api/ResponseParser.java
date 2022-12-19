@@ -218,8 +218,9 @@ public class ResponseParser {
 
         String streetAddr = "";
 
-        for (String key : streetAddrMap.keySet()) {
-            String addr = String.valueOf(streetAddrMap.get(key));
+        for (Map.Entry<String, Object> entry: streetAddrMap.entrySet()) {
+            // String addr = String.valueOf(streetAddrMap.get(key));
+            String addr = String.valueOf(entry.getValue());
 
             // removing double quotes from the original string value
             addr = " " + addr.substring(1, addr.length() - 1);
